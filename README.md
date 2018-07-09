@@ -1,3 +1,8 @@
+# Versioning
+
+Developers should not reference anything in the `master` branch directly. At any point in time, the version of `MicrosoftTeams.schema.json` in the `master` branch *may* match the [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest) or it may be a future version that will appear in [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases) at a later date.
+
+Developers should refer to [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases); usually [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest).
 
 # Contributing
 
