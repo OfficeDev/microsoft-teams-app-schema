@@ -101,6 +101,15 @@
                 "full"
             ]
         },
+        "appRequirements": {
+            "type": "array",
+            "description": "A list of requirement tags, each corresponding to a state that must be true for the app to appear in the list of apps for a user.",
+            "maxItems": 32,
+            "items": {
+                "type": "string",
+                "maxLength": 64
+            }
+        },
         "icons": {
             "type": "object",
             "additionalProperties": false,
