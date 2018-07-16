@@ -1,3 +1,15 @@
+# What Is This?
+
+This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.2/MicrosoftTeams.schema.json",`.
+
+Unless you are writing an app that reads/writes Microsoft Teams manifest.json files, you don't need to care about this.
+
+# Versioning
+
+If you do want to link to MicrosoftTeams.schema.json within your source, here's where to find specific versions.
+* **Released version**. https://developer.microsoft.com/en-us/json-schemas/teams/vX.X/MicrosoftTeams.schema.json, where X.X corresponds to 
+the version numbers listed in the [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases); usually [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest).
+* **Next release (vNext)**. Generally, there is no reason to link to MicrosoftTeams.schema.json in the `master` branch directly. At any point in time, the version of `MicrosoftTeams.schema.json` in the `master` branch *may* match the [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest) or it may be a future version that will appear in [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases) at a later date (vNext). If you do need to link to the vNext version, you can use this URL: https://raw.githubusercontent.com/OfficeDev/microsoft-teams-app-schema/master/MicrosoftTeams.schema.json. 
 
 # Contributing
 
