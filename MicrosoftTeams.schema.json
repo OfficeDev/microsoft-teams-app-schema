@@ -463,14 +463,6 @@
                     "type": "string",
                     "description": "Resource url of app for acquiring auth token for SSO.",
                     "maxLength": 2048
-                },
-                "scopes": {
-                    "type": "array",
-                    "maxItems": 80,
-                    "items": {
-                        "type": "string",
-                        "maxLength": 56
-                    }
                 }
             },
             "required": [
