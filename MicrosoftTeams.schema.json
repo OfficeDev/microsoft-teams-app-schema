@@ -378,7 +378,7 @@
                                 },
                                 "type": {
                                     "type": "string",
-                                    "enum": [ "Query", "Action" ],
+                                    "enum": [ "query", "action" ],
                                     "description": "Type of the command"
                                 },
                                 "title": {
@@ -416,7 +416,7 @@
                                             },
                                             "inputType": {
                                                 "type": "string",
-                                                "enum": [ "Text", "Textarea", "Number", "Date", "Time", "Toggle", "Choiceset" ],
+                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle", "choiceset" ],
                                                 "description": "Type of the parameter"
                                             },
                                             "title": {
