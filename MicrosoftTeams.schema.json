@@ -449,7 +449,7 @@
         },
         "devicePermissions": {
             "type": "array",
-            "description": "Specifies the devices the app requests from users.",
+            "description": "Specifies the device capabilities the app can request access to.",
             "maxItems": 5,
             "items": {
                 "enum": [
