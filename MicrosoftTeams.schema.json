@@ -416,7 +416,7 @@
                                             },
                                             "inputType": {
                                                 "type": "string",
-                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle", "choiceset" ],
+                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle" ],
                                                 "description": "Type of the parameter"
                                             },
                                             "title": {
