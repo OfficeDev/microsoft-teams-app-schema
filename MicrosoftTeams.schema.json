@@ -447,6 +447,20 @@
                 ]
             }
         },
+        "devicePermissions": {
+            "type": "array",
+            "description": "Specifies the device capabilities the app can request access to.",
+            "maxItems": 5,
+            "items": {
+                "enum": [
+                    "geolocation",
+                    "media",
+                    "notifications",
+                    "midi",
+                    "openExternal"
+                ]
+            }
+        },
         "validDomains": {
             "type": "array",
             "description": "A list of valid domains from which the tabs expect to load any content. Domain listings can include wildcards, for example `*.example.com`. If your tab configuration or content UI needs to navigate to any other domain besides the one use for tab configuration, that domain must be specified here.",
