@@ -66,6 +66,12 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                // the below property can be avoided by reducing the size of the short property.
+                "tiny": {
+                    "type": "string",
+                    "description": "A short display name for the app.",
+                    "maxLength": 12
+                },
                 "short": {
                     "type": "string",
                     "description": "A short display name for the app.",
@@ -110,6 +116,11 @@
                     "description": "A relative file path to a transparent PNG outline icon. The border color needs to be white. Size 20x20.",
                     "maxLength": 2048
                 },
+                "selectedOutline": {
+                    "type": "string",
+                    "description": "A relative file path to a transparent PNG filled icon. The fill color needs to be white. Size 20x20.",
+                    "maxLength": 2048
+                },
                 "color": {
                     "type": "string",
                     "description": "A relative file path to a full color PNG icon. Size 96x96.",
@@ -125,6 +136,30 @@
             "type": "string",
             "description": "A color to use in conjunction with the icon. The value must be a valid HTML color code starting with '#', for example `#4464ee`.",
             "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "mobilePackageUrl": {
+            // this should be a private field
+            "type": "string",
+            "description": "The codepush url to the React Native bundle for mobile. If this field is present, and the configurable or static tab support mobile platform, the react native bundle is used to render the tab content instead of the content url ",
+            "maxLength": 2048,
+            "pattern": "^codepush://"
+        },
+        "nativeAppInstallLinks": {
+            "additionalProperties": false,
+            "properties": {
+                "android" : {
+                    "type": "string",
+                    "description": "The url to the play store for this app.",
+                    "maxLength": 2048,
+                    "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+                },
+                "ios" : {
+                    "type": "string",
+                    "description": "The url to the play store for this app.",
+                    "maxLength": 2048,
+                    "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+                }
+            }
         },
         "configurableTabs": {
             "type": "array",
@@ -155,11 +190,24 @@
                                 "groupchat"
                             ]
                         }
+                    },
+                    "platforms": {
+                        "type": "array",
+                        "description": "Specifies the platform on which these tabs can be shown",
+                        "maxItems": 3,
+                        "items": {
+                            "enum": [
+                                "web",
+                                "desktop",
+                                "mobile"
+                            ]
+                        }
                     }
                 },
                 "required": [
                     "configurationUrl",
-                    "scopes"
+                    "scopes",
+                    "platforms"
                 ]
             }
         },
@@ -193,6 +241,11 @@
                         "maxLength": 2048,
                         "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
                     },
+                    "mobileUrl": { // TODO: should also add this to the configurableTabs settings in js sdk
+                        "type": "string",
+                        "description": "The url to deep link into native app or a mobile specific website url",
+                        "maxLength": 2048
+                    },
                     "scopes": {
                         "type": "array",
                         "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
@@ -203,13 +256,26 @@
                                 "personal"
                             ]
                         }
+                    },
+                    "platforms": {
+                        "type": "array",
+                        "description": "Specifies the platform on which these tabs can be shown",
+                        "maxItems": 3,
+                        "items": {
+                            "enum": [
+                                "web",
+                                "desktop",
+                                "mobile"
+                            ]
+                        }
                     }
                 },
                 "required": [
                     "entityId",
                     "name",
                     "contentUrl",
-                    "scopes"
+                    "scopes",
+                    "platforms"
                 ]
             }
         },
