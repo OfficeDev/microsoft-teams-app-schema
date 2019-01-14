@@ -386,6 +386,11 @@
                                     "description": "Id of the command.",
                                     "maxLength": 64
                                 },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [ "query", "action" ],
+                                    "description": "Type of the command"
+                                },
                                 "title": {
                                     "type": "string",
                                     "description": "Title of the command.",
@@ -401,6 +406,11 @@
                                     "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
                                     "default": false
                                 },
+                                "fetchTask": {
+                                    "type": "boolean",
+                                    "description": "A boolean value that indicates if it should fetch task module dynamically",
+                                    "default": false
+                                },
                                 "parameters": {
                                     "type": "array",
                                     "maxItems": 5,
@@ -413,6 +423,11 @@
                                                 "type": "string",
                                                 "description": "Name of the parameter.",
                                                 "maxLength": 64
+                                            },
+                                            "inputType": {
+                                                "type": "string",
+                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle" ],
+                                                "description": "Type of the parameter"
                                             },
                                             "title": {
                                                 "type": "string",
