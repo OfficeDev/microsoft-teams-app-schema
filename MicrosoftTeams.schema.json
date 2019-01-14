@@ -420,6 +420,31 @@
                                             "title"
                                         ]
                                     }
+                                },
+                                "taskInfo": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Initial dialog title",
+                                            "maxLength": 64
+                                        },
+                                        "width": {
+                                            "type": "string",
+                                            "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "height": {
+                                            "type": "string",
+                                            "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "description": "Initial webview URL",
+                                            "maxLength": 2048
+                                        }
+                                    }
                                 }
                             },
                             "required": [
