@@ -307,16 +307,6 @@
                         "description": "A value indicating whether the bot supports uploading/downloading of files.",
                         "default": false
                     },
-                    "supportsCalling": {
-                        "type": "boolean",
-                        "description": "A value indicating whether the bot supports audio calling.",
-                        "default": false
-                    },
-                    "supportsVideo": {
-                        "type": "boolean",
-                        "description": "A value indicating whether the bot supports video calling.",
-                        "default": false
-                    },
                     "scopes": {
                         "type": "array",
                         "description": "Specifies whether the bot offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive.",
@@ -332,7 +322,7 @@
                     "commandLists": {
                         "type": "array",
                         "maxItems": 2,
-                        "description": "The list of commands that the bot supplies, including their usage, description, and the scope for which the commands are valid. A seperate command list should be used for each scope.",
+                        "description": "The list of commands that the bot supplies, including their usage, description, and the scope for which the commands are valid. A separate command list should be used for each scope.",
                         "items": {
                             "type": "object",
                             "additionalProperties": false,
@@ -452,6 +442,11 @@
                                     "description": "Id of the command.",
                                     "maxLength": 64
                                 },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [ "query", "action" ],
+                                    "description": "Type of the command"
+                                },
                                 "title": {
                                     "type": "string",
                                     "description": "Title of the command.",
@@ -467,6 +462,11 @@
                                     "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
                                     "default": false
                                 },
+                                "fetchTask": {
+                                    "type": "boolean",
+                                    "description": "A boolean value that indicates if it should fetch task module dynamically",
+                                    "default": false
+                                },
                                 "parameters": {
                                     "type": "array",
                                     "maxItems": 5,
@@ -479,6 +479,11 @@
                                                 "type": "string",
                                                 "description": "Name of the parameter.",
                                                 "maxLength": 64
+                                            },
+                                            "inputType": {
+                                                "type": "string",
+                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle" ],
+                                                "description": "Type of the parameter"
                                             },
                                             "title": {
                                                 "type": "string",
@@ -495,6 +500,31 @@
                                             "name",
                                             "title"
                                         ]
+                                    }
+                                },
+                                "taskInfo": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Initial dialog title",
+                                            "maxLength": 64
+                                        },
+                                        "width": {
+                                            "type": "string",
+                                            "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "height": {
+                                            "type": "string",
+                                            "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "description": "Initial webview URL",
+                                            "maxLength": 2048
+                                        }
                                     }
                                 }
                             },
