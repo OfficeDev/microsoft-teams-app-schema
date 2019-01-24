@@ -264,11 +264,12 @@
                                 "scopes": {
                                     "type": "array",
                                     "description": "Specifies the scopes for which the command list is valid",
-                                    "maxItems": 2,
+                                    "maxItems": 3,
                                     "items": {
                                         "enum": [
                                             "team",
-                                            "personal"
+                                            "personal",
+                                            "groupchat"
                                         ]
                                     }
                                 },
