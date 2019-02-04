@@ -131,11 +131,6 @@
                     "description": "A relative file path to a transparent PNG outline icon. The border color needs to be white. Size 32x32.",
                     "maxLength": 2048
                 },
-                "selectedOutline": {
-                    "type": "string",
-                    "description": "A relative file path to a transparent PNG filled icon to be shown when the icon is in selected/ focused state. The fill color needs to be white. Size 32x32.",
-                    "maxLength": 2048
-                },
                 "color": {
                     "type": "string",
                     "description": "A relative file path to a full color PNG icon. Size 96x96.",
