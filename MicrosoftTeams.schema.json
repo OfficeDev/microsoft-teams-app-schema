@@ -298,11 +298,12 @@
                                 "scopes": {
                                     "type": "array",
                                     "description": "Specifies the scopes for which the command list is valid",
-                                    "maxItems": 2,
+                                    "maxItems": 3,
                                     "items": {
                                         "enum": [
                                             "team",
-                                            "personal"
+                                            "personal",
+                                            "groupchat"
                                         ]
                                     }
                                 },
@@ -529,6 +530,27 @@
                 "type": "string",
                 "maxLength": 2048
             }
+        },
+        "webApplicationInfo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "AAD application id of the app. This id must be a GUID.",
+                    "maxLength": 36,
+                    "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+                },
+                "resource": {
+                    "type": "string",
+                    "description": "Resource url of app for acquiring auth token for SSO.",
+                    "maxLength": 2048
+                }
+            },
+            "required": [
+                "id",
+                "resource"
+            ],
+            "additionalProperties": false
         }
     },
     "required": [
