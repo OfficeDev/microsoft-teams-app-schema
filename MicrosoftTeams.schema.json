@@ -26,7 +26,7 @@
         "manifestVersion": {
             "type": "string",
             "description": "The version of the schema this manifest is using.",
-            "maxLength": 16
+            "const": "devPreview"
         },
         "version": {
             "type": "string",
