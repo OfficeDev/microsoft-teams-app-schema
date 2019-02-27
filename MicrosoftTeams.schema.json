@@ -521,41 +521,6 @@
                                 "parameters"
                             ]
                         }
-                    },
-                    "messageHandlers": {
-                        "type": "array",
-                        "maxItems": 5,
-                        "description": "A list of handlers that allow apps to be invoked when certain conditions are met",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "enum": [
-                                        "Link"
-                                    ],
-                                    "description": "Type of the message handler"
-                                },
-                                "value": {
-                                    "type": "object",
-                                    "properties": {
-                                        "domains": {
-                                            "type": "array",
-                                            "description": "A list of domains that the link message handler can register for, and when they are matched the app will be invoked",
-                                            "items": {
-                                                "type": "string",
-                                                "maxLength": 2048
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "required": [
-                                "type",
-                                "value"
-                            ],
-                            "additionalProperties": false
-                        }
                     }
                 },
                 "required": [
