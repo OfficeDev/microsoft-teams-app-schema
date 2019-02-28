@@ -449,7 +449,7 @@
         },
         "devicePermissions": {
             "type": "array",
-            "description": "Specifies the device capabilities the app can request access to.",
+            "description": "Your tab might request permission to access native features.",
             "maxItems": 5,
             "items": {
                 "enum": [
