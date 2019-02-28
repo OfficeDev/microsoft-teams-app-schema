@@ -7,9 +7,9 @@ Unless you are writing an app that reads/writes Microsoft Teams manifest.json fi
 # Versioning
 
 If you do want to link to MicrosoftTeams.schema.json within your source, here's where to find specific versions.
-* **Released version**. https://developer.microsoft.com/en-us/json-schemas/teams/vX.X/MicrosoftTeams.schema.json, where X.X corresponds to 
-the version numbers listed in the [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases); usually [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest).
-* **Next release (vNext)**. Generally, there is no reason to link to MicrosoftTeams.schema.json in the `master` branch directly. At any point in time, the version of `MicrosoftTeams.schema.json` in the `master` branch *may* match the [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest) or it may be a future version that will appear in [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases) at a later date (vNext). If you do need to link to the vNext version, you can use this URL: https://raw.githubusercontent.com/OfficeDev/microsoft-teams-app-schema/master/MicrosoftTeams.schema.json. 
+* **Released version.** https://developer.microsoft.com/en-us/json-schemas/teams/vX.X/MicrosoftTeams.schema.json (the GitHub repository for which is [here](https://github.com/Microsoft/json-schemas)), where X.X corresponds to 
+the version numbers listed in the [releases](https://github.com/OfficeDev/microsoft-teams-app-schema/releases); usually [Latest release](https://github.com/OfficeDev/microsoft-teams-app-schema/releases/latest). 
+* **Developer Preview.** The [preview/DevPreview branch](https://github.com/OfficeDev/microsoft-teams-app-schema/tree/preview/DevPreview) contains the manifest matching features in [Microsoft Teams Developer Preview](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/dev-preview/developer-preview-features). If you need to link to this version, you can use this URL: <https://raw.githubusercontent.com/OfficeDev/microsoft-teams-app-schema/preview/DevPreview/MicrosoftTeams.schema.json>.
 
 # Contributing
 
