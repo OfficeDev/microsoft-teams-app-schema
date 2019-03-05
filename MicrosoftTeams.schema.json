@@ -369,79 +369,16 @@
                         "type": "array",
                         "maxItems": 10,
                         "items": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "properties": {
-                                "id": {
-                                    "type": "string",
-                                    "description": "Id of the command.",
-                                    "maxLength": 64
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/queryCommand"
                                 },
-                                "type": {
-                                    "type": "string",
-                                    "enum": [ "query", "action" ],
-                                    "description": "Type of the command"
+                                {
+                                    "$ref": "#/definitions/actionFetchCommand"
                                 },
-                                "title": {
-                                    "type": "string",
-                                    "description": "Title of the command.",
-                                    "maxLength": 32
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "description": "Description of the command.",
-                                    "maxLength": 128
-                                },
-                                "initialRun": {
-                                    "type": "boolean",
-                                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
-                                    "default": false
-                                },
-                                "fetchTask": {
-                                    "type": "boolean",
-                                    "description": "A boolean value that indicates if it should fetch task module dynamically",
-                                    "default": false
-                                },
-                                "parameters": {
-                                    "type": "array",
-                                    "maxItems": 5,
-                                    "minItems": 1,
-                                    "items": {
-                                        "type": "object",
-                                        "additionalProperties": false,
-                                        "properties": {
-                                            "name": {
-                                                "type": "string",
-                                                "description": "Name of the parameter.",
-                                                "maxLength": 64
-                                            },
-                                            "inputType": {
-                                                "type": "string",
-                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle" ],
-                                                "description": "Type of the parameter"
-                                            },
-                                            "title": {
-                                                "type": "string",
-                                                "description": "Title of the parameter.",
-                                                "maxLength": 32
-                                            },
-                                            "description": {
-                                                "type": "string",
-                                                "description": "Description of the parameter.",
-                                                "maxLength": 128
-                                            }
-                                        },
-                                        "required": [
-                                            "name",
-                                            "title"
-                                        ]
-                                    }
+                                {
+                                    "$ref": "#/definitions/actionParamCommand"
                                 }
-                            },
-                            "required": [
-                                "id",
-                                "title",
-                                "parameters"
                             ]
                         }
                     }
@@ -518,5 +455,190 @@
         "description",
         "icons",
         "accentColor"
-    ]
+    ],
+    "definitions": {
+        "queryCommand": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Id of the command.",
+                    "maxLength": 64
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Title of the command.",
+                    "maxLength": 32
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the command.",
+                    "maxLength": 128
+                },
+                "type": {
+                    "type": "string",
+                    "const": "query",
+                    "description": "Type of the command"
+                },
+                "initialRun": {
+                    "type": "boolean",
+                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
+                    "default": false
+                },
+                "parameters": {
+                    "type": "array",
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the parameter.",
+                                "maxLength": 64
+                            },
+                            "inputType": {
+                                "type": "string",
+                                "enum": [
+                                    "text"
+                                ],
+                                "default": "text",
+                                "description": "Type of the parameter"
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "Title of the parameter.",
+                                "maxLength": 32
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Description of the parameter.",
+                                "maxLength": 128
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "title"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "parameters"
+            ]
+        },
+        "actionParamCommand": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Id of the command.",
+                    "maxLength": 64
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Title of the command.",
+                    "maxLength": 32
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the command.",
+                    "maxLength": 128
+                },
+                "type": {
+                    "type": "string",
+                    "const": "action",
+                    "description": "Type of the command"
+                },
+                "fetchTask": {
+                    "type": "boolean",
+                    "const": false
+                },
+                "parameters": {
+                    "type": "array",
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the parameter.",
+                                "maxLength": 64
+                            },
+                            "inputType": {
+                                "type": "string",
+                                "enum": [
+                                    "text",
+                                    "textarea",
+                                    "number",
+                                    "date",
+                                    "time",
+                                    "toggle"
+                                ],
+                                "default": "text",
+                                "description": "Type of the parameter"
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "Title of the parameter.",
+                                "maxLength": 32
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Description of the parameter.",
+                                "maxLength": 128
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "title"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "type",
+                "parameters"
+            ]
+        },
+        "actionFetchCommand": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Id of the command.",
+                    "maxLength": 64
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Title of the command.",
+                    "maxLength": 32
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the command.",
+                    "maxLength": 128
+                },
+                "type": {
+                    "type": "string",
+                    "const": "action",
+                    "description": "Type of the command"
+                },
+                "fetchTask": {
+                    "type": "boolean",
+                    "const": true
+                }
+            },
+            "required": [
+                "type",
+                "fetchTask"
+            ]
+        }
+    }
 }
