@@ -526,6 +526,8 @@
                 }
             },
             "required": [
+                "id",
+                "title",
                 "parameters"
             ]
         },
@@ -602,6 +604,8 @@
                 }
             },
             "required": [
+                "id",
+                "title",
                 "type",
                 "parameters"
             ]
@@ -636,6 +640,8 @@
                 }
             },
             "required": [
+                "id",
+                "title",
                 "type",
                 "fetchTask"
             ]
