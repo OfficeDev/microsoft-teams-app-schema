@@ -419,7 +419,8 @@
                                 "type": {
                                     "type": "string",
                                     "enum": [ "query", "action" ],
-                                    "description": "Type of the command"
+                                    "description": "Type of the command",
+                                    "default": "action"
                                 },
                                 "context": {
                                     "type": "array",
@@ -429,9 +430,10 @@
                                             "compose",
                                             "commandbox",
                                             "message"
-                                        ],
-                                        "description": "Context where the command would apply"
-                                    }
+                                        ], 
+                                    },
+                                    "description": "Context where the command would apply",
+                                    "default": "['compose','commandbox']"
                                 },
                                 "title": {
                                     "type": "string",
