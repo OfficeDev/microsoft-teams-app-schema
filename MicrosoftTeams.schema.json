@@ -26,10 +26,30 @@
             "description": "A unique identifier for this app in reverse domain notation. E.g: com.example.myapp",
             "maxLength": 64
         },
-        "defaultLanguageTag": {
-            "$ref": "#/definitions/languageTag",
-            "description": "The language tag of the strings in this top level manifest file.",
-            "default": "en-us"
+        "localizationInfo":{
+            "defaultLanguageTag": {
+                "$ref": "#/definitions/languageTag",
+                "description": "The language tag of the strings in this top level manifest file.",
+                "default": "en-us"
+            },
+            "additionalLanguages": {
+                "type": "array",
+                "additionalProperties": false,
+                "properties": {
+                    "languageTag": {
+                        "$ref": "#/definitions/languageTag",
+                        "description": "The language tag of the strings in the provided file."
+                    },
+                    "file": {
+                        "$ref": "#/definitions/relativePath",
+                        "description": "A relative file path to a full color PNG icon. Size 96x96."
+                    }
+                },
+                "required": [
+                    "languageTag",
+                    "file"
+                ]
+            },    
         },
         "developer": {
             "type": "object",
@@ -115,24 +135,6 @@
             "required": [
                 "outline",
                 "color"
-            ]
-        },
-        "localizations": {
-            "type": "array",
-            "additionalProperties": false,
-            "properties": {
-                "languageTag": {
-                    "$ref": "#/definitions/languageTag",
-                    "description": "The language tag of the strings in the provided file."
-                },
-                "file": {
-                    "$ref": "#/definitions/relativePath",
-                    "description": "A relative file path to a full color PNG icon. Size 96x96."
-                }
-            },
-            "required": [
-                "languageTag",
-                "file"
             ]
         },
         "accentColor": {
