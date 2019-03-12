@@ -433,7 +433,7 @@
                                         ], 
                                     },
                                     "description": "Context where the command would apply",
-                                    "default": "['compose','commandbox']"
+                                    "default": ["compose","commandbox"]
                                 },
                                 "title": {
                                     "type": "string",
