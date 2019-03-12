@@ -7,10 +7,6 @@
             "type": "string",
             "format": "uri"
         },
-        "languageTag": {
-            "$ref": "#/definitions/languageTag",
-            "description": "The language tag of the strings in this localization file."
-        },
         "name.short": {
             "type": "string",
             "maxLength": 30
@@ -28,9 +24,6 @@
             "maxLength": 4000
         }
     },
-    "required": [
-        "languageTag"
-    ],
     "patternProperties": {
         "^staticTabs\\[([0-9]|1[0-5])\\]\\.name$": {
             "type": "string",
@@ -59,12 +52,6 @@
         "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.parameters\\[[0-4]\\]\\.description$": {
             "type": "string",
             "maxLength": 128
-        }
-    },
-    "definitions": {
-        "languageTag": {
-            "type": "string",
-            "pattern": "^((^|-)[A-Za-z0-9]{1,8}){1,3}$"
         }
     }
 }
