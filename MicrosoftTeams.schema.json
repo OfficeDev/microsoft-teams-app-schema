@@ -10,7 +10,7 @@
         "manifestVersion": {
             "type": "string",
             "description": "The version of the schema this manifest is using.",
-            "maxLength": 16
+            "const": "1.4
         },
         "version": {
             "type": "string",
