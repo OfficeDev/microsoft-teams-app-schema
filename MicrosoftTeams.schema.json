@@ -27,29 +27,36 @@
             "maxLength": 64
         },
         "localizationInfo":{
-            "defaultLanguageTag": {
-                "$ref": "#/definitions/languageTag",
-                "additionalProperties": false,
-                "description": "The language tag of the strings in this top level manifest file.",
-                "default": "en-us"
-            },
-            "additionalLanguages": {
-                "type": "array",
-                "additionalProperties": false,
-                "properties": {
-                    "languageTag": {
-                        "$ref": "#/definitions/languageTag",
-                        "description": "The language tag of the strings in the provided file."
-                    },
-                    "file": {
-                        "$ref": "#/definitions/relativePath",
-                        "description": "A relative file path to a full color PNG icon. Size 96x96."
-                    }
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "defaultLanguageTag": {
+                    "$ref": "#/definitions/languageTag",
+                    "description": "The language tag of the strings in this top level manifest file.",
+                    "default": "en-us"
                 },
-                "required": [
-                    "languageTag",
-                    "file"
-                ]
+                "additionalLanguages": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "languageTag": {
+                                "$ref": "#/definitions/languageTag",
+                                "description": "The language tag of the strings in the provided file."
+                            },
+                            "file": {
+                                "$ref": "#/definitions/relativePath",
+                                "description": "A relative file path to a full color PNG icon. Size 96x96."
+                            }
+                        },
+                        "required": [
+                            "languageTag",
+                            "file"
+                        ]
+                    }
+                }
             },
             "required": [
                 "defaultLanguageTag"
