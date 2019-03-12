@@ -2,6 +2,22 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "additionalProperties": false,
+    "definitions" : {
+        "platforms" : {
+            "type": "array",
+            "description": "This section defines the different environments supported by Teams application. 1. web refers to the Teams website running in a web browser on any compatible device/ computer. 2. Desktop refers to the installed package of Teams application on devices/ machines running Windows or Mac OS 3. phone refers to native apps (apk or ipa) running on Android or IOS Phone devices like iPhone, etc. 4. tablet refers to native apps (apk or ipa) running on Android or IOS Tablet devices like iPad, etc",
+            "maxItems": 4,
+            "items": {
+                "enum": [
+                    "web",
+                    "desktop",
+                    "phone",
+                    "tablet"
+                ]
+            },
+            "default" : ["web", "desktop", "phone", "tablet"]
+        }
+    },
     "properties": {
         "$schema": {
             "type": "string",
@@ -161,7 +177,7 @@
                             ]
                         }
                     },
-                    "platforms": {
+                    "platforms": { 
                         "$ref": "#/definitions/platforms",
                         "description": "Specifies the platforms on which configurable tabs are displayed"
                     }
@@ -392,16 +408,121 @@
                         "type": "array",
                         "maxItems": 10,
                         "items": {
-                            "oneOf": [
-                                {
-                                    "$ref": "#/definitions/queryCommand"
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Id of the command.",
+                                    "maxLength": 64
                                 },
-                                {
-                                    "$ref": "#/definitions/actionFetchCommand"
+                                "type": {
+                                    "type": "string",
+                                    "enum": [ "query", "action" ],
+                                    "description": "Type of the command"
                                 },
-                                {
-                                    "$ref": "#/definitions/actionParamCommand"
+                                "context": {
+                                    "type": "array",
+                                    "maxItems": 3,
+                                    "items": {
+                                        "enum": [
+                                            "compose",
+                                            "commandbox",
+                                            "message"
+                                        ],
+                                        "description": "Context where the command would apply"
+                                    }
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "Title of the command.",
+                                    "maxLength": 32
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the command.",
+                                    "maxLength": 128
+                                },
+                                "initialRun": {
+                                    "type": "boolean",
+                                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
+                                    "default": false
+                                },
+                                "fetchTask": {
+                                    "type": "boolean",
+                                    "description": "A boolean value that indicates if it should fetch task module dynamically",
+                                    "default": false
+                                },
+                                "parameters": {
+                                    "type": "array",
+                                    "maxItems": 5,
+                                    "minItems": 1,
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Name of the parameter.",
+                                                "maxLength": 64
+                                            },
+                                            "inputType": {
+                                                "type": "string",
+                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle", "choiceset" ],
+                                                "description": "Type of the parameter"
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "description": "Title of the parameter.",
+                                                "maxLength": 32
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "description": "Description of the parameter.",
+                                                "maxLength": 128
+                                            },
+                                            "value": {
+                                                "type": "string",
+                                                "description": "Initial value for the parameter",
+                                                "maxLength": 512
+                                            },
+                                            "choices": {
+                                                "type": "array",
+                                                "maxItems": 10,
+                                                "description": "The choice options for the parameter",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "title": {
+                                                            "type": "string",
+                                                            "description": "Title of the choice",
+                                                            "maxLength": 128
+                                                        },
+                                                        "value": {
+                                                            "type": "string",
+                                                            "description": "Value of the choice",
+                                                            "maxLength": 512
+                                                        }
+                                                    },
+                                                    "additionalProperties": false,
+                                                    "required": [
+                                                        "title",
+                                                        "value"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "name",
+                                            "title"
+                                        ]
+                                    }
                                 }
+                            },
+                            "required": [
+                                "id",
+                                "title",
+                                "parameters"
                             ]
                         }
                     },
@@ -513,283 +634,5 @@
         "description",
         "icons",
         "accentColor"
-    ],
-    "definitions": {
-        "platforms": {
-            "type": "array",
-            "description": "This section defines the different environments supported by Teams application. 1. web refers to the Teams website running in a web browser on any compatible device/ computer. 2. Desktop refers to the installed package of Teams application on devices/ machines running Windows or Mac OS 3. phone refers to native apps (apk or ipa) running on Android or IOS Phone devices like iPhone, etc. 4. tablet refers to native apps (apk or ipa) running on Android or IOS Tablet devices like iPad, etc",
-            "maxItems": 4,
-            "items": {
-                "enum": [
-                    "web",
-                    "desktop",
-                    "phone",
-                    "tablet"
-                ]
-            },
-            "default": [
-                "web",
-                "desktop",
-                "phone",
-                "tablet"
-            ]
-        },
-        "queryCommand": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "description": "Id of the command.",
-                    "maxLength": 64
-                },
-                "title": {
-                    "type": "string",
-                    "description": "Title of the command.",
-                    "maxLength": 32
-                },
-                "description": {
-                    "type": "string",
-                    "description": "Description of the command.",
-                    "maxLength": 128
-                },
-                "type": {
-                    "type": "string",
-                    "const": "query",
-                    "description": "Type of the command"
-                },
-                "context": {
-                    "type": "array",
-                    "maxItems": 2,
-                    "uniqueItems": true,
-                    "items": {
-                        "enum": [
-                            "compose",
-                            "commandbox"
-                        ],
-                        "description": "Context where the command would apply"
-                    }
-                },
-                "initialRun": {
-                    "type": "boolean",
-                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
-                    "default": false
-                },
-                "parameters": {
-                    "type": "array",
-                    "maxItems": 5,
-                    "minItems": 1,
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "description": "Name of the parameter.",
-                                "maxLength": 64
-                            },
-                            "inputType": {
-                                "type": "string",
-                                "enum": [
-                                    "text"
-                                ],
-                                "default": "text",
-                                "description": "Type of the parameter"
-                            },
-                            "title": {
-                                "type": "string",
-                                "description": "Title of the parameter.",
-                                "maxLength": 32
-                            },
-                            "description": {
-                                "type": "string",
-                                "description": "Description of the parameter.",
-                                "maxLength": 128
-                            }
-                        },
-                        "required": [
-                            "name",
-                            "title"
-                        ]
-                    }
-                }
-            },
-            "required": [
-                "id",
-                "title",
-                "parameters"
-            ]
-        },
-        "actionParamCommand": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "description": "Id of the command.",
-                    "maxLength": 64
-                },
-                "title": {
-                    "type": "string",
-                    "description": "Title of the command.",
-                    "maxLength": 32
-                },
-                "description": {
-                    "type": "string",
-                    "description": "Description of the command.",
-                    "maxLength": 128
-                },
-                "type": {
-                    "type": "string",
-                    "const": "action",
-                    "description": "Type of the command"
-                },
-                "context": {
-                    "type": "array",
-                    "maxItems": 2,
-                    "uniqueItems": true,
-                    "items": {
-                        "enum": [
-                            "compose",
-                            "commandbox",
-                            "message"
-                        ],
-                        "description": "Context where the command would apply"
-                    }
-                },
-                "fetchTask": {
-                    "type": "boolean",
-                    "const": false
-                },
-                "parameters": {
-                    "type": "array",
-                    "maxItems": 5,
-                    "minItems": 1,
-                    "items": {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "description": "Name of the parameter.",
-                                "maxLength": 64
-                            },
-                            "inputType": {
-                                "type": "string",
-                                "enum": [
-                                    "text",
-                                    "textarea",
-                                    "number",
-                                    "date",
-                                    "time",
-                                    "toggle"
-                                ],
-                                "default": "text",
-                                "description": "Type of the parameter"
-                            },
-                            "title": {
-                                "type": "string",
-                                "description": "Title of the parameter.",
-                                "maxLength": 32
-                            },
-                            "description": {
-                                "type": "string",
-                                "description": "Description of the parameter.",
-                                "maxLength": 128
-                            },
-                            "value": {
-                                "type": "string",
-                                "description": "Initial value for the parameter",
-                                "maxLength": 512
-                            },
-                            "choices": {
-                                "type": "array",
-                                "maxItems": 10,
-                                "description": "The choice options for the parameter",
-                                "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "title": {
-                                            "type": "string",
-                                            "description": "Title of the choice",
-                                            "maxLength": 128
-                                        },
-                                        "value": {
-                                            "type": "string",
-                                            "description": "Value of the choice",
-                                            "maxLength": 512
-                                        }
-                                    },
-                                    "additionalProperties": false,
-                                    "required": [
-                                        "title",
-                                        "value"
-                                    ]
-                                }
-                            }
-                        },
-                        "required": [
-                            "name",
-                            "title"
-                        ]
-                    }
-                }
-            },
-            "required": [
-                "id",
-                "title",
-                "type",
-                "parameters"
-            ]
-        },
-        "actionFetchCommand": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "description": "Id of the command.",
-                    "maxLength": 64
-                },
-                "title": {
-                    "type": "string",
-                    "description": "Title of the command.",
-                    "maxLength": 32
-                },
-                "description": {
-                    "type": "string",
-                    "description": "Description of the command.",
-                    "maxLength": 128
-                },
-                "type": {
-                    "type": "string",
-                    "const": "action",
-                    "description": "Type of the command"
-                },
-                "context": {
-                    "type": "array",
-                    "maxItems": 2,
-                    "uniqueItems": true,
-                    "items": {
-                        "enum": [
-                            "compose",
-                            "commandbox",
-                            "message"
-                        ],
-                        "description": "Context where the command would apply"
-                    }
-                },
-                "fetchTask": {
-                    "type": "boolean",
-                    "const": true
-                }
-            },
-            "required": [
-                "id",
-                "title",
-                "type",
-                "fetchTask"
-            ]
-        }
-    }
+    ]
 }
