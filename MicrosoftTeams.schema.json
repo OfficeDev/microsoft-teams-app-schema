@@ -29,6 +29,7 @@
         "localizationInfo":{
             "defaultLanguageTag": {
                 "$ref": "#/definitions/languageTag",
+                "additionalProperties": false,
                 "description": "The language tag of the strings in this top level manifest file.",
                 "default": "en-us"
             },
@@ -49,7 +50,10 @@
                     "languageTag",
                     "file"
                 ]
-            },    
+            },
+            "required": [
+                "defaultLanguageTag"
+            ]
         },
         "developer": {
             "type": "object",
