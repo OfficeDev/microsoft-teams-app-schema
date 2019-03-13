@@ -428,12 +428,12 @@
                                     "items": {
                                         "enum": [
                                             "compose",
-                                            "commandbox",
+                                            "commandBox",
                                             "message"
                                         ], 
                                     },
                                     "description": "Context where the command would apply",
-                                    "default": ["compose","commandbox"]
+                                    "default": ["compose","commandBox"]
                                 },
                                 "title": {
                                     "type": "string",
