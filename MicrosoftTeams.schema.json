@@ -155,6 +155,22 @@
                                 "groupchat"
                             ]
                         }
+                    },
+                    "sharePointPreviewImage": {
+                        "type": "string",
+                        "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768.",
+                        "maxLength": 2048
+                    },
+                    "supportedSharePointHosts": {
+                        "type": "array",
+                        "description": "Defines how your tab will be made available in SharePoint.",
+                        "maxItems": 2,
+                        "items": {
+                            "enum": [
+                                "sharePointFullPage",
+                                "sharePointWebPart"
+                            ]
+                        }
                     }
                 },
                 "required": [
