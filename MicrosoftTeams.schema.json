@@ -165,6 +165,7 @@
                         "type": "array",
                         "description": "Defines how your tab will be made available in SharePoint.",
                         "maxItems": 2,
+                        "uniqueItems": true,
                         "items": {
                             "enum": [
                                 "sharePointFullPage",
