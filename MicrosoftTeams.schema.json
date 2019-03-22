@@ -447,7 +447,7 @@
                                             "compose",
                                             "commandBox",
                                             "message"
-                                        ], 
+                                        ]
                                     },
                                     "description": "Context where the command would apply",
                                     "default": ["compose","commandBox"]
