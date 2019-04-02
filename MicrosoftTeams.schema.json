@@ -497,7 +497,7 @@
         },
         "devicePermissions": {
             "type": "array",
-            "description": "Your tab might request permission to access native features.",
+            "description": "Specify the native features on a user's device that your app may request access to.",
             "maxItems": 5,
             "items": {
                 "enum": [
@@ -520,6 +520,7 @@
         },
         "webApplicationInfo": {
             "type": "object",
+            "description": "Specify your AAD App ID and Graph information to help users seamlessly sign into your AAD app.",
             "properties": {
                 "id": {
                     "$ref": "#/definitions/guid",
