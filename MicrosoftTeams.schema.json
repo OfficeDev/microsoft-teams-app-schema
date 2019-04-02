@@ -416,14 +416,14 @@
                                     "description": "Description of the command.",
                                     "maxLength": 128
                                 },
-                                "fetchTask": {
-                                    "type": "boolean",
-                                    "description": "A boolean value that indicates if it should fetch task module dynamically",
-                                    "default": false
-                                },
                                 "initialRun": {
                                     "type": "boolean",
                                     "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
+                                    "default": false
+                                },
+                                "fetchTask": {
+                                    "type": "boolean",
+                                    "description": "A boolean value that indicates if it should fetch task module dynamically",
                                     "default": false
                                 },
                                 "parameters": {
