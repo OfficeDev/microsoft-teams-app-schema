@@ -10,7 +10,7 @@
         "manifestVersion": {
             "type": "string",
             "description": "The version of the schema this manifest is using.",
-            "const": "1.4"
+            "const": "devPreview"
         },
         "version": {
             "type": "string",
@@ -18,14 +18,49 @@
             "maxLength": 256
         },
         "id": {
-            "type": "string",
-            "description": "A unique identifier for this app. This id must be a GUID.",
-            "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+            "$ref": "#/definitions/guid",
+            "description": "A unique identifier for this app. This id must be a GUID."
         },
         "packageName": {
             "type": "string",
             "description": "A unique identifier for this app in reverse domain notation. E.g: com.example.myapp",
             "maxLength": 64
+        },
+        "localizationInfo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "defaultLanguageTag": {
+                    "$ref": "#/definitions/languageTag",
+                    "description": "The language tag of the strings in this top level manifest file.",
+                    "default": "en-us"
+                },
+                "additionalLanguages": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "languageTag": {
+                                "$ref": "#/definitions/languageTag",
+                                "description": "The language tag of the strings in the provided file."
+                            },
+                            "file": {
+                                "$ref": "#/definitions/relativePath",
+                                "description": "A relative file path to a full color PNG icon. Size 96x96."
+                            }
+                        },
+                        "required": [
+                            "languageTag",
+                            "file"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "defaultLanguageTag"
+            ]
         },
         "developer": {
             "type": "object",
@@ -37,22 +72,16 @@
                     "maxLength": 32
                 },
                 "websiteUrl": {
-                    "type": "string",
-                    "description": "The url to the page that provides support information for the app.",
-                    "maxLength": 2048,
-                    "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+                    "$ref": "#/definitions/httpsUrl",
+                    "description": "The url to the page that provides support information for the app."
                 },
                 "privacyUrl": {
-                    "type": "string",
-                    "description": "The url to the page that provides privacy information for the app.",
-                    "maxLength": 2048,
-                    "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+                    "$ref": "#/definitions/httpsUrl",
+                    "description": "The url to the page that provides privacy information for the app."
                 },
                 "termsOfUseUrl": {
-                    "type": "string",
-                    "description": "The url to the page that provides the terms of use for the app.",
-                    "maxLength": 2048,
-                    "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+                    "$ref": "#/definitions/httpsUrl",
+                    "description": "The url to the page that provides the terms of use for the app."
                 }
             },
             "required": [
@@ -106,14 +135,12 @@
             "additionalProperties": false,
             "properties": {
                 "outline": {
-                    "type": "string",
-                    "description": "A relative file path to a transparent PNG outline icon. The border color needs to be white. Size 20x20.",
-                    "maxLength": 2048
+                    "$ref": "#/definitions/relativePath",
+                    "description": "A relative file path to a transparent PNG outline icon. The border color needs to be white. Size 20x20."
                 },
                 "color": {
-                    "type": "string",
-                    "description": "A relative file path to a full color PNG icon. Size 96x96.",
-                    "maxLength": 2048
+                    "$ref": "#/definitions/relativePath",
+                    "description": "A relative file path to a full color PNG icon. Size 96x96."
                 }
             },
             "required": [
@@ -122,9 +149,8 @@
             ]
         },
         "accentColor": {
-            "type": "string",
-            "description": "A color to use in conjunction with the icon. The value must be a valid HTML color code starting with '#', for example `#4464ee`.",
-            "pattern": "^#[0-9a-fA-F]{6}$"
+            "$ref": "#/definitions/hexColor",
+            "description": "A color to use in conjunction with the icon. The value must be a valid HTML color code starting with '#', for example `#4464ee`."
         },
         "configurableTabs": {
             "type": "array",
@@ -135,10 +161,8 @@
                 "additionalProperties": false,
                 "properties": {
                     "configurationUrl": {
-                        "type": "string",
-                        "description": "The url to use when configuring the tab.",
-                        "maxLength": 2048,
-                        "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "The url to use when configuring the tab."
                     },
                     "canUpdateConfiguration": {
                         "type": "boolean",
@@ -146,20 +170,19 @@
                         "default": true
                     },
                     "scopes": {
-                        "type": "array",
-                        "description": "Specifies whether the tab offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive. Currently, configurable tabs are only supported in the teams and groupchats scopes.",
-                        "maxItems": 2,
-                        "items": {
-                            "enum": [
-                                "team",
-                                "groupchat"
-                            ]
-                        }
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/scopes"
+                            },
+                            {
+                                "$ref": "#/definitions/personalScopeNotAllowed"
+                            }
+                        ],
+                        "description": "Specifies whether the tab offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive. Currently, configurable tabs are only supported in the teams and groupchats scopes."
                     },
                     "sharePointPreviewImage": {
-                        "type": "string",
-                        "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768.",
-                        "maxLength": 2048
+                        "$ref": "#/definitions/relativePath",
+                        "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768."
                     },
                     "supportedSharePointHosts": {
                         "type": "array",
@@ -199,27 +222,23 @@
                         "maxLength": 128
                     },
                     "contentUrl": {
-                        "type": "string",
-                        "description": "The url which points to the entity UI to be displayed in the Teams canvas.",
-                        "maxLength": 2048,
-                        "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "The url which points to the entity UI to be displayed in the Teams canvas."
                     },
                     "websiteUrl": {
-                        "type": "string",
-                        "description": "The url to point at if a user opts to view in a browser.",
-                        "maxLength": 2048,
-                        "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "The url to point at if a user opts to view in a browser."
                     },
                     "scopes": {
-                        "type": "array",
-                        "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
-                        "maxItems": 2,
-                        "items": {
-                            "enum": [
-                                "team",
-                                "personal"
-                            ]
-                        }
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/scopes"
+                            },
+                            {
+                                "$ref": "#/definitions/groupchatScopeNotAllowed"
+                            }
+                        ],
+                        "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope."
                     }
                 },
                 "required": [
@@ -239,9 +258,8 @@
                 "additionalProperties": false,
                 "properties": {
                     "botId": {
-                        "type": "string",
-                        "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)",
-                        "maxLength": 64
+                        "$ref": "#/definitions/botId",
+                        "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
                     },
                     "needsChannelSelector": {
                         "type": "boolean",
@@ -259,16 +277,8 @@
                         "default": false
                     },
                     "scopes": {
-                        "type": "array",
-                        "description": "Specifies whether the bot offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive.",
-                        "maxItems": 3,
-                        "items": {
-                            "enum": [
-                                "team",
-                                "personal",
-                                "groupchat"
-                            ]
-                        }
+                        "$ref": "#/definitions/scopes",
+                        "description": "Specifies whether the bot offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive."
                     },
                     "commandLists": {
                         "type": "array",
@@ -279,16 +289,8 @@
                             "additionalProperties": false,
                             "properties": {
                                 "scopes": {
-                                    "type": "array",
-                                    "description": "Specifies the scopes for which the command list is valid",
-                                    "maxItems": 3,
-                                    "items": {
-                                        "enum": [
-                                            "team",
-                                            "personal",
-                                            "groupchat"
-                                        ]
-                                    }
+                                    "$ref": "#/definitions/scopes",
+                                    "description": "Specifies the scopes for which the command list is valid"
                                 },
                                 "commands": {
                                     "type": "array",
@@ -342,20 +344,22 @@
                         "maxLength": 64
                     },
                     "configurationUrl": {
-                        "type": "string",
-                        "description": "The url to use for configuring the connector using the inline configuration experience.",
-                        "maxLength": 2048,
-                        "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "The url to use for configuring the connector using the inline configuration experience."
                     },
                     "scopes": {
-                        "type": "array",
-                        "description": "Specifies whether the connector offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. Currently, only the team scope is supported.",
-                        "maxItems": 1,
-                        "items": {
-                            "enum": [
-                                "team"
-                            ]
-                        }
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/scopes"
+                            },
+                            {
+                                "$ref": "#/definitions/personalScopeNotAllowed"
+                            },
+                            {
+                                "$ref": "#/definitions/groupchatScopeNotAllowed"
+                            }
+                        ],
+                        "description": "Specifies whether the connector offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. Currently, only the team scope is supported."
                     }
                 },
                 "required": [
@@ -373,9 +377,8 @@
                 "additionalProperties": false,
                 "properties": {
                     "botId": {
-                        "type": "string",
-                        "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)",
-                        "maxLength": 64
+                        "$ref": "#/definitions/botId",
+                        "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)"
                     },
                     "canUpdateConfiguration": {
                         "type": "boolean",
@@ -396,8 +399,12 @@
                                 },
                                 "type": {
                                     "type": "string",
-                                    "enum": [ "query", "action" ],
-                                    "description": "Type of the command"
+                                    "enum": [
+                                        "query",
+                                        "action"
+                                    ],
+                                    "description": "Type of the command",
+                                    "default": "query"
                                 },
                                 "title": {
                                     "type": "string",
@@ -409,14 +416,14 @@
                                     "description": "Description of the command.",
                                     "maxLength": 128
                                 },
-                                "initialRun": {
-                                    "type": "boolean",
-                                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
-                                    "default": false
-                                },
                                 "fetchTask": {
                                     "type": "boolean",
                                     "description": "A boolean value that indicates if it should fetch task module dynamically",
+                                    "default": false
+                                },
+                                "initialRun": {
+                                    "type": "boolean",
+                                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
                                     "default": false
                                 },
                                 "parameters": {
@@ -434,9 +441,16 @@
                                             },
                                             "inputType": {
                                                 "type": "string",
-                                                "enum": [ "text", "textarea", "number", "date", "time", "toggle" ],
-                                                "default": "text",
-                                                "description": "Type of the parameter"
+                                                "enum": [
+                                                    "text",
+                                                    "textarea",
+                                                    "number",
+                                                    "date",
+                                                    "time",
+                                                    "toggle"
+                                                ],
+                                                "description": "Type of the parameter",
+                                                "default": "text"
                                             },
                                             "title": {
                                                 "type": "string",
@@ -482,7 +496,7 @@
         },
         "devicePermissions": {
             "type": "array",
-            "description": "Specify the native features on a user's device that your app may request access to.",
+            "description": "Your tab might request permission to access native features.",
             "maxItems": 5,
             "items": {
                 "enum": [
@@ -505,13 +519,10 @@
         },
         "webApplicationInfo": {
             "type": "object",
-            "description": "Specify your AAD App ID and Graph information to help users seamlessly sign into your AAD app.",
             "properties": {
                 "id": {
-                    "type": "string",
-                    "description": "AAD application id of the app. This id must be a GUID.",
-                    "maxLength": 36,
-                    "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+                    "$ref": "#/definitions/guid",
+                    "description": "AAD application id of the app. This id must be a GUID."
                 },
                 "resource": {
                     "type": "string",
@@ -530,11 +541,79 @@
         "manifestVersion",
         "version",
         "id",
-        "packageName",
         "developer",
         "name",
         "description",
         "icons",
         "accentColor"
-    ]
+    ],
+    "definitions": {
+        "relativePath": {
+            "type": "string",
+            "maxLength": 2048
+        },
+        "httpsUrl": {
+            "type": "string",
+            "maxLength": 2048,
+            "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+        },
+        "semver": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^([0-9]|[1-9]+[0-9]*)\\.([0-9]|[1-9]+[0-9]*)\\.([0-9]|[1-9]+[0-9]*)$"
+        },
+        "hexColor": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "guid": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+        },
+        "botId": {
+            "type": "string",
+            "maxLength": 64
+        },
+        "languageTag": {
+            "type": "string",
+            "pattern": "^([A-Za-z0-9]{1,8}($|-)){1,3}(?<!-)$"
+        },
+        "scopes": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": {
+                "$ref": "#/definitions/scope"
+            }
+        },
+        "scope": {
+            "enum": [
+                "team",
+                "personal",
+                "groupchat"
+            ]
+        },
+        "teamScopeNotAllowed": {
+            "not": {
+                "contains": {
+                    "const": "team"
+                }
+            }
+        },
+        "personalScopeNotAllowed": {
+            "not": {
+                "contains": {
+                    "const": "personal"
+                }
+            }
+        },
+        "groupchatScopeNotAllowed": {
+            "not": {
+                "contains": {
+                    "const": "groupchat"
+                }
+            }
+        }
+    }
 }
