@@ -555,7 +555,7 @@
                                 "type": {
                                     "type": "string",
                                     "enum": [
-                                        "Link"
+                                        "link"
                                     ],
                                     "description": "Type of the message handler"
                                 },
