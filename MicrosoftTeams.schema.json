@@ -540,8 +540,7 @@
                             },
                             "required": [
                                 "id",
-                                "title",
-                                "parameters"
+                                "title"
                             ]
                         }
                     },
