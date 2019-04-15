@@ -445,12 +445,12 @@
                                     "items": {
                                         "enum": [
                                             "compose",
-                                            "commandBox",
+                                            "commandbox",
                                             "message"
                                         ]
                                     },
                                     "description": "Context where the command would apply",
-                                    "default": ["compose","commandBox"]
+                                    "default": ["compose","commandbox"]
                                 },
                                 "title": {
                                     "type": "string",
