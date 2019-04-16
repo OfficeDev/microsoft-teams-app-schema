@@ -29,11 +29,11 @@
       "type": "string",
       "maxLength": 128
     },
-    "^bots\\[0\\]\\.commandLists\\[[0-1]\\]\\.commands\\[[0-9]\\]\\.title$": {
+    "^bots\\[0\\]\\.commandLists\\[[0-2]\\]\\.commands\\[[0-9]\\]\\.title$": {
       "type": "string",
       "maxLength": 32
     },
-    "^bots\\[0\\]\\.commandLists\\[[0-1]\\]\\.commands\\[[0-9]\\]\\.description$": {
+    "^bots\\[0\\]\\.commandLists\\[[0-2]\\]\\.commands\\[[0-9]\\]\\.description$": {
       "type": "string",
       "maxLength": 128
     },
@@ -52,6 +52,18 @@
     "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.parameters\\[[0-4]\\]\\.description$": {
       "type": "string",
       "maxLength": 128
+    },
+    "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.parameters\\[[0-4]\\]\\.value$": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.parameters\\[[0-4]\\]\\.choices\\[[0-9]\\]\\.title$": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.taskInfo\\.title$": {
+      "type": "string",
+      "maxLength": 64
     }
   }
 }
