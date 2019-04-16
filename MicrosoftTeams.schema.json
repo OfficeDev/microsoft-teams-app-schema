@@ -416,7 +416,7 @@
                                         "action"
                                     ],
                                     "description": "Type of the command",
-                                    "default": "action"
+                                    "default": "query"
                                 },
                                 "context": {
                                     "type": "array",
@@ -433,15 +433,6 @@
                                         "compose",
                                         "commandBox"
                                     ]
-                                },
-                                "type": {
-                                    "type": "string",
-                                    "enum": [
-                                        "query",
-                                        "action"
-                                    ],
-                                    "description": "Type of the command",
-                                    "default": "query"
                                 },
                                 "title": {
                                     "type": "string",
@@ -535,6 +526,32 @@
                                             "name",
                                             "title"
                                         ]
+                                    }
+                                },
+                                "taskInfo": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Initial dialog title",
+                                            "maxLength": 64
+                                        },
+                                        "width": {
+                                            "type": "string",
+                                            "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "height": {
+                                            "type": "string",
+                                            "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "description": "Initial webview URL",
+                                            "maxLength": 2048
+                                        }
                                     }
                                 }
                             },
