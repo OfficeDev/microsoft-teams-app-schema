@@ -543,19 +543,16 @@
                                             "maxLength": 64
                                         },
                                         "width": {
-                                            "type": "string",
-                                            "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
-                                            "maxLength": 16
+                                            "$ref": "#/definitions/taskInfoDimension",
+                                            "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
                                         },
                                         "height": {
-                                            "type": "string",
-                                            "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
-                                            "maxLength": 16
+                                            "$ref": "#/definitions/taskInfoDimension",
+                                            "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
                                         },
                                         "url": {
-                                            "type": "string",
-                                            "description": "Initial webview URL",
-                                            "maxLength": 2048
+                                            "$ref": "#/definitions/httpsUrl",
+                                            "description": "Initial webview URL"
                                         }
                                     }
                                 }
@@ -703,6 +700,11 @@
         "languageTag": {
             "type": "string",
             "pattern": "^([A-Za-z0-9]{1,8}($|-)){1,3}(?<!-)$"
+        },
+        "taskInfoDimension": {
+            "type": "string",
+            "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
+            "maxLength": 16
         }
     }
 }
