@@ -418,6 +418,22 @@
                                     "description": "Type of the command",
                                     "default": "query"
                                 },
+                                "context": {
+                                    "type": "array",
+                                    "maxItems": 3,
+                                    "items": {
+                                        "enum": [
+                                            "compose",
+                                            "commandBox",
+                                            "message"
+                                        ]
+                                    },
+                                    "description": "Context where the command would apply",
+                                    "default": [
+                                        "compose",
+                                        "commandBox"
+                                    ]
+                                },
                                 "title": {
                                     "type": "string",
                                     "description": "Title of the command.",
@@ -459,7 +475,8 @@
                                                     "number",
                                                     "date",
                                                     "time",
-                                                    "toggle"
+                                                    "toggle",
+                                                    "choiceset"
                                                 ],
                                                 "description": "Type of the parameter",
                                                 "default": "text"
@@ -473,6 +490,36 @@
                                                 "type": "string",
                                                 "description": "Description of the parameter.",
                                                 "maxLength": 128
+                                            },
+                                            "value": {
+                                                "type": "string",
+                                                "description": "Initial value for the parameter",
+                                                "maxLength": 512
+                                            },
+                                            "choices": {
+                                                "type": "array",
+                                                "maxItems": 10,
+                                                "description": "The choice options for the parameter",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "title": {
+                                                            "type": "string",
+                                                            "description": "Title of the choice",
+                                                            "maxLength": 128
+                                                        },
+                                                        "value": {
+                                                            "type": "string",
+                                                            "description": "Value of the choice",
+                                                            "maxLength": 512
+                                                        }
+                                                    },
+                                                    "additionalProperties": false,
+                                                    "required": [
+                                                        "title",
+                                                        "value"
+                                                    ]
+                                                }
                                             }
                                         },
                                         "required": [
@@ -480,12 +527,73 @@
                                             "title"
                                         ]
                                     }
+                                },
+                                "taskInfo": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Initial dialog title",
+                                            "maxLength": 64
+                                        },
+                                        "width": {
+                                            "type": "string",
+                                            "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "height": {
+                                            "type": "string",
+                                            "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'",
+                                            "maxLength": 16
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "description": "Initial webview URL",
+                                            "maxLength": 2048
+                                        }
+                                    }
                                 }
                             },
                             "required": [
                                 "id",
                                 "title"
                             ]
+                        }
+                    },
+                    "messageHandlers": {
+                        "type": "array",
+                        "maxItems": 5,
+                        "description": "A list of handlers that allow apps to be invoked when certain conditions are met",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "link"
+                                    ],
+                                    "description": "Type of the message handler"
+                                },
+                                "value": {
+                                    "type": "object",
+                                    "properties": {
+                                        "domains": {
+                                            "type": "array",
+                                            "description": "A list of domains that the link message handler can register for, and when they are matched the app will be invoked",
+                                            "items": {
+                                                "type": "string",
+                                                "maxLength": 2048
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "value"
+                            ],
+                            "additionalProperties": false
                         }
                     }
                 },
