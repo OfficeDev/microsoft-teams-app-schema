@@ -71,6 +71,11 @@
                     "description": "The display name for the developer.",
                     "maxLength": 32
                 },
+                "mpnId": {
+                    "type": "integer",
+                    "description": "If you are a registered partner of Microsoft and building this app for your customer, provide the Microsoft Partner Network Id that identifies your partner organization.",
+                    "minimum": 0
+                },
                 "websiteUrl": {
                     "$ref": "#/definitions/httpsUrl",
                     "description": "The url to the page that provides support information for the app."
