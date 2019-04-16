@@ -71,6 +71,11 @@
                     "description": "The display name for the developer.",
                     "maxLength": 32
                 },
+                "mpnId": {
+                    "type": "string",
+                    "description": "The Microsoft Partner Network ID that identifies the partner organization building the app. This field is not required, and should only be used if you are already part of the Microsoft Partner Network. More info at https://aka.ms/partner",
+                    "maxLength": 10
+                },
                 "websiteUrl": {
                     "$ref": "#/definitions/httpsUrl",
                     "description": "The url to the page that provides support information for the app."
