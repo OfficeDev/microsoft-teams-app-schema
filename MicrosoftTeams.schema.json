@@ -553,9 +553,8 @@
                                             "maxLength": 16
                                         },
                                         "url": {
-                                            "type": "string",
-                                            "description": "Initial webview URL",
-                                            "maxLength": 2048
+                                            "$ref": "#/definitions/httpsUrl",
+                                            "description": "Initial webview URL"
                                         }
                                     }
                                 }
