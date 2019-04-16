@@ -72,9 +72,9 @@
                     "maxLength": 32
                 },
                 "mpnId": {
-                    "type": "integer",
-                    "description": "The Microsoft Partner Network ID that identifies the partner organization building the app.",
-                    "minimum": 0
+                    "type": "string",
+                    "description": "The Microsoft Partner Network ID that identifies the partner organization building the app. More info at https://aka.ms/partner",
+                    "maxLength": 10
                 },
                 "websiteUrl": {
                     "$ref": "#/definitions/httpsUrl",
