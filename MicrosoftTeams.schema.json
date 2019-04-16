@@ -73,7 +73,7 @@
                 },
                 "mpnId": {
                     "type": "string",
-                    "description": "The Microsoft Partner Network ID that identifies the partner organization building the app. More info at https://aka.ms/partner",
+                    "description": "The Microsoft Partner Network ID that identifies the partner organization building the app. This field is not required, and should only be used if you are already part of the Microsoft Partner Network. More info at https://aka.ms/partner",
                     "maxLength": 10
                 },
                 "websiteUrl": {
