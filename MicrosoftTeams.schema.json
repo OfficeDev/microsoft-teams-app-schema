@@ -73,7 +73,7 @@
                 },
                 "mpnId": {
                     "type": "integer",
-                    "description": "If you are a registered partner of Microsoft and building this app for your customer, provide the Microsoft Partner Network Id that identifies your partner organization.",
+                    "description": "The Microsoft Partner Network ID that identifies the partner organization building the app.",
                     "minimum": 0
                 },
                 "websiteUrl": {
