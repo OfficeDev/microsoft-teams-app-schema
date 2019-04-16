@@ -703,7 +703,7 @@
         },
         "taskInfoDimension": {
             "type": "string",
-            "pattern": "(?i)^((([0-9]*[.])?[0-9]+)|large|medium|small)$",
+            "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
             "maxLength": 16
         }
     }
