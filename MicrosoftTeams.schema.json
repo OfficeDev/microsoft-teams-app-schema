@@ -100,6 +100,11 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "tiny": {
+                    "type": "string",
+                    "description": "A shorter display name of the app, used on devices such as phone or tablet. If not provided, short name will be truncated to fit.",
+                    "maxLength": 12
+                },
                 "short": {
                     "type": "string",
                     "description": "A short display name for the app.",
@@ -200,6 +205,10 @@
                                 "sharePointWebPart"
                             ]
                         }
+                    },
+                    "platforms": {
+                        "$ref": "#/definitions/platforms",
+                        "description": "Specifies the platforms on which configurable tabs are displayed"
                     }
                 },
                 "required": [
@@ -244,6 +253,10 @@
                                 "personal"
                             ]
                         }
+                    },
+                    "platforms": {
+                        "$ref": "#/definitions/platforms",
+                        "description": "Specifies the platforms on which staticTabs tabs are displayed"
                     }
                 },
                 "required": [
@@ -681,6 +694,25 @@
         "accentColor"
     ],
     "definitions": {
+        "platforms": {
+            "type": "array",
+            "description": "This section defines the different environments supported by Teams application. 1. web refers to the Teams website running in a web browser on any compatible device/ computer. 2. Desktop refers to the installed package of Teams application on devices/ machines running Windows or Mac OS 3. phone refers to native apps (apk or ipa) running on Android or IOS Phone devices like iPhone, etc. 4. tablet refers to native apps (apk or ipa) running on Android or IOS Tablet devices like iPad, etc",
+            "maxItems": 4,
+            "items": {
+                "enum": [
+                    "web",
+                    "desktop",
+                    "phone",
+                    "tablet"
+                ]
+            },
+            "default": [
+                "web",
+                "desktop",
+                "phone",
+                "tablet"
+            ]
+        },
         "relativePath": {
             "type": "string",
             "maxLength": 2048
