@@ -582,7 +582,8 @@
                             },
                             "required": [
                                 "id",
-                                "title"
+                                "title",
+                                "type"
                             ]
                         }
                     },
