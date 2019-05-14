@@ -48,7 +48,7 @@
                             },
                             "file": {
                                 "$ref": "#/definitions/relativePath",
-                                "description": "A relative file path to a full color PNG icon. Size 96x96."
+                                "description": "A relative file path to a the .json file containing the translated strings."
                             }
                         },
                         "required": [
