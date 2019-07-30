@@ -1,3 +1,17 @@
+--- 
+page_type: sample 
+products: 
+- office-teams
+- office-365 
+languages: 
+- json
+extensions: 
+  contentType: samples 
+  technologies: 
+  - Add-ins 
+  createdDate: 6/28/2018 10:26:10 AM 
+---
+
 # What Is This?
 
 This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",`.
