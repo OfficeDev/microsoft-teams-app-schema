@@ -671,7 +671,7 @@
         },
         "showLoadingIndicator": {
             "type": "boolean",
-            "description": "This value describes whether or not show loading indicator when app is loading",
+            "description": "This value describes whether or not to show loading indicator when app is loading",
             "default": false
         }
     },
