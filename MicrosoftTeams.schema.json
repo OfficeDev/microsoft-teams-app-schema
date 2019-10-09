@@ -668,6 +668,11 @@
                 "resource"
             ],
             "additionalProperties": false
+        },
+        "showLoadingIndicator": {
+            "type": "boolean",
+            "description": "This value describes whether or not show loading indicator when app is loading",
+            "default": false
         }
     },
     "required": [
