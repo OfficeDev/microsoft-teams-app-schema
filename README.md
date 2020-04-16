@@ -1,8 +1,23 @@
-# What Is This?
+--- 
+page_type: sample 
+products: 
+- office-teams
+- office-365 
+languages: 
+- json
+description: JSON Schema used to provision Apps for Microsoft Teams
+extensions: 
+  contentType: samples 
+  technologies: 
+  - Add-ins 
+  createdDate: 6/28/2018 10:26:10 AM 
+---
 
-This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",`.
+# Microsoft Teams App Schema
 
-If you are localizing your Microsoft Teams app, then you should also use the localization schema in your strings file to ensure a proper format, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.Localization.schema.json",`.
+This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.6/MicrosoftTeams.schema.json",`.
+
+If you are localizing your Microsoft Teams app, then you should also use the localization schema in your strings file to ensure a proper format, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.6/MicrosoftTeams.Localization.schema.json",`.
 
 Unless you are writing an app that reads/writes Microsoft Teams manifest.json files, you don't need to care about this.
 
