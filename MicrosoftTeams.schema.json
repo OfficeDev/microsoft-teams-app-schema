@@ -266,7 +266,7 @@
                   "chat",
                   "about",
                   "recent",
-                  "all"
+                  "allTabs"
                 ],
                 "description": "A unique identifier for the entity which the tab displays.",
                 "maxLength": 64
