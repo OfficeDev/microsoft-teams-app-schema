@@ -212,82 +212,45 @@
       "type": "array",
       "description": "A set of tabs that may be 'pinned' by default, without the user adding them manually. Static tabs declared in personal scope are always pinned to the app's personal experience. Static tabs do not currently support the 'teams' scope.",
       "maxItems": 16,
-      "uniqueItems": true,
       "items": {
         "type": "object",
-        "oneOf": [
-          {
-            "additionalProperties": false,
-            "properties": {
-              "entityId": {
-                "type": "string",
-                "description": "A unique identifier for the entity which the tab displays.",
-                "maxLength": 64,
-                "pattern": "(?!^chat$|^about$)(^.*$)"
-              },
-              "name": {
-                "type": "string",
-                "description": "The display name of the tab.",
-                "maxLength": 128
-              },
-              "contentUrl": {
-                "$ref": "#/definitions/httpsUrl",
-                "description": "The url which points to the entity UI to be displayed in the Teams canvas."
-              },
-              "websiteUrl": {
-                "$ref": "#/definitions/httpsUrl",
-                "description": "The url to point at if a user opts to view in a browser."
-              },
-              "scopes": {
-                "type": "array",
-                "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
-                "maxItems": 2,
-                "items": {
-                  "enum": [
-                    "team",
-                    "personal"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "entityId",
-              "name",
-              "contentUrl",
-              "scopes"
-            ]
+        "additionalProperties": false,
+        "properties": {
+          "entityId": {
+            "type": "string",
+            "description": "A unique identifier for the entity which the tab displays.",
+            "maxLength": 64
           },
-          {
-            "additionalProperties": false,
-            "properties": {
-              "entityId": {
-                "type": "string",
-                "enum": [
-                  "chat",
-                  "about",
-                  "recent",
-                  "allTabs"
-                ],
-                "description": "A unique identifier for the entity which the tab displays.",
-                "maxLength": 64
-              },
-              "scopes": {
-                "type": "array",
-                "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
-                "maxItems": 2,
-                "items": {
-                  "enum": [
-                    "team",
-                    "personal"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "entityId",
-              "scopes"
-            ]
+          "name": {
+            "type": "string",
+            "description": "The display name of the tab.",
+            "maxLength": 128
+          },
+          "contentUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url which points to the entity UI to be displayed in the Teams canvas."
+          },
+          "websiteUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url to point at if a user opts to view in a browser."
+          },
+          "scopes": {
+            "type": "array",
+            "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
+            "maxItems": 2,
+            "items": {
+              "enum": [
+                "team",
+                "personal"
+              ]
+            }
           }
+        },
+        "required": [
+          "entityId",
+          "name",
+          "contentUrl",
+          "scopes"
         ]
       }
     },
@@ -316,6 +279,16 @@
           "supportsFiles": {
             "type": "boolean",
             "description": "A value indicating whether the bot supports uploading/downloading of files.",
+            "default": false
+          },
+          "supportsCalling": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports audio calling.",
+            "default": false
+          },
+          "supportsVideo": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports video calling.",
             "default": false
           },
           "scopes": {
@@ -707,6 +680,36 @@
       "type": "boolean",
       "description": "A value indicating whether or not show loading indicator when app/tab is loading",
       "default": false
+    },
+    "activities": {
+      "type": "object",
+      "properties": {
+        "activityTypes": {
+          "type": "array",
+          "description": "Specify the types of activites that your app can post to a users activity feed",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 128
+              },
+              "templateText": {
+                "type": "string",
+                "maxLength": 128
+              }
+            },
+            "required": [ "type", "description", "templateText" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [
