@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "const": "1.6"
+      "const": "1.7"
     },
     "version": {
       "type": "string",
@@ -212,6 +212,7 @@
       "type": "array",
       "description": "A set of tabs that may be 'pinned' by default, without the user adding them manually. Static tabs declared in personal scope are always pinned to the app's personal experience. Static tabs do not currently support the 'teams' scope.",
       "maxItems": 16,
+      "uniqueItems": true,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -248,8 +249,6 @@
         },
         "required": [
           "entityId",
-          "name",
-          "contentUrl",
           "scopes"
         ]
       }
@@ -279,6 +278,16 @@
           "supportsFiles": {
             "type": "boolean",
             "description": "A value indicating whether the bot supports uploading/downloading of files.",
+            "default": false
+          },
+          "supportsCalling": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports audio calling.",
+            "default": false
+          },
+          "supportsVideo": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports video calling.",
             "default": false
           },
           "scopes": {
@@ -675,6 +684,36 @@
       "type": "boolean",
       "description": "A value indicating whether a personal app is rendered without a tab header-bar",
       "default": false
+    },
+    "activities": {
+      "type": "object",
+      "properties": {
+        "activityTypes": {
+          "type": "array",
+          "description": "Specify the types of activites that your app can post to a users activity feed",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 128
+              },
+              "templateText": {
+                "type": "string",
+                "maxLength": 128
+              }
+            },
+            "required": [ "type", "description", "templateText" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [
