@@ -64,6 +64,14 @@
     "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.taskInfo\\.title$": {
       "type": "string",
       "maxLength": 64
+    },
+    "^activities.activityTypes\\[[0-127]\\]\\.description$": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "^activities.activityTypes\\[[0-127]\\]\\.templateText$": {
+      "type": "string",
+      "maxLength": 128
     }
   }
 }
