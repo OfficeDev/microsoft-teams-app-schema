@@ -680,7 +680,7 @@
       "description": "A value indicating whether or not show loading indicator when app/tab is loading",
       "default": false
     },
-    "isFullscreen": {
+    "isFullScreen": {
       "type": "boolean",
       "description": "A value indicating whether a personal app is rendered without a tab header-bar",
       "default": false
