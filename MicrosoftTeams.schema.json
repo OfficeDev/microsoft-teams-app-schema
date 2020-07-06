@@ -237,7 +237,7 @@
           },
           "searchUrl": {
             "$ref": "#/definitions/httpsUrl",
-            "description": "The url to which we can resolve end user search queries "
+            "description": "The url to direct a user's search queries."
           },
           "scopes": {
             "type": "array",
