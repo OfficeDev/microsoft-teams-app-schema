@@ -185,14 +185,14 @@
               ]
             }
           },
-	  "context": {
+          "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belongs to",
             "maxItems": 2,
             "items": {
               "enum": [ 
                 "personalTab", 
-		"channelTab" 
+                "channelTab" 
               ]
             }
           },
@@ -263,9 +263,9 @@
             "maxItems": 2,
             "items": {
               "enum": [ 
-		 "personalTab", 
-                 "channelTab" 
-	      ]
+                "personalTab", 
+                "channelTab" 
+              ]
             }
           }
         },
