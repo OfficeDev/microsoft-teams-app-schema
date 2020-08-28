@@ -188,11 +188,17 @@
           "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belongs to",
-            "maxItems": 2,
+            "maxItems": 8,
             "items": {
               "enum": [
                 "personalTab",
-                "channelTab"
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
+                "meetingDetailsTab",
+                "meetingSidePanel",
+                "meetingStage",
+                "callingSidePanel"
               ]
             }
           },
@@ -264,25 +270,20 @@
           "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belongs to",
-            "maxItems": 8,
+            "maxItems": 2,
             "items": {
               "enum": [
                 "personalTab",
-                "channelTab",
-                "privateChatTab",
-                "meetingChatTab",
-                "meetingDetailsTab",
-                "meetingSidePanel",
-                "meetingStage",
-                "callingSidePanel"
+                "channelTab"
               ]
             }
-          },
-          "required": [
-            "entityId",
-            "scopes"
-          ]
-        }
+          }
+        },
+        "required": [
+          "entityId",
+          "scopes"
+        ]
+      }
     },
     "bots": {
       "type": "array",
