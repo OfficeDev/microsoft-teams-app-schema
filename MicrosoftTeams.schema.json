@@ -248,7 +248,7 @@
             "$ref": "#/definitions/httpsUrl",
             "description": "The url which points to the entity UI to be displayed in the Teams canvas."
           },
-          "botId": {
+          "contentBotId": {
             "$ref": "#/definitions/botId",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
