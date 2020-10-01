@@ -185,9 +185,20 @@
               ]
             }
           },
+          "meetingSurfaces": {
+            "type": "array",
+            "description": "The set of meetingSurfaceItem scopes that a tab belong to",
+            "maxItems": 2,
+            "items": {
+              "enum": [
+                "sidePanel",
+                "stage"
+              ]
+            }
+          },
           "context": {
             "type": "array",
-            "description": "The set of contextItem scopes that a tab belongs to",
+            "description": "The set of contextItem scopes that a tab belong to",
             "maxItems": 8,
             "items": {
               "enum": [
@@ -273,7 +284,7 @@
           },
           "context": {
             "type": "array",
-            "description": "The set of contextItem scopes that a tab belongs to",
+            "description": "The set of contextItem scopes that a tab belong to",
             "maxItems": 2,
             "items": {
               "enum": [

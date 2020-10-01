@@ -65,11 +65,11 @@
       "type": "string",
       "maxLength": 64
     },
-    "^activities.activityTypes\\[[0-127]\\]\\.description$": {
+    "^activities.activityTypes\\[\\b([0-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|12[0-7])\\b]\\.description$": {
       "type": "string",
       "maxLength": 128
     },
-    "^activities.activityTypes\\[[0-127]\\]\\.templateText$": {
+    "^activities.activityTypes\\[\\b([0-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|12[0-7])\\b]\\.templateText$": {
       "type": "string",
       "maxLength": 128
     }
