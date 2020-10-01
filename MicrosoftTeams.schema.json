@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "const": "1.7"
+      "const": "1.8"
     },
     "version": {
       "type": "string",
@@ -185,6 +185,21 @@
               ]
             }
           },
+          "context": {
+            "type": "array",
+            "description": "The set of contextItem scopes that a tab belong to",
+            "maxItems": 6,
+            "items": {
+              "enum": [
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
+                "meetingDetailsTab",
+                "meetingSidePanel",
+                "meetingStage"
+              ]
+            }
+          },
           "sharePointPreviewImage": {
             "$ref": "#/definitions/relativePath",
             "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768."
@@ -235,6 +250,10 @@
             "$ref": "#/definitions/httpsUrl",
             "description": "The url to point at if a user opts to view in a browser."
           },
+          "searchUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url to direct a user's search queries."
+          },
           "scopes": {
             "type": "array",
             "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
@@ -243,6 +262,17 @@
               "enum": [
                 "team",
                 "personal"
+              ]
+            }
+          },
+          "context": {
+            "type": "array",
+            "description": "The set of contextItem scopes that a tab belong to",
+            "maxItems": 2,
+            "items": {
+              "enum": [
+                "personalTab",
+                "channelTab"
               ]
             }
           }
@@ -278,6 +308,16 @@
           "supportsFiles": {
             "type": "boolean",
             "description": "A value indicating whether the bot supports uploading/downloading of files.",
+            "default": false
+          },
+          "supportsCalling": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports audio calling.",
+            "default": false
+          },
+          "supportsVideo": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports video calling.",
             "default": false
           },
           "scopes": {
