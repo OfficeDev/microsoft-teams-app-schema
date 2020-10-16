@@ -761,6 +761,55 @@
         }
       },
       "additionalProperties": false
+    },
+    "defaultInstallScope": {
+      "type": "string",
+      "enum": [
+        "team",
+        "personal",
+        "groupchat",
+        "meetings"
+      ],
+      "description": "The install scope defined for this app by default. This will be the option displayed on the button when a user tries to add the app"
+    },
+    "defaultGroupCapability": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "type": "string",
+          "enum": [
+            "bot",
+            "tab",
+            "connector"
+          ],
+          "description": "When the install scope selected is Team, this field specifies the default capability available"
+        },
+        "groupchat": {
+          "type": "string",
+          "enum": [
+            "bot",
+            "tab",
+            "connector"
+          ],
+          "description": "When the install scope selected is GroupChat, this field specifies the default capability available"
+        },
+        "meetings": {
+          "type": "string",
+          "enum": [
+            "bot",
+            "tab",
+            "connector"
+          ],
+          "description": "When the install scope selected is Meetings, this field specifies the default capability available"
+        }
+      },
+      "description": "When a group install scope is selected, this will define the default capability when the user installs the app",
+      "required": [
+        "team", 
+        "groupchat", 
+        "meetings"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [
