@@ -804,11 +804,6 @@
         }
       },
       "description": "When a group install scope is selected, this will define the default capability when the user installs the app",
-      "required": [
-        "team", 
-        "groupchat", 
-        "meetings"
-      ],
       "additionalProperties": false
     }
   },
