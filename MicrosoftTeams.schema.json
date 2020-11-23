@@ -808,7 +808,7 @@
     },
     "configurableProperties": {
       "type": "array",
-      "description": "A list of tenant configured properties for an app",
+      "description": "A list of tenant configurable properties for an app",
       "maxItems": 9,
       "items": {
         "enum": [
