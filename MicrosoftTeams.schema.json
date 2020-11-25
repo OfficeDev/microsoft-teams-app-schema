@@ -202,7 +202,7 @@
           },
           "supportedPlatform" : {
             "type": "array",
-            "description": "Platform flag to determine in which platform is this tab supported or not",
+            "description": "Specifies the different types of Teams Clients on which this tab is supported on",
             "maxItems": 3,
             "items": {
               "enum": [
@@ -290,7 +290,7 @@
           },
           "supportedPlatform" : {
             "type": "array",
-            "description": "Platform flag to determine in which platform is this tab supported or not",
+            "description": "Specifies the different types of Teams Clients on which this tab is supported on",
             "maxItems": 3,
             "items": {
               "enum": [
