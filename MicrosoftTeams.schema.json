@@ -213,9 +213,9 @@
               ]
             }
           },
-          "supportedPlatform" : {
+          "supportedPlatform": {
             "type": "array",
-            "description": "Specifies the different types of Teams Clients on which this tab is supported on",
+            "description": "The set of supportedPlatform scopes that a tab belong to",
             "maxItems": 3,
             "items": {
               "enum": [
@@ -305,9 +305,9 @@
               ]
             }
           },
-          "supportedPlatform" : {
+          "supportedPlatform": {
             "type": "array",
-            "description": "Specifies the different types of Teams Clients on which this tab is supported on",
+            "description": "The set of supportedPlatform scopes that a tab belong to",
             "maxItems": 3,
             "items": {
               "enum": [
@@ -786,6 +786,24 @@
       },
       "additionalProperties": false
     },
+    "configurableProperties": {
+      "type": "array",
+      "description": "A list of tenant configured properties for an app",
+      "maxItems": 9,
+      "items": {
+        "enum": [
+          "name",
+          "shortDescription",
+          "longDescription",
+          "smallImageUrl",
+          "largeImageUrl",
+          "accentColor",
+          "developerUrl",
+          "privacyUrl",
+          "termsOfUseUrl"
+        ]
+      }
+    },
     "defaultInstallScope": {
       "type": "string",
       "enum": [
@@ -829,24 +847,6 @@
       },
       "description": "When a group install scope is selected, this will define the default capability when the user installs the app",
       "additionalProperties": false
-    },
-    "configurableProperties": {
-      "type": "array",
-      "description": "A list of tenant configurable properties for an app",
-      "maxItems": 9,
-      "items": {
-        "enum": [
-          "name",
-          "shortDescription",
-          "longDescription",
-          "smallImageUrl",
-          "largeImageUrl",
-          "accentColor",
-          "developerUrl",
-          "privacyUrl",
-          "termsOfUseUrl"
-        ]
-      }
     }
   },
   "required": [
