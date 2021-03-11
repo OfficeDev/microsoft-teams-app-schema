@@ -248,6 +248,19 @@
         ]
       }
     },
+    "subscriptionOffer": {
+      "type": "object",
+      "description": "Subscription offer associated with this app.",
+      "properties": {
+        "offerId": {
+          "type": "string",
+          "description": "A unique identifier for the Commercial Marketplace Software as a Service Offer.",
+          "maxLength": 128
+        }
+      },
+      "required": [ "offerId" ],
+      "additionalProperties": false
+    },
     "staticTabs": {
       "type": "array",
       "description": "A set of tabs that may be 'pinned' by default, without the user adding them manually. Static tabs declared in personal scope are always pinned to the app's personal experience. Static tabs do not currently support the 'teams' scope.",
