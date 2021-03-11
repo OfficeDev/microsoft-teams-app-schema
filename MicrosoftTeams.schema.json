@@ -255,7 +255,7 @@
         "offerId": {
           "type": "string",
           "description": "A unique identifier for the Commercial Marketplace Software as a Service Offer.",
-          "maxLength": 128
+          "maxLength": 2048
         }
       },
       "required": [ "offerId" ],
