@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "const": "devPreview"
+      "enum": ["devPreview", "m365DevPreview"]
     },
     "version": {
       "type": "string",
