@@ -744,14 +744,6 @@
           "type": "string",
           "description": "Resource url of app for acquiring auth token for SSO.",
           "maxLength": 2048
-        },
-        "applicationPermissions": {
-          "type": "array",
-          "maxItems": 100,
-          "items": {
-            "type": "string",
-            "maxLength": 128
-          }
         }
       },
       "required": [
@@ -937,6 +929,66 @@
       },
       "description": "Specify meeting extension definition.",
       "additionalProperties": false
+    },
+    "authorization": {
+      "type": "object",
+      "description": "Specify and consolidates authorization related information for the App.",
+      "additionalProperties": false,
+      "properties": {
+        "permissions": {
+          "type": "object",
+          "description": "Specify Permissions which App lists for accessing Resource.",
+          "additionalProperties": false,
+          "properties": {
+            "orgWide": {
+              "description": "App's organization wide classic permissions provided by user.",
+              "maxItems": 16,
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The Permission name of app's permission node.",
+                    "maxLength": 128
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [ "Application", "Delegated" ],
+                    "description": "The Permission type of app's permission node."
+                  }
+                },
+                "required": [ "name", "type" ]
+              }
+            },
+            "resourceSpecific": {
+              "description": "App's resource specific permissions provided by user.",
+              "maxItems": 16,
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The Permission name of app's permission node.",
+                    "maxLength": 128
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [ "Application", "Delegated" ],
+                    "description": "The Permission type of app's permission node."
+                  }
+                },
+                "required": [ "name", "type" ]
+              }
+            }
+          }
+        }
+      }
     }
   },
   "required": [
