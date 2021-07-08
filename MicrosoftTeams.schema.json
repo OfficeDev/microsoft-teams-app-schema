@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "const": "devPreview"
+      "enum": ["devPreview", "m365DevPreview"]
     },
     "version": {
       "type": "string",
@@ -464,6 +464,19 @@
           "scopes"
         ]
       }
+    },
+    "subscriptionOffer": {
+      "type": "object",
+      "description": "Subscription offer associated with this app.",
+      "properties": {
+        "offerId": {
+          "type": "string",
+          "description": "A unique identifier for the Commercial Marketplace Software as a Service Offer.",
+          "maxLength": 2048
+        }
+      },
+      "required": [ "offerId" ],
+      "additionalProperties": false
     },
     "composeExtensions": {
       "type": "array",
