@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "enum": ["devPreview", "m365DevPreview"]
+      "enum": [ "devPreview", "m365DevPreview" ]
     },
     "version": {
       "type": "string",
@@ -808,6 +808,15 @@
           "termsOfUseUrl"
         ]
       }
+    },
+    "defaultBlockUntilAdminAction": {
+      "type": "boolean",
+      "description": "A value indicating whether an app is blocked by default until admin allows it",
+      "default": false
+    },
+    "publisherDocsUrl": {
+      "$ref": "#/definitions/httpsUrl",
+      "description": "The url to the page that provides additional app information for the admins"
     },
     "defaultInstallScope": {
       "type": "string",
