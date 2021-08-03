@@ -475,6 +475,11 @@
           "maxLength": 2048
         }
       },
+      "hasFreeTrial": {
+        "type": "boolean",
+        "description": "A value indicating whether the app has free trials",
+        "default": false
+      },
       "required": [ "offerId" ],
       "additionalProperties": false
     },
