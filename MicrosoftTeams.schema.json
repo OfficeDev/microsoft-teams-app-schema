@@ -10,10 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "enum": [
-        "devPreview",
-        "m365DevPreview"
-      ]
+      "enum": [ "devPreview", "m365DevPreview" ]
     },
     "version": {
       "type": "string",
@@ -433,751 +430,722 @@
                 }
               }
             }
-          },
-          "properties": {
-            "botId": {
-              "$ref": "#/definitions/botId",
-              "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
-            },
-            "needsChannelSelector": {
-              "type": "boolean",
-              "description": "This value describes whether or not the bot utilizes a user hint to add the bot to a specific channel.",
-              "default": false
-            },
-            "isNotificationOnly": {
-              "type": "boolean",
-              "description": "A value indicating whether or not the bot is a one-way notification only bot, as opposed to a conversational bot.",
-              "default": false
-            },
-            "supportsFiles": {
-              "type": "boolean",
-              "description": "A value indicating whether the bot supports uploading/downloading of files.",
-              "default": false
-            },
-            "supportsCalling": {
-              "type": "boolean",
-              "description": "A value indicating whether the bot supports audio calling.",
-              "default": false
-            },
-            "supportsVideo": {
-              "type": "boolean",
-              "description": "A value indicating whether the bot supports video calling.",
-              "default": false
-            },
-            "scopes": {
-              "type": "array",
-              "description": "Specifies whether the bot offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive.",
-              "maxItems": 3,
-              "items": {
-                "enum": [
-                  "team",
-                  "personal",
-                  "groupchat"
-                ]
-              }
-            },
-            "commandLists": {
-              "type": "array",
-              "maxItems": 3,
-              "description": "The list of commands that the bot supplies, including their usage, description, and the scope for which the commands are valid. A separate command list should be used for each scope.",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "scopes": {
-                    "type": "array",
-                    "description": "Specifies the scopes for which the command list is valid",
-                    "maxItems": 3,
-                    "items": {
-                      "enum": [
-                        "team",
-                        "personal",
-                        "groupchat"
-                      ]
-                    }
-                  },
-                  "commands": {
-                    "type": "array",
-                    "maxItems": 10,
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "title": {
-                          "type": "string",
-                          "description": "The bot command name",
-                          "maxLength": 32
-                        },
-                        "description": {
-                          "type": "string",
-                          "description": "A simple text description or an example of the command syntax and its arguments.",
-                          "maxLength": 128
-                        }
-                      },
-                      "required": [
-                        "title",
-                        "description"
-                      ]
-                    }
-                  }
-                },
-                "required": [
-                  "scopes",
-                  "commands"
-                ]
-              }
-            }
-          },
-          "required": [
-            "botId",
-            "scopes"
-          ]
-        }
-      }
-    },
-      "connectors": {
-        "type": "array",
-        "description": "The set of Office365 connectors for this app. Currently only one connector per app is supported.",
-        "maxItems": 1,
-        "items": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "connectorId": {
-              "type": "string",
-              "description": "A unique identifier for the connector which matches its ID in the Connectors Developer Portal.",
-              "maxLength": 64
-            },
-            "configurationUrl": {
-              "$ref": "#/definitions/httpsUrl",
-              "description": "The url to use for configuring the connector using the inline configuration experience."
-            },
-            "scopes": {
-              "type": "array",
-              "description": "Specifies whether the connector offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. Currently, only the team scope is supported.",
-              "maxItems": 1,
-              "items": {
-                "enum": [
-                  "team"
-                ]
-              }
-            }
-          },
-          "required": [
-            "connectorId",
-            "scopes"
-          ]
-        }
-      },
-      "subscriptionOffer": {
-        "type": "object",
-        "description": "Subscription offer associated with this app.",
-        "properties": {
-          "offerId": {
-            "type": "string",
-            "description": "A unique identifier for the Commercial Marketplace Software as a Service Offer.",
-            "maxLength": 2048
           }
         },
-        "required": [
-          "offerId"
-        ],
-        "additionalProperties": false
-      },
-      "composeExtensions": {
-        "type": "array",
-        "description": "The set of compose extensions for this app. Currently only one compose extension per app is supported.",
-        "maxItems": 1,
-        "items": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "botId": {
-              "$ref": "#/definitions/botId",
-              "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)"
-            },
-            "canUpdateConfiguration": {
-              "type": "boolean",
-              "description": "A value indicating whether the configuration of a compose extension can be updated by the user.",
-              "default": false
-            },
-            "commands": {
-              "type": "array",
-              "maxItems": 10,
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "Id of the command.",
-                    "maxLength": 64
-                  },
-                  "type": {
-                    "type": "string",
+        "properties": {
+          "botId": {
+            "$ref": "#/definitions/botId",
+            "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
+          },
+          "needsChannelSelector": {
+            "type": "boolean",
+            "description": "This value describes whether or not the bot utilizes a user hint to add the bot to a specific channel.",
+            "default": false
+          },
+          "isNotificationOnly": {
+            "type": "boolean",
+            "description": "A value indicating whether or not the bot is a one-way notification only bot, as opposed to a conversational bot.",
+            "default": false
+          },
+          "supportsFiles": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports uploading/downloading of files.",
+            "default": false
+          },
+          "supportsCalling": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports audio calling.",
+            "default": false
+          },
+          "supportsVideo": {
+            "type": "boolean",
+            "description": "A value indicating whether the bot supports video calling.",
+            "default": false
+          },
+          "scopes": {
+            "type": "array",
+            "description": "Specifies whether the bot offers an experience in the context of a channel in a team, in a 1:1 or group chat, or in an experience scoped to an individual user alone. These options are non-exclusive.",
+            "maxItems": 3,
+            "items": {
+              "enum": [
+                "team",
+                "personal",
+                "groupchat"
+              ]
+            }
+          },
+          "commandLists": {
+            "type": "array",
+            "maxItems": 3,
+            "description": "The list of commands that the bot supplies, including their usage, description, and the scope for which the commands are valid. A separate command list should be used for each scope.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "scopes": {
+                  "type": "array",
+                  "description": "Specifies the scopes for which the command list is valid",
+                  "maxItems": 3,
+                  "items": {
                     "enum": [
-                      "query",
-                      "action"
-                    ],
-                    "description": "Type of the command",
-                    "default": "query"
-                  },
-                  "context": {
-                    "type": "array",
-                    "maxItems": 3,
-                    "items": {
-                      "enum": [
-                        "compose",
-                        "commandBox",
-                        "message"
-                      ]
-                    },
-                    "description": "Context where the command would apply",
-                    "default": [
-                      "compose",
-                      "commandBox"
+                      "team",
+                      "personal",
+                      "groupchat"
                     ]
-                  },
-                  "title": {
-                    "type": "string",
-                    "description": "Title of the command.",
-                    "maxLength": 32
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Description of the command.",
-                    "maxLength": 128
-                  },
-                  "initialRun": {
-                    "type": "boolean",
-                    "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
-                    "default": false
-                  },
-                  "fetchTask": {
-                    "type": "boolean",
-                    "description": "A boolean value that indicates if it should fetch task module dynamically",
-                    "default": false
-                  },
-                  "parameters": {
-                    "type": "array",
-                    "maxItems": 5,
-                    "minItems": 1,
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "description": "Name of the parameter.",
-                          "maxLength": 64
-                        },
-                        "inputType": {
-                          "type": "string",
-                          "enum": [
-                            "text",
-                            "textarea",
-                            "number",
-                            "date",
-                            "time",
-                            "toggle",
-                            "choiceset"
-                          ],
-                          "description": "Type of the parameter",
-                          "default": "text"
-                        },
-                        "title": {
-                          "type": "string",
-                          "description": "Title of the parameter.",
-                          "maxLength": 32
-                        },
-                        "description": {
-                          "type": "string",
-                          "description": "Description of the parameter.",
-                          "maxLength": 128
-                        },
-                        "value": {
-                          "type": "string",
-                          "description": "Initial value for the parameter",
-                          "maxLength": 512
-                        },
-                        "choices": {
-                          "type": "array",
-                          "maxItems": 10,
-                          "description": "The choice options for the parameter",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "title": {
-                                "type": "string",
-                                "description": "Title of the choice",
-                                "maxLength": 128
-                              },
-                              "value": {
-                                "type": "string",
-                                "description": "Value of the choice",
-                                "maxLength": 512
-                              }
-                            },
-                            "additionalProperties": false,
-                            "required": [
-                              "title",
-                              "value"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "title"
-                      ]
-                    }
-                  },
-                  "taskInfo": {
+                  }
+                },
+                "commands": {
+                  "type": "array",
+                  "maxItems": 10,
+                  "items": {
                     "type": "object",
                     "additionalProperties": false,
                     "properties": {
                       "title": {
                         "type": "string",
-                        "description": "Initial dialog title",
-                        "maxLength": 64
+                        "description": "The bot command name",
+                        "maxLength": 32
                       },
-                      "width": {
-                        "$ref": "#/definitions/taskInfoDimension",
-                        "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                      },
-                      "height": {
-                        "$ref": "#/definitions/taskInfoDimension",
-                        "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                      },
-                      "url": {
-                        "$ref": "#/definitions/httpsUrl",
-                        "description": "Initial webview URL"
+                      "description": {
+                        "type": "string",
+                        "description": "A simple text description or an example of the command syntax and its arguments.",
+                        "maxLength": 128
                       }
-                    }
+                    },
+                    "required": [
+                      "title",
+                      "description"
+                    ]
                   }
-                },
-                "required": [
-                  "id",
-                  "title"
-                ]
-              }
-            },
-            "messageHandlers": {
-              "type": "array",
-              "maxItems": 5,
-              "description": "A list of handlers that allow apps to be invoked when certain conditions are met",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "link"
-                    ],
-                    "description": "Type of the message handler"
-                  },
-                  "value": {
-                    "type": "object",
-                    "properties": {
-                      "domains": {
-                        "type": "array",
-                        "description": "A list of domains that the link message handler can register for, and when they are matched the app will be invoked",
-                        "items": {
-                          "type": "string",
-                          "maxLength": 2048
-                        }
-                      }
-                    }
-                  }
-                },
-                "required": [
-                  "type",
-                  "value"
-                ],
-                "additionalProperties": false
-              }
+                }
+              },
+              "required": [
+                "scopes",
+                "commands"
+              ]
             }
-          },
-          "required": [
-            "botId",
-            "commands"
-          ]
-        }
-      },
-      "permissions": {
-        "type": "array",
-        "description": "Specifies the permissions the app requests from users.",
-        "maxItems": 2,
-        "items": {
-          "enum": [
-            "identity",
-            "messageTeamMembers"
-          ]
-        }
-      },
-      "devicePermissions": {
-        "type": "array",
-        "description": "Specify the native features on a user's device that your app may request access to.",
-        "maxItems": 5,
-        "items": {
-          "enum": [
-            "geolocation",
-            "media",
-            "notifications",
-            "midi",
-            "openExternal"
-          ]
-        }
-      },
-      "validDomains": {
-        "type": "array",
-        "description": "A list of valid domains from which the tabs expect to load any content. Domain listings can include wildcards, for example `*.example.com`. If your tab configuration or content UI needs to navigate to any other domain besides the one use for tab configuration, that domain must be specified here.",
-        "maxItems": 16,
-        "items": {
-          "type": "string",
-          "maxLength": 2048
-        }
-      },
-      "webApplicationInfo": {
-        "type": "object",
-        "description": "Specify your AAD App ID and Graph information to help users seamlessly sign into your AAD app.",
-        "properties": {
-          "id": {
-            "$ref": "#/definitions/guid",
-            "description": "AAD application id of the app. This id must be a GUID."
-          },
-          "resource": {
-            "type": "string",
-            "description": "Resource url of app for acquiring auth token for SSO.",
-            "maxLength": 2048
           }
         },
         "required": [
-          "id"
-        ],
-        "additionalProperties": false
-      },
-      "showLoadingIndicator": {
-        "type": "boolean",
-        "description": "A value indicating whether or not show loading indicator when app/tab is loading",
-        "default": false
-      },
-      "isFullScreen": {
-        "type": "boolean",
-        "description": "A value indicating whether a personal app is rendered without a tab header-bar",
-        "default": false
-      },
-      "activities": {
+          "botId",
+          "scopes"
+        ]
+      }
+    },
+    "connectors": {
+      "type": "array",
+      "description": "The set of Office365 connectors for this app. Currently only one connector per app is supported.",
+      "maxItems": 1,
+      "items": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
-          "activityTypes": {
+          "connectorId": {
+            "type": "string",
+            "description": "A unique identifier for the connector which matches its ID in the Connectors Developer Portal.",
+            "maxLength": 64
+          },
+          "configurationUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url to use for configuring the connector using the inline configuration experience."
+          },
+          "scopes": {
             "type": "array",
-            "description": "Specify the types of activites that your app can post to a users activity feed",
-            "maxItems": 128,
+            "description": "Specifies whether the connector offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. Currently, only the team scope is supported.",
+            "maxItems": 1,
+            "items": {
+              "enum": [
+                "team"
+              ]
+            }
+          }
+        },
+        "required": [
+          "connectorId",
+          "scopes"
+        ]
+      }
+    },
+    "subscriptionOffer": {
+      "type": "object",
+      "description": "Subscription offer associated with this app.",
+      "properties": {
+        "offerId": {
+          "type": "string",
+          "description": "A unique identifier for the Commercial Marketplace Software as a Service Offer.",
+          "maxLength": 2048
+        }
+      },
+      "required": [ "offerId" ],
+      "additionalProperties": false
+    },
+    "composeExtensions": {
+      "type": "array",
+      "description": "The set of compose extensions for this app. Currently only one compose extension per app is supported.",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "botId": {
+            "$ref": "#/definitions/botId",
+            "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)"
+          },
+          "canUpdateConfiguration": {
+            "type": "boolean",
+            "description": "A value indicating whether the configuration of a compose extension can be updated by the user.",
+            "default": false
+          },
+          "commands": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Id of the command.",
+                  "maxLength": 64
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "query",
+                    "action"
+                  ],
+                  "description": "Type of the command",
+                  "default": "query"
+                },
+                "context": {
+                  "type": "array",
+                  "maxItems": 3,
+                  "items": {
+                    "enum": [
+                      "compose",
+                      "commandBox",
+                      "message"
+                    ]
+                  },
+                  "description": "Context where the command would apply",
+                  "default": [
+                    "compose",
+                    "commandBox"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the command.",
+                  "maxLength": 32
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the command.",
+                  "maxLength": 128
+                },
+                "initialRun": {
+                  "type": "boolean",
+                  "description": "A boolean value that indicates if the command should be run once initially with no parameter.",
+                  "default": false
+                },
+                "fetchTask": {
+                  "type": "boolean",
+                  "description": "A boolean value that indicates if it should fetch task module dynamically",
+                  "default": false
+                },
+                "parameters": {
+                  "type": "array",
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the parameter.",
+                        "maxLength": 64
+                      },
+                      "inputType": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "textarea",
+                          "number",
+                          "date",
+                          "time",
+                          "toggle",
+                          "choiceset"
+                        ],
+                        "description": "Type of the parameter",
+                        "default": "text"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "Title of the parameter.",
+                        "maxLength": 32
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Description of the parameter.",
+                        "maxLength": 128
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Initial value for the parameter",
+                        "maxLength": 512
+                      },
+                      "choices": {
+                        "type": "array",
+                        "maxItems": 10,
+                        "description": "The choice options for the parameter",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string",
+                              "description": "Title of the choice",
+                              "maxLength": 128
+                            },
+                            "value": {
+                              "type": "string",
+                              "description": "Value of the choice",
+                              "maxLength": 512
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "title",
+                            "value"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "title"
+                    ]
+                  }
+                },
+                "taskInfo": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Initial dialog title",
+                      "maxLength": 64
+                    },
+                    "width": {
+                      "$ref": "#/definitions/taskInfoDimension",
+                      "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                    },
+                    "height": {
+                      "$ref": "#/definitions/taskInfoDimension",
+                      "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                    },
+                    "url": {
+                      "$ref": "#/definitions/httpsUrl",
+                      "description": "Initial webview URL"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "title"
+              ]
+            }
+          },
+          "messageHandlers": {
+            "type": "array",
+            "maxItems": 5,
+            "description": "A list of handlers that allow apps to be invoked when certain conditions are met",
             "items": {
               "type": "object",
               "properties": {
                 "type": {
                   "type": "string",
-                  "maxLength": 32
+                  "enum": [
+                    "link"
+                  ],
+                  "description": "Type of the message handler"
                 },
-                "description": {
-                  "type": "string",
-                  "maxLength": 128
-                },
-                "templateText": {
-                  "type": "string",
-                  "maxLength": 128
+                "value": {
+                  "type": "object",
+                  "properties": {
+                    "domains": {
+                      "type": "array",
+                      "description": "A list of domains that the link message handler can register for, and when they are matched the app will be invoked",
+                      "items": {
+                        "type": "string",
+                        "maxLength": 2048
+                      }
+                    }
+                  }
                 }
               },
               "required": [
                 "type",
-                "description",
-                "templateText"
+                "value"
               ],
               "additionalProperties": false
             }
           }
         },
-        "additionalProperties": false
-      },
-      "configurableProperties": {
-        "type": "array",
-        "description": "A list of tenant configured properties for an app",
-        "maxItems": 9,
-        "items": {
-          "enum": [
-            "name",
-            "shortDescription",
-            "longDescription",
-            "smallImageUrl",
-            "largeImageUrl",
-            "accentColor",
-            "developerUrl",
-            "privacyUrl",
-            "termsOfUseUrl"
-          ]
+        "required": [
+          "botId",
+          "commands"
+        ]
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "description": "Specifies the permissions the app requests from users.",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "identity",
+          "messageTeamMembers"
+        ]
+      }
+    },
+    "devicePermissions": {
+      "type": "array",
+      "description": "Specify the native features on a user's device that your app may request access to.",
+      "maxItems": 5,
+      "items": {
+        "enum": [
+          "geolocation",
+          "media",
+          "notifications",
+          "midi",
+          "openExternal"
+        ]
+      }
+    },
+    "validDomains": {
+      "type": "array",
+      "description": "A list of valid domains from which the tabs expect to load any content. Domain listings can include wildcards, for example `*.example.com`. If your tab configuration or content UI needs to navigate to any other domain besides the one use for tab configuration, that domain must be specified here.",
+      "maxItems": 16,
+      "items": {
+        "type": "string",
+        "maxLength": 2048
+      }
+    },
+    "webApplicationInfo": {
+      "type": "object",
+      "description": "Specify your AAD App ID and Graph information to help users seamlessly sign into your AAD app.",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/guid",
+          "description": "AAD application id of the app. This id must be a GUID."
+        },
+        "resource": {
+          "type": "string",
+          "description": "Resource url of app for acquiring auth token for SSO.",
+          "maxLength": 2048
         }
       },
-      "defaultBlockUntilAdminAction": {
-        "type": "boolean",
-        "description": "A value indicating whether an app is blocked by default until admin allows it",
-        "default": false
-      },
-      "publisherDocsUrl": {
-        "$ref": "#/definitions/httpsUrl",
-        "description": "The url to the page that provides additional app information for the admins"
-      },
-      "defaultInstallScope": {
-        "type": "string",
-        "enum": [
-          "personal",
-          "team",
-          "groupchat",
-          "meetings"
-        ],
-        "description": "The install scope defined for this app by default. This will be the option displayed on the button when a user tries to add the app"
-      },
-      "defaultGroupCapability": {
-        "type": "object",
-        "properties": {
-          "team": {
-            "type": "string",
-            "enum": [
-              "tab",
-              "bot",
-              "connector"
-            ],
-            "description": "When the install scope selected is Team, this field specifies the default capability available"
-          },
-          "groupchat": {
-            "type": "string",
-            "enum": [
-              "tab",
-              "bot",
-              "connector"
-            ],
-            "description": "When the install scope selected is GroupChat, this field specifies the default capability available"
-          },
-          "meetings": {
-            "type": "string",
-            "enum": [
-              "tab",
-              "bot",
-              "connector"
-            ],
-            "description": "When the install scope selected is Meetings, this field specifies the default capability available"
-          }
-        },
-        "description": "When a group install scope is selected, this will define the default capability when the user installs the app",
-        "additionalProperties": false
-      },
-      "meetingExtensionDefinition": {
-        "type": "object",
-        "properties": {
-          "scenes": {
-            "description": "Meeting supported scenes.",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "id": {
-                  "$ref": "#/definitions/guid",
-                  "description": "A unique identifier for this scene. This id must be a GUID."
-                },
-                "name": {
-                  "type": "string",
-                  "description": "Scene name.",
-                  "maxLength": 128
-                },
-                "file": {
-                  "$ref": "#/definitions/relativePath",
-                  "description": "A relative file path to a scene metadata json file."
-                },
-                "preview": {
-                  "$ref": "#/definitions/relativePath",
-                  "description": "A relative file path to a scene PNG preview icon."
-                },
-                "maxAudience": {
-                  "type": "integer",
-                  "description": "Maximum audiences supported in scene.",
-                  "maximum": 50
-                },
-                "seatsReservedForOrganizersOrPresenters": {
-                  "type": "integer",
-                  "description": "Meeting scene's number of seats reserved for organizers or presenters.",
-                  "maximum": 50
-                }
-              },
-              "required": [
-                "id",
-                "name",
-                "file",
-                "preview",
-                "maxAudience",
-                "seatsReservedForOrganizersOrPresenters"
-              ]
-            },
-            "maxItems": 5,
-            "type": "array",
-            "uniqueItems": true
-          },
-          "filters": {
-            "description": "Meeting supported A/V filters.",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "id": {
-                  "$ref": "#/definitions/guid",
-                  "description": "A unique identifier for this A/V filter. This id must be a GUID."
-                },
-                "name": {
-                  "type": "string",
-                  "description": "A/V filter's name.",
-                  "maxLength": 128
-                },
-                "thumbnail": {
-                  "$ref": "#/definitions/relativePath",
-                  "description": "A relative file path to a A/V filter's thumbnail."
-                }
-              },
-              "required": [
-                "id",
-                "name",
-                "thumbnail"
-              ]
-            },
-            "maxItems": 16,
-            "type": "array",
-            "uniqueItems": true
-          },
-          "videoAppContentUrl": {
-            "$ref": "#/definitions/httpsUrl",
-            "description": "The url which indicates A/V filters' video app content."
-          }
-        },
-        "description": "Specify meeting extension definition.",
-        "additionalProperties": false
-      },
-      "authorization": {
-        "type": "object",
-        "description": "Specify and consolidates authorization related information for the App.",
-        "additionalProperties": false,
-        "properties": {
-          "permissions": {
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "showLoadingIndicator": {
+      "type": "boolean",
+      "description": "A value indicating whether or not show loading indicator when app/tab is loading",
+      "default": false
+    },
+    "isFullScreen": {
+      "type": "boolean",
+      "description": "A value indicating whether a personal app is rendered without a tab header-bar",
+      "default": false
+    },
+    "activities": {
+      "type": "object",
+      "properties": {
+        "activityTypes": {
+          "type": "array",
+          "description": "Specify the types of activites that your app can post to a users activity feed",
+          "maxItems": 128,
+          "items": {
             "type": "object",
-            "description": "Specify Permissions which App lists for accessing Resource.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 128
+              },
+              "templateText": {
+                "type": "string",
+                "maxLength": 128
+              }
+            },
+            "required": [ "type", "description", "templateText" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "configurableProperties": {
+      "type": "array",
+      "description": "A list of tenant configured properties for an app",
+      "maxItems": 9,
+      "items": {
+        "enum": [
+          "name",
+          "shortDescription",
+          "longDescription",
+          "smallImageUrl",
+          "largeImageUrl",
+          "accentColor",
+          "developerUrl",
+          "privacyUrl",
+          "termsOfUseUrl"
+        ]
+      }
+    },
+    "defaultBlockUntilAdminAction": {
+      "type": "boolean",
+      "description": "A value indicating whether an app is blocked by default until admin allows it",
+      "default": false
+    },
+    "publisherDocsUrl": {
+      "$ref": "#/definitions/httpsUrl",
+      "description": "The url to the page that provides additional app information for the admins"
+    },
+    "defaultInstallScope": {
+      "type": "string",
+      "enum": [
+        "personal",
+        "team",
+        "groupchat",
+        "meetings"
+      ],
+      "description": "The install scope defined for this app by default. This will be the option displayed on the button when a user tries to add the app"
+    },
+    "defaultGroupCapability": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "type": "string",
+          "enum": [
+            "tab",
+            "bot",
+            "connector"
+          ],
+          "description": "When the install scope selected is Team, this field specifies the default capability available"
+        },
+        "groupchat": {
+          "type": "string",
+          "enum": [
+            "tab",
+            "bot",
+            "connector"
+          ],
+          "description": "When the install scope selected is GroupChat, this field specifies the default capability available"
+        },
+        "meetings": {
+          "type": "string",
+          "enum": [
+            "tab",
+            "bot",
+            "connector"
+          ],
+          "description": "When the install scope selected is Meetings, this field specifies the default capability available"
+        }
+      },
+      "description": "When a group install scope is selected, this will define the default capability when the user installs the app",
+      "additionalProperties": false
+    },
+    "meetingExtensionDefinition": {
+      "type": "object",
+      "properties": {
+        "scenes": {
+          "description": "Meeting supported scenes.",
+          "items": {
+            "type": "object",
             "additionalProperties": false,
             "properties": {
-              "orgWide": {
-                "description": "App's organization wide classic permissions provided by user.",
-                "maxItems": 16,
-                "type": "array",
-                "uniqueItems": true,
-                "items": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "The Permission name of app's permission node.",
-                      "maxLength": 128
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "Application",
-                        "Delegated"
-                      ],
-                      "description": "The Permission type of app's permission node."
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "type"
-                  ]
-                }
+              "id": {
+                "$ref": "#/definitions/guid",
+                "description": "A unique identifier for this scene. This id must be a GUID."
               },
-              "resourceSpecific": {
-                "description": "App's resource specific permissions provided by user.",
-                "maxItems": 16,
-                "type": "array",
-                "uniqueItems": true,
-                "items": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "The Permission name of app's permission node.",
-                      "maxLength": 128
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "Application",
-                        "Delegated"
-                      ],
-                      "description": "The Permission type of app's permission node."
-                    }
+              "name": {
+                "type": "string",
+                "description": "Scene name.",
+                "maxLength": 128
+              },
+              "file": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a scene metadata json file."
+              },
+              "preview": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a scene PNG preview icon."
+              },
+              "maxAudience": {
+                "type": "integer",
+                "description": "Maximum audiences supported in scene.",
+                "maximum": 50
+              },
+              "seatsReservedForOrganizersOrPresenters": {
+                "type": "integer",
+                "description": "Meeting scene's number of seats reserved for organizers or presenters.",
+                "maximum": 50
+              }
+            },
+            "required": [ "id", "name", "file", "preview", "maxAudience", "seatsReservedForOrganizersOrPresenters" ]
+          },
+          "maxItems": 5,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "filters": {
+          "description": "Meeting supported A/V filters.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/guid",
+                "description": "A unique identifier for this A/V filter. This id must be a GUID."
+              },
+              "name": {
+                "type": "string",
+                "description": "A/V filter's name.",
+                "maxLength": 128
+              },
+              "thumbnail": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a A/V filter's thumbnail."
+              }
+            },
+            "required": [ "id", "name", "thumbnail" ]
+          },
+          "maxItems": 16,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "videoAppContentUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The url which indicates A/V filters' video app content."
+        }
+      },
+      "description": "Specify meeting extension definition.",
+      "additionalProperties": false
+    },
+    "authorization": {
+      "type": "object",
+      "description": "Specify and consolidates authorization related information for the App.",
+      "additionalProperties": false,
+      "properties": {
+        "permissions": {
+          "type": "object",
+          "description": "Specify Permissions which App lists for accessing Resource.",
+          "additionalProperties": false,
+          "properties": {
+            "orgWide": {
+              "description": "App's organization wide classic permissions provided by user.",
+              "maxItems": 16,
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The Permission name of app's permission node.",
+                    "maxLength": 128
                   },
-                  "required": [
-                    "name",
-                    "type"
-                  ]
-                }
+                  "type": {
+                    "type": "string",
+                    "enum": [ "Application", "Delegated" ],
+                    "description": "The Permission type of app's permission node."
+                  }
+                },
+                "required": [ "name", "type" ]
+              }
+            },
+            "resourceSpecific": {
+              "description": "App's resource specific permissions provided by user.",
+              "maxItems": 16,
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The Permission name of app's permission node.",
+                    "maxLength": 128
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [ "Application", "Delegated" ],
+                    "description": "The Permission type of app's permission node."
+                  }
+                },
+                "required": [ "name", "type" ]
               }
             }
           }
         }
       }
-    },
-    "required": [
-      "manifestVersion",
-      "version",
-      "id",
-      "developer",
-      "name",
-      "description",
-      "icons",
-      "accentColor"
-    ],
-    "definitions": {
-      "relativePath": {
-        "type": "string",
-        "maxLength": 2048
-      },
-      "httpsUrl": {
-        "type": "string",
-        "maxLength": 2048,
-        "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
-      },
-      "semver": {
-        "type": "string",
-        "maxLength": 256,
-        "pattern": "^([0-9]|[1-9]+[0-9]*)\\.([0-9]|[1-9]+[0-9]*)\\.([0-9]|[1-9]+[0-9]*)$"
-      },
-      "hexColor": {
-        "type": "string",
-        "pattern": "^#[0-9a-fA-F]{6}$"
-      },
-      "guid": {
-        "type": "string",
-        "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
-      },
-      "botId": {
-        "type": "string",
-        "maxLength": 64
-      },
-      "languageTag": {
-        "type": "string",
-        "pattern": "^[A-Za-z0-9]{1,8}(-[A-Za-z0-9]{1,8}){0,2}$"
-      },
-      "taskInfoDimension": {
-        "type": "string",
-        "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
-        "maxLength": 16
-      }
     }
+  },
+  "required": [
+    "manifestVersion",
+    "version",
+    "id",
+    "developer",
+    "name",
+    "description",
+    "icons",
+    "accentColor"
+  ],
+  "definitions": {
+    "relativePath": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "httpsUrl": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+    },
+    "semver": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^([0-9]|[1-9]+[0-9]*)\\.([0-9]|[1-9]+[0-9]*)\\.([0-9]|[1-9]+[0-9]*)$"
+    },
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "guid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+    },
+    "botId": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "languageTag": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9]{1,8}(-[A-Za-z0-9]{1,8}){0,2}$"
+    },
+    "taskInfoDimension": {
+      "type": "string",
+      "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
+      "maxLength": 16
+    }
+  }
 }
