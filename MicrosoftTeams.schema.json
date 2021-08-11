@@ -413,20 +413,20 @@
               "properties": {
                 "title": {
                   "type": "string",
-                  "description": "Initial dialog title",
+                  "description": "Task module title",
                   "maxLength": 64
                 },
                 "width": {
                   "$ref": "#/definitions/taskInfoDimension",
-                  "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                  "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
                 },
                 "height": {
                   "$ref": "#/definitions/taskInfoDimension",
-                  "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                  "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
                 },
                 "url": {
                   "$ref": "#/definitions/httpsUrl",
-                  "description": "Initial webview URL"
+                  "description": "Task module URL"
                 }
               }
             }
