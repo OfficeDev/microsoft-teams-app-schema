@@ -379,7 +379,7 @@
               },
               "requirements": {
                 "properties": {
-                  "apiSets": {
+                  "capabilities": {
                     "$ref": "#/definitions/clientApiSets",
                     "description": "The set of host capabilities required by this page."
                   }
