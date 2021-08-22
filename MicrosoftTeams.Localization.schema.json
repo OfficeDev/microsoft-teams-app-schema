@@ -29,6 +29,10 @@
       "type": "string",
       "maxLength": 128
     },
+    "^personalApp.pages\\[([0-9]|1[0-5])\\]\\.displayName$": {
+      "type": "string",
+      "maxLength": 128
+    },
     "^bots\\[0\\]\\.commandLists\\[[0-2]\\]\\.commands\\[[0-9]\\]\\.title$": {
       "type": "string",
       "maxLength": 32
