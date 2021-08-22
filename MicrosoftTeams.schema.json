@@ -160,13 +160,9 @@
     "requirements": {
       "additionalProperties": false,
       "properties": {
-        "apiSets": {
-          "description": "The set of host capabilities required by the app.",
+        "capabilities": {
+          "description": "The set of host capabilities required by the app.  ",
           "$ref": "#/definitions/clientApiSets"
-        },
-        "elements": {
-          "description": "The set of supported elements required by the app.",
-          "$ref": "#/definitions/appFeatureTypes"
         }
       }
     },
@@ -599,7 +595,8 @@
                     "enum": [
                       "compose",
                       "commandBox",
-                      "message"
+                      "message",
+                      "composeMail"
                     ]
                   },
                   "description": "Context where the command would apply",
@@ -1089,31 +1086,6 @@
               "pages.config",
               "pages.fullTrust",
               "teams.fullTrust"
-            ]
-          }
-        }
-      }
-    },
-    "appFeatureTypes": {
-      "type": "array",
-      "description": "Set of app feature types",
-      "maxItems": 7,
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Type of the app feature",
-            "enum": [
-              "personalApp",
-              "groupChannelApp",
-              "bot",
-              "messagingExtensions",
-              "connector",
-              "meetingExtension",
-              "scene"
             ]
           }
         }
