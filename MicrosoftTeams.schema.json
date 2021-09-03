@@ -1061,7 +1061,7 @@
     "clientApiSets": {
       "type": "array",
       "description": "Array of client API sets",
-      "maxItems": 15,
+      "maxItems": 14,
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -1070,22 +1070,21 @@
           "name": {
             "type": "string",
             "description": "name of the API Set",
-            "enum": [
-              "chat",
-              "custom",
-              "deepLinks",
-              "dialogs",
-              "files",
+            "enum": [              
+              "calendar",
               "location",
-              "logs",
+              "mail",
               "media",
-              "meeting",
-              "menus",
-              "notifications",
-              "pages.backStack",
+              "monetization",
+              "onlineMeeting",
               "pages.config",
-              "pages.fullTrust",
-              "teams.fullTrust"
+              "pages.tabs",
+              "pages.backstack",
+              "pages.appButton",
+              "people",
+              "sharing",
+              "teamsCore",
+              "video"   
             ]
           }
         }
