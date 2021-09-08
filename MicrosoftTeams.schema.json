@@ -751,6 +751,34 @@
       ],
       "additionalProperties": false
     },
+    "graphConnector": {
+      "type": "object",
+      "description": "Specify the app's Graph connector information.",
+      "properties": {
+        "configuration": {
+          "type": "object",
+          "description": "Specify configuration of the app's Graph connector.",
+          "properties": {
+            "aadApplicationId": {
+              "$ref": "#/definitions/guid",
+              "description": "AAD application id of the app. This id must be a GUID."
+            },
+            "notificationUrl": {
+              "$ref": "#/definitions/httpsUrl",
+              "description": "The url where Graph-connector notifications for the application should be sent."
+            }
+          },
+          "required": [
+            "notificationUrl"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "configuration"
+      ],
+      "additionalProperties": false
+    },
     "showLoadingIndicator": {
       "type": "boolean",
       "description": "A value indicating whether or not show loading indicator when app/tab is loading",
