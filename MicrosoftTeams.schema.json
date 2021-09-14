@@ -331,111 +331,115 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "configuration": {
-          "team": {
-            "parameters": {
-              "type": "array",
-              "maxItems": 5,
-              "minItems": 1,
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Name of the parameter.",
-                    "maxLength": 64
-                  },
-                  "inputType": {
-                    "type": "string",
-                    "enum": [
-                      "text",
-                      "textarea",
-                      "number",
-                      "date",
-                      "time",
-                      "toggle",
-                      "choiceset"
-                    ],
-                    "description": "Type of the parameter",
-                    "default": "text"
-                  },
-                  "title": {
-                    "type": "string",
-                    "description": "Title of the parameter.",
-                    "maxLength": 32
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Description of the parameter.",
-                    "maxLength": 128
-                  },
-                  "value": {
-                    "type": "string",
-                    "description": "Initial value for the parameter",
-                    "maxLength": 512
-                  },
-                  "choices": {
-                    "type": "array",
-                    "maxItems": 10,
-                    "description": "The choice options for the parameter",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "title": {
-                          "type": "string",
-                          "description": "Title of the choice",
-                          "maxLength": 128
-                        },
-                        "value": {
-                          "type": "string",
-                          "description": "Value of the choice",
-                          "maxLength": 512
-                        }
-                      },
-                      "additionalProperties": false,
-                      "required": [
-                        "title",
-                        "value"
-                      ]
-                    }
-                  }
-                },
-                "required": [
-                  "name",
-                  "title"
-                ]
-              }
-            },
-            "taskInfo": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "description": "Task module title",
-                  "maxLength": 64
-                },
-                "width": {
-                  "$ref": "#/definitions/taskInfoDimension",
-                  "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                },
-                "height": {
-                  "$ref": "#/definitions/taskInfoDimension",
-                  "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                },
-                "url": {
-                  "$ref": "#/definitions/httpsUrl",
-                  "description": "Task module URL"
-                }
-              }
-            }
-          }
-        },
         "properties": {
           "botId": {
             "$ref": "#/definitions/botId",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
+          },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "team": {
+              "type": "object",
+              "additionalProperties": false,
+              "parameters": {
+                "type": "array",
+                "maxItems": 5,
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the parameter.",
+                      "maxLength": 64
+                    },
+                    "inputType": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "textarea",
+                        "number",
+                        "date",
+                        "time",
+                        "toggle",
+                        "choiceset"
+                      ],
+                      "description": "Type of the parameter",
+                      "default": "text"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Title of the parameter.",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of the parameter.",
+                      "maxLength": 128
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "Initial value for the parameter",
+                      "maxLength": 512
+                    },
+                    "choices": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "description": "The choice options for the parameter",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "Title of the choice",
+                            "maxLength": 128
+                          },
+                          "value": {
+                            "type": "string",
+                            "description": "Value of the choice",
+                            "maxLength": 512
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "title",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "title"
+                  ]
+                }
+              },
+              "taskInfo": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Task module title",
+                    "maxLength": 64
+                  },
+                  "width": {
+                    "$ref": "#/definitions/taskInfoDimension",
+                    "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                  },
+                  "height": {
+                    "$ref": "#/definitions/taskInfoDimension",
+                    "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                  },
+                  "url": {
+                    "$ref": "#/definitions/httpsUrl",
+                    "description": "Task module URL"
+                  }
+                }
+              }
+            }
           },
           "needsChannelSelector": {
             "type": "boolean",
