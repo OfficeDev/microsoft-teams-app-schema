@@ -753,29 +753,15 @@
     },
     "graphConnector": {
       "type": "object",
-      "description": "Specify the app's Graph connector information.",
+      "description": "Specify the app's Graph connector configuration. If this is present then webApplicationInfo.id must also be specified.",
       "properties": {
-        "configuration": {
-          "type": "object",
-          "description": "Specify configuration of the app's Graph connector.",
-          "properties": {
-            "aadApplicationId": {
-              "$ref": "#/definitions/guid",
-              "description": "AAD application id of the app. This id must be a GUID."
-            },
-            "notificationUrl": {
-              "$ref": "#/definitions/httpsUrl",
-              "description": "The url where Graph-connector notifications for the application should be sent."
-            }
-          },
-          "required": [
-            "notificationUrl"
-          ],
-          "additionalProperties": false
+        "notificationUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The url where Graph-connector notifications for the application should be sent."
         }
       },
       "required": [
-        "configuration"
+        "notificationUrl"
       ],
       "additionalProperties": false
     },
