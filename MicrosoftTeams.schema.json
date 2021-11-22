@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "const": "1.10"
+      "const": "1.11"
     },
     "version": {
       "type": "string",
@@ -213,18 +213,6 @@
               ]
             }
           },
-          "supportedPlatform": {
-            "type": "array",
-            "description": "The set of supportedPlatform scopes that a tab belong to",
-            "maxItems": 3,
-            "items": {
-              "enum": [
-                "desktop",
-                "mobile",
-                "teamsMeetingDevices"
-              ]
-            }
-          },
           "sharePointPreviewImage": {
             "$ref": "#/definitions/relativePath",
             "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768."
@@ -272,7 +260,7 @@
             "description": "The url which points to the entity UI to be displayed in the Teams canvas."
           },
           "contentBotId": {
-            "$ref": "#/definitions/botId",
+            "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
           "websiteUrl": {
@@ -304,18 +292,6 @@
                 "channelTab"
               ]
             }
-          },
-          "supportedPlatform": {
-            "type": "array",
-            "description": "The set of supportedPlatform scopes that a tab belong to",
-            "maxItems": 3,
-            "items": {
-              "enum": [
-                "desktop",
-                "mobile",
-                "teamsMeetingDevices"
-              ]
-            }
           }
         },
         "required": [
@@ -333,7 +309,7 @@
         "additionalProperties": false,
         "properties": {
           "botId": {
-            "$ref": "#/definitions/botId",
+            "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
           "needsChannelSelector": {
@@ -487,7 +463,7 @@
         "additionalProperties": false,
         "properties": {
           "botId": {
-            "$ref": "#/definitions/botId",
+            "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
           "canUpdateConfiguration": {
@@ -759,6 +735,20 @@
       ],
       "additionalProperties": false
     },
+    "graphConnector": {
+      "type": "object",
+      "description": "Specify the app's Graph connector configuration. If this is present then webApplicationInfo.id must also be specified.",
+      "properties": {
+        "notificationUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The url where Graph-connector notifications for the application should be sent."
+        }
+      },
+      "required": [
+        "notificationUrl"
+      ],
+      "additionalProperties": false
+    },
     "showLoadingIndicator": {
       "type": "boolean",
       "description": "A value indicating whether or not show loading indicator when app/tab is loading",
@@ -816,6 +806,15 @@
           "termsOfUseUrl"
         ]
       }
+    },
+    "defaultBlockUntilAdminAction": {
+      "type": "boolean",
+      "description": "A value indicating whether an app is blocked by default until admin allows it",
+      "default": false
+    },
+    "publisherDocsUrl": {
+      "$ref": "#/definitions/httpsUrl",
+      "description": "The url to the page that provides additional app information for the admins"
     },
     "defaultInstallScope": {
       "type": "string",
@@ -894,7 +893,7 @@
               },
               "seatsReservedForOrganizersOrPresenters": {
                 "type": "integer",
-                "description": "Meeting scene's number of seats reserved for organizers or presenters.",
+                "description": "Number of seats reserved for organizers or presenters.",
                 "maximum": 50
               }
             },
@@ -926,13 +925,14 @@
             },
             "required": [ "id", "name", "thumbnail" ]
           },
-          "maxItems": 16,
+          "maxItems": 100,
           "type": "array",
           "uniqueItems": true
         },
         "videoAppContentUrl": {
-          "$ref": "#/definitions/httpsUrl",
-          "description": "The url which indicates A/V filters' video app content."
+          "type": "string",
+          "description": "The url which indicates A/V filters' video app content.",
+          "maxLength": 2048
         }
       },
       "description": "Specify meeting extension definition.",
@@ -971,10 +971,6 @@
     "guid": {
       "type": "string",
       "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
-    },
-    "botId": {
-      "type": "string",
-      "maxLength": 64
     },
     "languageTag": {
       "type": "string",
