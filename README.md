@@ -15,9 +15,9 @@ extensions:
 
 # Microsoft Teams App Schema
 
-This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.7/MicrosoftTeams.schema.json",`.
+This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",`.
 
-If you are localizing your Microsoft Teams app, then you should also use the localization schema in your strings file to ensure a proper format, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.7/MicrosoftTeams.Localization.schema.json",`.
+If you are localizing your Microsoft Teams app, then you should also use the localization schema in your strings file to ensure a proper format, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.Localization.schema.json",`.
 
 Unless you are writing an app that reads/writes Microsoft Teams manifest.json files, you don't need to care about this.
 
