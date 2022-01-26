@@ -1012,6 +1012,27 @@
           }
         }
       }
+    },
+    "ltiConfiguration": {
+      "type": "object",
+      "description": "These properties contain information for configuring the app as an LTI app.",
+      "additionalProperties": false,
+      "properties": {
+        "properties": {
+          "loginUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url to use when initiating the login operation for the app."
+          },
+          "redirectUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url to use when returning the authentication token for the app."
+          },
+          "required": [
+            "loginUrl",
+            "redirectUrl"
+          ]
+        }
+      }
     }
   },
   "required": [
