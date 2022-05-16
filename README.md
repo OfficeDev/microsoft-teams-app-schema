@@ -15,9 +15,9 @@ extensions:
 
 # Microsoft Teams App Schema
 
-This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.6/MicrosoftTeams.schema.json",`.
+This repository is where the [JSON Schema](http://json-schema.org/) for the [Microsoft Teams application manifest](https://docs.microsoft.com/en-us/microsoftteams/platform/resources/schema/manifest-schema) resides. The first line in a Teams app manifest.json file is a reference to this file so that it can be validated, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.12/MicrosoftTeams.schema.json",`.
 
-If you are localizing your Microsoft Teams app, then you should also use the localization schema in your strings file to ensure a proper format, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.6/MicrosoftTeams.Localization.schema.json",`.
+If you are localizing your Microsoft Teams app, then you should also use the localization schema in your strings file to ensure a proper format, e.g.: `"$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.12/MicrosoftTeams.Localization.schema.json",`.
 
 Unless you are writing an app that reads/writes Microsoft Teams manifest.json files, you don't need to care about this.
 
@@ -41,3 +41,4 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
