@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "const": "1.12"
+      "enum": [ "devPreview", "m365DevPreview" ]
     },
     "version": {
       "type": "string",
@@ -213,6 +213,18 @@
               ]
             }
           },
+          "supportedPlatform": {
+            "type": "array",
+            "description": "The set of supportedPlatform scopes that a tab belong to",
+            "maxItems": 3,
+            "items": {
+              "enum": [
+                "desktop",
+                "mobile",
+                "teamsMeetingDevices"
+              ]
+            }
+          },
           "sharePointPreviewImage": {
             "$ref": "#/definitions/relativePath",
             "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768."
@@ -285,11 +297,29 @@
           "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belong to",
-            "maxItems": 2,
+            "maxItems": 8,
             "items": {
               "enum": [
                 "personalTab",
-                "channelTab"
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
+                "meetingDetailsTab",
+                "meetingSidePanel",
+                "meetingStage",
+                "teamLevelApp"
+              ]
+            }
+          },
+          "supportedPlatform": {
+            "type": "array",
+            "description": "The set of supportedPlatform scopes that a tab belong to",
+            "maxItems": 3,
+            "items": {
+              "enum": [
+                "desktop",
+                "mobile",
+                "teamsMeetingDevices"
               ]
             }
           }
@@ -311,6 +341,115 @@
           "botId": {
             "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
+          },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "team": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the parameter.",
+                          "maxLength": 64
+                        },
+                        "inputType": {
+                          "type": "string",
+                          "enum": [
+                            "text",
+                            "textarea",
+                            "number",
+                            "date",
+                            "time",
+                            "toggle",
+                            "choiceset"
+                          ],
+                          "description": "Type of the parameter",
+                          "default": "text"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "Title of the parameter.",
+                          "maxLength": 32
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Description of the parameter.",
+                          "maxLength": 128
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Initial value for the parameter",
+                          "maxLength": 512
+                        },
+                        "choices": {
+                          "type": "array",
+                          "maxItems": 10,
+                          "description": "The choice options for the parameter",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "description": "Title of the choice",
+                                "maxLength": 128
+                              },
+                              "value": {
+                                "type": "string",
+                                "description": "Value of the choice",
+                                "maxLength": 512
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "title",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "title"
+                      ]
+                    }
+                  },
+                  "taskInfo": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Task module title",
+                        "maxLength": 64
+                      },
+                      "width": {
+                        "$ref": "#/definitions/taskInfoDimension",
+                        "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                      },
+                      "height": {
+                        "$ref": "#/definitions/taskInfoDimension",
+                        "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                      },
+                      "url": {
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "Task module URL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "needsChannelSelector": {
             "type": "boolean",
@@ -674,6 +813,46 @@
         ]
       }
     },
+    "scopeConstraints": {
+      "type": "object",
+      "properties": {
+        "teams": {
+          "type": "array",
+          "description": "A list of team thread ids to which your app is restricted to",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Team's thread Id",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        },
+        "groupChats": {
+          "type": "array",
+          "description": "A list of chat thread ids to which your app is restricted to",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Chat's thread Id",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "permissions": {
       "type": "array",
       "description": "Specifies the permissions the app requests from users.",
@@ -780,6 +959,17 @@
         }
       },
       "additionalProperties": false
+    },
+    "supportedChannelTypes": {
+      "type": "array",
+      "description": "The set of supported channel type that an app belongs to",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "sharedChannels",
+          "privateChannels"
+        ]
+      }
     },
     "configurableProperties": {
       "type": "array",
@@ -925,6 +1115,11 @@
           "type": "string",
           "description": "The url which indicates A/V filters' video app content.",
           "maxLength": 2048
+        },
+        "supportsStreaming": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
         }
       },
       "description": "Specify meeting extension definition.",
