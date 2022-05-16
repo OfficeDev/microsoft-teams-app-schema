@@ -10,7 +10,10 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using.",
-      "enum": [ "devPreview", "m365DevPreview" ]
+      "enum,": [
+        "devPreview",
+        "m365DevPreview"
+      ]
     },
     "version": {
       "type": "string",
@@ -272,7 +275,7 @@
             "description": "The url which points to the entity UI to be displayed in the Teams canvas."
           },
           "contentBotId": {
-            "$ref": "#/definitions/botId",
+            "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
           "websiteUrl": {
@@ -297,11 +300,17 @@
           "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belong to",
-            "maxItems": 2,
+            "maxItems": 8,
             "items": {
               "enum": [
                 "personalTab",
-                "channelTab"
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
+                "meetingDetailsTab",
+                "meetingSidePanel",
+                "meetingStage",
+                "teamLevelApp"
               ]
             }
           },
@@ -333,8 +342,117 @@
         "additionalProperties": false,
         "properties": {
           "botId": {
-            "$ref": "#/definitions/botId",
+            "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
+          },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "team": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the parameter.",
+                          "maxLength": 64
+                        },
+                        "inputType": {
+                          "type": "string",
+                          "enum": [
+                            "text",
+                            "textarea",
+                            "number",
+                            "date",
+                            "time",
+                            "toggle",
+                            "choiceset"
+                          ],
+                          "description": "Type of the parameter",
+                          "default": "text"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "Title of the parameter.",
+                          "maxLength": 32
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Description of the parameter.",
+                          "maxLength": 128
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Initial value for the parameter",
+                          "maxLength": 512
+                        },
+                        "choices": {
+                          "type": "array",
+                          "maxItems": 10,
+                          "description": "The choice options for the parameter",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "description": "Title of the choice",
+                                "maxLength": 128
+                              },
+                              "value": {
+                                "type": "string",
+                                "description": "Value of the choice",
+                                "maxLength": 512
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "title",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "title"
+                      ]
+                    }
+                  },
+                  "taskInfo": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Task module title",
+                        "maxLength": 64
+                      },
+                      "width": {
+                        "$ref": "#/definitions/taskInfoDimension",
+                        "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                      },
+                      "height": {
+                        "$ref": "#/definitions/taskInfoDimension",
+                        "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                      },
+                      "url": {
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "Task module URL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "needsChannelSelector": {
             "type": "boolean",
@@ -475,7 +593,9 @@
           "maxLength": 2048
         }
       },
-      "required": [ "offerId" ],
+      "required": [
+        "offerId"
+      ],
       "additionalProperties": false
     },
     "composeExtensions": {
@@ -487,7 +607,7 @@
         "additionalProperties": false,
         "properties": {
           "botId": {
-            "$ref": "#/definitions/botId",
+            "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
           "canUpdateConfiguration": {
@@ -698,6 +818,46 @@
         ]
       }
     },
+    "scopeConstraints": {
+      "type": "object",
+      "properties": {
+        "teams": {
+          "type": "array",
+          "description": "A list of team thread ids to which your app is restricted to",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Team's thread Id",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        },
+        "groupChats": {
+          "type": "array",
+          "description": "A list of chat thread ids to which your app is restricted to",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Chat's thread Id",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "permissions": {
       "type": "array",
       "description": "Specifies the permissions the app requests from users.",
@@ -798,12 +958,27 @@
                 "maxLength": 128
               }
             },
-            "required": [ "type", "description", "templateText" ],
+            "required": [
+              "type",
+              "description",
+              "templateText"
+            ],
             "additionalProperties": false
           }
         }
       },
       "additionalProperties": false
+    },
+    "supportedChannelTypes": {
+      "type": "array",
+      "description": "The set of supported channel type that an app belongs to",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "sharedChannels",
+          "privateChannels"
+        ]
+      }
     },
     "configurableProperties": {
       "type": "array",
@@ -909,11 +1084,18 @@
               },
               "seatsReservedForOrganizersOrPresenters": {
                 "type": "integer",
-                "description": "Meeting scene's number of seats reserved for organizers or presenters.",
+                "description": "Number of seats reserved for organizers or presenters.",
                 "maximum": 50
               }
             },
-            "required": [ "id", "name", "file", "preview", "maxAudience", "seatsReservedForOrganizersOrPresenters" ]
+            "required": [
+              "id",
+              "name",
+              "file",
+              "preview",
+              "maxAudience",
+              "seatsReservedForOrganizersOrPresenters"
+            ]
           },
           "maxItems": 5,
           "type": "array",
@@ -939,15 +1121,25 @@
                 "description": "A relative file path to a A/V filter's thumbnail."
               }
             },
-            "required": [ "id", "name", "thumbnail" ]
+            "required": [
+              "id",
+              "name",
+              "thumbnail"
+            ]
           },
-          "maxItems": 16,
+          "maxItems": 100,
           "type": "array",
           "uniqueItems": true
         },
         "videoAppContentUrl": {
-          "$ref": "#/definitions/httpsUrl",
-          "description": "The url which indicates A/V filters' video app content."
+          "type": "string",
+          "description": "The url which indicates A/V filters' video app content.",
+          "maxLength": 2048
+        },
+        "supportsStreaming": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
         }
       },
       "description": "Specify meeting extension definition.",
@@ -979,11 +1171,17 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": [ "Application", "Delegated" ],
+                    "enum": [
+                      "Application",
+                      "Delegated"
+                    ],
                     "description": "The Permission type of app's permission node."
                   }
                 },
-                "required": [ "name", "type" ]
+                "required": [
+                  "name",
+                  "type"
+                ]
               }
             },
             "resourceSpecific": {
@@ -1002,11 +1200,17 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": [ "Application", "Delegated" ],
+                    "enum": [
+                      "Application",
+                      "Delegated"
+                    ],
                     "description": "The Permission type of app's permission node."
                   }
                 },
-                "required": [ "name", "type" ]
+                "required": [
+                  "name",
+                  "type"
+                ]
               }
             }
           }
@@ -1046,10 +1250,6 @@
     "guid": {
       "type": "string",
       "pattern": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
-    },
-    "botId": {
-      "type": "string",
-      "maxLength": 64
     },
     "languageTag": {
       "type": "string",
