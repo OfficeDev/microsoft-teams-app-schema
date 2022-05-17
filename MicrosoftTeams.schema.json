@@ -9,8 +9,8 @@
     },
     "manifestVersion": {
       "type": "string",
-      "description": "The version of the schema this manifest is using.",
-      "const": "1.12"
+      "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
+      "const": "1.13"
     },
     "version": {
       "type": "string",
@@ -257,7 +257,7 @@
           },
           "contentUrl": {
             "$ref": "#/definitions/httpsUrl",
-            "description": "The url which points to the entity UI to be displayed in the Teams canvas."
+            "description": "The url which points to the entity UI to be displayed in the canvas."
           },
           "contentBotId": {
             "$ref": "#/definitions/guid",
