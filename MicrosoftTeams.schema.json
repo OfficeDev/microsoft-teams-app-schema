@@ -1272,7 +1272,7 @@
           "requirements": {
             "$ref": "#/definitions/requirements-extension-element"
           },
-          "context": {
+          "contexts": {
             "$ref": "#/definitions/extension-contexts"
           },
           "tabs": {
