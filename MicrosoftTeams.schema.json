@@ -1225,10 +1225,10 @@
         "type": {
           "type": "string",
           "enum": [
-            "execute"
+            "executeFunction"
           ],
-          "default": "execute",
-          "description": "Run a script function without waiting for it to finish. No UI is shown."
+          "default": "executeFunction",
+          "description": "Run a script function without waiting for it to finish."
         }
       },
       "additionalProperties": false,
