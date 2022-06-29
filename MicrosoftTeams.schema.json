@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.13"
+      "const": "1.14"
     },
     "version": {
       "type": "string",
@@ -674,6 +674,46 @@
         ]
       }
     },
+    "scopeConstraints": {
+      "type": "object",
+      "properties": {
+        "teams": {
+          "type": "array",
+          "description": "A list of team thread ids to which your app is restricted to.",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Team's thread Id.",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        },
+        "groupChats": {
+          "type": "array",
+          "description": "A list of chat thread ids to which your app is restricted to.",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Chat's thread Id.",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "permissions": {
       "type": "array",
       "description": "Specifies the permissions the app requests from users.",
@@ -796,6 +836,17 @@
           "developerUrl",
           "privacyUrl",
           "termsOfUseUrl"
+        ]
+      }
+    },
+    "supportedChannelTypes": {
+      "type": "array",
+      "description": "The set of supported channel type that an app belongs to.",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "sharedChannels",
+          "privateChannels"
         ]
       }
     },
@@ -925,6 +976,11 @@
           "type": "string",
           "description": "The url which indicates A/V filters' video app content.",
           "maxLength": 2048
+        },
+        "supportsStreaming": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
         }
       },
       "description": "Specify meeting extension definition.",
