@@ -801,7 +801,7 @@
     },
     "supportedChannelTypes": {
       "type": "array",
-      "description": "The set of supported channel type that an app belongs to.",
+      "description": "The types of channels that the app would be enabled in.",
       "maxItems": 2,
       "items": {
         "enum": [
