@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.13"
+      "const": "1.14"
     },
     "version": {
       "type": "string",
@@ -799,6 +799,17 @@
         ]
       }
     },
+    "supportedChannelTypes": {
+      "type": "array",
+      "description": "List of 'non-standard' channel types that the app supports. Note: Channels of standard type are supported by default if the app supports team scope.",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "sharedChannels",
+          "privateChannels"
+        ]
+      }
+    },
     "defaultBlockUntilAdminAction": {
       "type": "boolean",
       "description": "A value indicating whether an app is blocked by default until admin allows it",
@@ -925,6 +936,11 @@
           "type": "string",
           "description": "The url which indicates A/V filters' video app content.",
           "maxLength": 2048
+        },
+        "supportsStreaming": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
         }
       },
       "description": "Specify meeting extension definition.",
