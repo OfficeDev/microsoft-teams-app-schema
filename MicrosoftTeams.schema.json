@@ -461,6 +461,11 @@
             "description": "A value indicating whether or not the bot is a one-way notification only bot, as opposed to a conversational bot.",
             "default": false
           },
+          "requiresSecurityEnabledGroup": {
+            "type": "boolean",
+            "description": "A value indicating whether the team's Office group needs to be security enabled.",
+            "default": false
+          },
           "supportsFiles": {
             "type": "boolean",
             "description": "A value indicating whether the bot supports uploading/downloading of files.",
@@ -1119,11 +1124,6 @@
         "supportsStreaming": {
           "type": "boolean",
           "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
-          "default": false
-        },
-        "isAnonymousAccessAllowed": {
-          "type": "boolean",
-          "description": "A boolean value indicating whether this app allows management by anonymous users.",
           "default": false
         }
       },
