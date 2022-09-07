@@ -1118,7 +1118,7 @@
         },
         "videoFiltersConfigurationUrl": {
           "type": "string",
-          "description": "The url which indicates video filters' video app configuration.",
+          "description": "A URL for configuring the video filters.",
           "maxLength": 2048
         },
         "supportsStreaming": {
