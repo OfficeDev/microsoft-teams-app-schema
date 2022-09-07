@@ -9,8 +9,8 @@
     },
     "manifestVersion": {
       "type": "string",
-      "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.14"
+      "description": "The version of the schema this manifest is using.",
+      "enum": [ "devPreview", "m365DevPreview" ]
     },
     "version": {
       "type": "string",
@@ -213,6 +213,18 @@
               ]
             }
           },
+          "supportedPlatform": {
+            "type": "array",
+            "description": "The set of supportedPlatform scopes that a tab belong to",
+            "maxItems": 3,
+            "items": {
+              "enum": [
+                "desktop",
+                "mobile",
+                "teamsMeetingDevices"
+              ]
+            }
+          },
           "sharePointPreviewImage": {
             "$ref": "#/definitions/relativePath",
             "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768."
@@ -257,7 +269,7 @@
           },
           "contentUrl": {
             "$ref": "#/definitions/httpsUrl",
-            "description": "The url which points to the entity UI to be displayed in the canvas."
+            "description": "The url which points to the entity UI to be displayed in the Teams canvas."
           },
           "contentBotId": {
             "$ref": "#/definitions/guid",
@@ -285,11 +297,29 @@
           "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belong to",
-            "maxItems": 2,
+            "maxItems": 8,
             "items": {
               "enum": [
                 "personalTab",
-                "channelTab"
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
+                "meetingDetailsTab",
+                "meetingSidePanel",
+                "meetingStage",
+                "teamLevelApp"
+              ]
+            }
+          },
+          "supportedPlatform": {
+            "type": "array",
+            "description": "The set of supportedPlatform scopes that a tab belong to",
+            "maxItems": 3,
+            "items": {
+              "enum": [
+                "desktop",
+                "mobile",
+                "teamsMeetingDevices"
               ]
             }
           }
@@ -312,6 +342,115 @@
             "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "team": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the parameter.",
+                          "maxLength": 64
+                        },
+                        "inputType": {
+                          "type": "string",
+                          "enum": [
+                            "text",
+                            "textarea",
+                            "number",
+                            "date",
+                            "time",
+                            "toggle",
+                            "choiceset"
+                          ],
+                          "description": "Type of the parameter",
+                          "default": "text"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "Title of the parameter.",
+                          "maxLength": 32
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Description of the parameter.",
+                          "maxLength": 128
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Initial value for the parameter",
+                          "maxLength": 512
+                        },
+                        "choices": {
+                          "type": "array",
+                          "maxItems": 10,
+                          "description": "The choice options for the parameter",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "description": "Title of the choice",
+                                "maxLength": 128
+                              },
+                              "value": {
+                                "type": "string",
+                                "description": "Value of the choice",
+                                "maxLength": 512
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "title",
+                              "value"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "title"
+                      ]
+                    }
+                  },
+                  "taskInfo": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Task module title",
+                        "maxLength": 64
+                      },
+                      "width": {
+                        "$ref": "#/definitions/taskInfoDimension",
+                        "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                      },
+                      "height": {
+                        "$ref": "#/definitions/taskInfoDimension",
+                        "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+                      },
+                      "url": {
+                        "$ref": "#/definitions/httpsUrl",
+                        "description": "Task module URL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "needsChannelSelector": {
             "type": "boolean",
             "description": "This value describes whether or not the bot utilizes a user hint to add the bot to a specific channel.",
@@ -320,6 +459,11 @@
           "isNotificationOnly": {
             "type": "boolean",
             "description": "A value indicating whether or not the bot is a one-way notification only bot, as opposed to a conversational bot.",
+            "default": false
+          },
+          "requiresSecurityEnabledGroup": {
+            "type": "boolean",
+            "description": "A value indicating whether the team's Office group needs to be security enabled.",
             "default": false
           },
           "supportsFiles": {
@@ -674,6 +818,46 @@
         ]
       }
     },
+    "scopeConstraints": {
+      "type": "object",
+      "properties": {
+        "teams": {
+          "type": "array",
+          "description": "A list of team thread ids to which your app is restricted to",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Team's thread Id",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        },
+        "groupChats": {
+          "type": "array",
+          "description": "A list of chat thread ids to which your app is restricted to",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Chat's thread Id",
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [ "id" ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "permissions": {
       "type": "array",
       "description": "Specifies the permissions the app requests from users.",
@@ -781,6 +965,17 @@
       },
       "additionalProperties": false
     },
+    "supportedChannelTypes": {
+      "type": "array",
+      "description": "The set of supported channel type that an app belongs to",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "sharedChannels",
+          "privateChannels"
+        ]
+      }
+    },
     "configurableProperties": {
       "type": "array",
       "description": "A list of tenant configured properties for an app",
@@ -796,17 +991,6 @@
           "developerUrl",
           "privacyUrl",
           "termsOfUseUrl"
-        ]
-      }
-    },
-    "supportedChannelTypes": {
-      "type": "array",
-      "description": "List of 'non-standard' channel types that the app supports. Note: Channels of standard type are supported by default if the app supports team scope.",
-      "maxItems": 2,
-      "items": {
-        "enum": [
-          "sharedChannels",
-          "privateChannels"
         ]
       }
     },
@@ -905,6 +1089,37 @@
           "maxItems": 5,
           "type": "array",
           "uniqueItems": true
+        },
+        "videoFilters": {
+          "description": "Meeting supported video filters.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/guid",
+                "description": "A unique identifier for this video filter. This id must be a GUID."
+              },
+              "name": {
+                "type": "string",
+                "description": "Video filter's name.",
+                "maxLength": 128
+              },
+              "thumbnail": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a video filter's thumbnail."
+              }
+            },
+            "required": [ "id", "name", "thumbnail" ]
+          },
+          "maxItems": 100,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "videoFiltersConfigurationUrl": {
+          "type": "string",
+          "description": "The url which indicates video filters' video app configuration.",
+          "maxLength": 2048
         },
         "supportsStreaming": {
           "type": "boolean",
