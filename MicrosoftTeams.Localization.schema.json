@@ -77,7 +77,7 @@
       "type": "string",
       "maxLength": 128
     },
-    "^meetingExtensionDefinition.filters\\[([0-9]|1[0-5])\\]\\.name$": {
+    "^meetingExtensionDefinition.videoFilters\\[([0-9]|1[0-5])\\]\\.name$": {
       "type": "string",
       "maxLength": 128
     }
