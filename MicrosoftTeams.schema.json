@@ -285,7 +285,7 @@
           },
           "scopes": {
             "type": "array",
-            "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone or group chat. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
+            "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone or a group chat. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
             "maxItems": 3,
             "items": {
               "enum": [
