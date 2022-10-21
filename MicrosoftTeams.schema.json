@@ -1118,7 +1118,7 @@
             },
             "required": [ "id", "name", "thumbnail" ]
           },
-          "maxItems": 100,
+          "maxItems": 32,
           "type": "array",
           "uniqueItems": true
         },
