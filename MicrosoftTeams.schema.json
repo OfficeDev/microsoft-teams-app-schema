@@ -804,7 +804,7 @@
                     },
                     "supportsAnonymizedPayloads": {
                       "type": "boolean",
-                      "description": "A boolean that indicates whether the app's link message handler supports anonymous invoke flow.",
+                      "description": "A boolean value that indicates whether the app's link message handler supports anonymous invoke flow.",
                       "default": false
                     }
                   }
