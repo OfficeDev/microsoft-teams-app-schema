@@ -804,6 +804,11 @@
                     },
                     "supportsAnonymousAccess": {
                       "type": "boolean",
+                      "description": "A boolean value that indicates whether the app's link message handler supports anonymous invoke flow. [Deprecated]. This property has been superceded by 'supportsAnonymizedPayloads'.",
+                      "default": false
+                    },
+                    "supportsAnonymizedPayloads": {
+                      "type": "boolean",
                       "description": "A boolean value that indicates whether the app's link message handler supports anonymous invoke flow.",
                       "default": false
                     }
@@ -1130,6 +1135,11 @@
         "supportsStreaming": {
           "type": "boolean",
           "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
+        },
+        "supportsAnonymousGuestUsers": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app supports access by anonymous guest users.",
           "default": false
         }
       },
