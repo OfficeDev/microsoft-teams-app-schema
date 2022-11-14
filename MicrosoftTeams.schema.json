@@ -802,6 +802,11 @@
                         "maxLength": 2048
                       }
                     },
+                    "supportsAnonymousAccess": {
+                      "type": "boolean",
+                      "description": "A boolean value that indicates whether the app's link message handler supports anonymous invoke flow.",
+                      "default": false
+                    },
                     "supportsAnonymizedPayloads": {
                       "type": "boolean",
                       "description": "A boolean value that indicates whether the app's link message handler supports anonymous invoke flow.",
