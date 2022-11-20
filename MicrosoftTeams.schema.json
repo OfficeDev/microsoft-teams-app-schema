@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.14"
+      "const": "1.15"
     },
     "version": {
       "type": "string",
@@ -656,6 +656,11 @@
                         "type": "string",
                         "maxLength": 2048
                       }
+                    },
+                    "supportsAnonymizedPayloads": {
+                      "type": "boolean",
+                      "description": "A boolean that indicates whether the app's link message handler supports anonymous invoke flow.",
+                      "default": false
                     }
                   }
                 }
