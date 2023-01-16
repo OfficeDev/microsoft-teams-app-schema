@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -829,6 +829,158 @@
         ]
       }
     },
+    "graphConnector": {
+      "type": "object",
+      "description": "Specify the app's Graph connector configuration. If this is present then webApplicationInfo.id must also be specified.",
+      "properties": {
+        "notificationUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The url where Graph-connector notifications for the application should be sent."
+        }
+      },
+      "required": [
+        "notificationUrl"
+      ],
+      "additionalProperties": false
+    },
+    "activities": {
+      "type": "object",
+      "properties": {
+        "activityTypes": {
+          "type": "array",
+          "description": "Specify the types of activites that your app can post to a users activity feed",
+          "maxItems": 128,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 128
+              },
+              "templateText": {
+                "type": "string",
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "type",
+              "description",
+              "templateText"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "meetingExtensionDefinition": {
+      "type": "object",
+      "properties": {
+        "scenes": {
+          "description": "Meeting supported scenes.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/guid",
+                "description": "A unique identifier for this scene. This id must be a GUID."
+              },
+              "name": {
+                "type": "string",
+                "description": "Scene name.",
+                "maxLength": 128
+              },
+              "file": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a scene metadata json file."
+              },
+              "preview": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a scene PNG preview icon."
+              },
+              "maxAudience": {
+                "type": "integer",
+                "description": "Maximum audiences supported in scene.",
+                "maximum": 50
+              },
+              "seatsReservedForOrganizersOrPresenters": {
+                "type": "integer",
+                "description": "Number of seats reserved for organizers or presenters.",
+                "maximum": 50
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "file",
+              "preview",
+              "maxAudience",
+              "seatsReservedForOrganizersOrPresenters"
+            ]
+          },
+          "maxItems": 5,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "videoFilters": {
+          "description": "Meeting supported video filters.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/guid",
+                "description": "A unique identifier for this video filter. This id must be a GUID."
+              },
+              "name": {
+                "type": "string",
+                "description": "A/V filter's name.",
+                "maxLength": 128
+              },
+              "thumbnail": {
+                "$ref": "#/definitions/relativePath",
+                "description": "A relative file path to a video filter's thumbnail."
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "thumbnail"
+            ]
+          },
+          "maxItems": 100,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "videoFiltersConfigurationUrl": {
+          "type": "string",
+          "description": "The url which indicates video filters' video app configuration.",
+          "maxLength": 2048
+        },
+        "supportsStreaming": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
+        },
+        "isAnonymousAccessAllowed": {
+          "type": [ "boolean", "null" ],
+          "description": "A boolean value indicating whether this app allows management by anonymous users.",
+          "default": null
+        },
+        "supportsAnonymousGuestUsers": {
+          "type": [ "boolean", "null" ],
+          "description": "A boolean value indicating whether this app allows management by anonymous users.",
+          "default": null
+        }
+      },
+      "description": "Specify meeting extension definition.",
+      "additionalProperties": false
+    },
     "scopeConstraints": {
       "type": "object",
       "properties": {
@@ -922,20 +1074,6 @@
       ],
       "additionalProperties": false
     },
-    "graphConnector": {
-      "type": "object",
-      "description": "Specify the app's Graph connector configuration. If this is present then webApplicationInfo.id must also be specified.",
-      "properties": {
-        "notificationUrl": {
-          "$ref": "#/definitions/httpsUrl",
-          "description": "The url where Graph-connector notifications for the application should be sent."
-        }
-      },
-      "required": [
-        "notificationUrl"
-      ],
-      "additionalProperties": false
-    },
     "showLoadingIndicator": {
       "type": "boolean",
       "description": "A value indicating whether or not show loading indicator when app/tab is loading",
@@ -945,36 +1083,6 @@
       "type": "boolean",
       "description": "A value indicating whether a personal app is rendered without a tab header-bar",
       "default": false
-    },
-    "activities": {
-      "type": "object",
-      "properties": {
-        "activityTypes": {
-          "type": "array",
-          "description": "Specify the types of activites that your app can post to a users activity feed",
-          "maxItems": 128,
-          "items": {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "maxLength": 32
-              },
-              "description": {
-                "type": "string",
-                "maxLength": 128
-              },
-              "templateText": {
-                "type": "string",
-                "maxLength": 128
-              }
-            },
-            "required": [ "type", "description", "templateText" ],
-            "additionalProperties": false
-          }
-        }
-      },
-      "additionalProperties": false
     },
     "supportedChannelTypes": {
       "type": "array",
@@ -1058,94 +1166,6 @@
       "description": "When a group install scope is selected, this will define the default capability when the user installs the app",
       "additionalProperties": false
     },
-    "meetingExtensionDefinition": {
-      "type": "object",
-      "properties": {
-        "scenes": {
-          "description": "Meeting supported scenes.",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "$ref": "#/definitions/guid",
-                "description": "A unique identifier for this scene. This id must be a GUID."
-              },
-              "name": {
-                "type": "string",
-                "description": "Scene name.",
-                "maxLength": 128
-              },
-              "file": {
-                "$ref": "#/definitions/relativePath",
-                "description": "A relative file path to a scene metadata json file."
-              },
-              "preview": {
-                "$ref": "#/definitions/relativePath",
-                "description": "A relative file path to a scene PNG preview icon."
-              },
-              "maxAudience": {
-                "type": "integer",
-                "description": "Maximum audiences supported in scene.",
-                "maximum": 50
-              },
-              "seatsReservedForOrganizersOrPresenters": {
-                "type": "integer",
-                "description": "Number of seats reserved for organizers or presenters.",
-                "maximum": 50
-              }
-            },
-            "required": [ "id", "name", "file", "preview", "maxAudience", "seatsReservedForOrganizersOrPresenters" ]
-          },
-          "maxItems": 5,
-          "type": "array",
-          "uniqueItems": true
-        },
-        "videoFilters": {
-          "description": "Meeting supported video filters.",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "$ref": "#/definitions/guid",
-                "description": "A unique identifier for this video filter. This id must be a GUID."
-              },
-              "name": {
-                "type": "string",
-                "description": "Video filter's name.",
-                "maxLength": 128
-              },
-              "thumbnail": {
-                "$ref": "#/definitions/relativePath",
-                "description": "A relative file path to a video filter's thumbnail."
-              }
-            },
-            "required": [ "id", "name", "thumbnail" ]
-          },
-          "maxItems": 32,
-          "type": "array",
-          "uniqueItems": true
-        },
-        "videoFiltersConfigurationUrl": {
-          "type": "string",
-          "description": "A URL for configuring the video filters.",
-          "maxLength": 2048
-        },
-        "supportsStreaming": {
-          "type": "boolean",
-          "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
-          "default": false
-        },
-        "supportsAnonymousGuestUsers": {
-          "type": "boolean",
-          "description": "A boolean value indicating whether this app supports access by anonymous guest users.",
-          "default": false
-        }
-      },
-      "description": "Specify meeting extension definition.",
-      "additionalProperties": false
-    },
     "authorization": {
       "type": "object",
       "description": "Specify and consolidates authorization related information for the App.",
@@ -1188,6 +1208,9 @@
           }
         }
       }
+    },
+    "extensions": {
+      "$ref": "#/definitions/element-extensions"
     }
   },
   "required": [
@@ -1231,6 +1254,719 @@
       "type": "string",
       "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
       "maxLength": 16
+    },
+    "element-extensions": {
+      "type": "array",
+      "description": "The set of extensions for this app. Currently only one extensions per app is supported.",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirements-extension-element"
+          },
+          "runtimes": {
+            "$ref": "#/definitions/extension-runtimes-general-array"
+          },
+          "ribbons": {
+            "$ref": "#/definitions/extension-ribbons-array"
+          },
+          "autoRunEvents": {
+            "$ref": "#/definitions/extension-autoRunEvents-array"
+          },
+          "alternates": {
+            "$ref": "#/definitions/extension-alternateVersions-array"
+          },
+          "audienceClaimUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url for your extension, used to validate Exchange user identity tokens."
+          }
+        },
+        "additionalProperties": false
+      },
+      "additionalProperties": false
+    },
+    "requirements-extension-element": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "minVersion": {
+                "type": "string"
+              },
+              "maxVersion": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "formFactors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "desktop",
+              "mobile"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "extension-runtimes-general-array": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/extension-general-runtime"
+      },
+      "minItems": 1
+    },
+    "extension-general-runtime": {
+      "type": "object",
+      "description": "A runtime environment to execute a script",
+      "properties": {
+        "requirements": {
+          "$ref": "#/definitions/requirements-extension-element"
+        },
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this runtime within the app.  Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": ["general"],
+          "description": "General runtime to execute functions and as launch pages."
+        },
+        "code": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "$ref": "#/definitions/httpsUrl",
+              "description": "URL of the .html page to be loaded in browser-based runtimes."
+            },
+            "script": {
+              "$ref": "#/definitions/httpsUrl",
+              "description": "URL of the .js script file to be loaded in UI-less runtimes."
+            }
+          },
+          "additionalProperties": false,
+          "required": ["page"]
+        },
+        "lifetime": {
+          "type": "string",
+          "enum": [
+            "short",
+            "long"
+          ],
+          "default": "short",
+          "description": "Runtimes with a short lifetime do not preserve state across executions. Runtimes with a long lifetime do."
+        },
+        "actions": {
+          "$ref": "#/definitions/extension-runtimes-actions"
+        }   
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "code",
+        "lifetime"
+      ]
+    },
+    "extension-runtimes-actions": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/extension-runtimes-actions-executeFunction"
+          },
+          {
+            "$ref": "#/definitions/extension-runtimes-actions-openPage"
+          }
+        ]
+      },
+      "additionalProperties": false,
+      "required": [
+        "actions"
+      ]
+    },
+    "extension-runtimes-actions-executeFunction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifier for this action. Maximum length is 64 characters. This value is passed to the code file.",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "const": "executeFunction",
+          "description": "Run a function without waiting for it to finish. "
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the action. Maximum length is 64 characters.",
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "extension-runtimes-actions-openPage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifier for this action. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "const": "openPage",
+          "description": "Open a page in a view such as a task pane."
+        },
+        "view": {
+          "type": "string",
+          "description": "View where the page should be opened. Maximum length is 64 characters.  ",
+          "maxLength": 64
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the page. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "pinnable": {
+          "type": "boolean",
+          "description": "Specifies that a pane supports pinning, which keeps the task pane open when the user changes the selection."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "extension-ribbons-array": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirements-extension-element"
+          },
+          "contexts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "mailRead",
+                "mailCompose",
+                "meetingDetailsOrganizer",
+                "meetingDetailsAttendee"
+              ]
+            }
+          },
+          "tabs": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "$ref": "#/definitions/extension-ribbons-customTab" },
+                { "$ref": "#/definitions/extension-ribbons-builtInTab" }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "tabs"
+        ]
+      }
+    },
+    "extension-ribbons-customTab": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this tab within the app. Maximum length is 64 characters. ",          
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the tab. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "position": {
+          "type": "object",
+          "properties": {
+            "builtInTabId": {
+              "type": "string",
+              "description": "The id of the built-in tab. Maximum length is 64 characters.",
+              "maxLength": 64
+            },
+            "align": {
+              "type": "string",
+              "description": "Define alignment of this custom tab relative to the specified built-in tab.",
+              "enum": [
+                "after",
+                "before"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "builtInTabId",
+            "align"
+          ]
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/definitions/extension-common-customGroup" },
+              { "$ref": "#/definitions/extension-common-builtInGroup" }
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "groups"
+      ]
+    },
+    "extension-ribbons-builtInTab": {
+      "type": "object",
+      "properties": {
+        "builtInTabId": {
+          "type": "string",
+          "description": "Id of the existing Office tab. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extension-common-customGroup"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "builtInTabId"
+      ]
+    },
+    "extension-common-customGroup": {
+      "type": "object",
+      "properties": {
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        },
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this group within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the group. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extension-common-icon"
+          }
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/extension-common-custom-control-button"
+              },
+              {
+                "$ref": "#/definitions/extension-common-builtInControl-button"
+              },
+              {
+                "$ref": "#/definitions/extension-common-custom-control-menu"
+              }
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "controls"
+      ]
+    },
+    "extension-common-builtInGroup": {
+      "type": "object",
+      "properties": {
+        "builtInGroupId": {
+          "type": "string",
+          "description": "Id of a built-in Group. Maximum length is 64 characters.",
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "builtInGroupId"
+      ]
+    },
+    "extension-autoRunEvents-array": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirements-extension-element"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type" : "string",
+                  "maxLength": 64
+                },
+                "actionId": {
+                  "type": "string",
+                  "description": "The ID of an action defined in runtimes. Maximum length is 64 characters.",
+                  "maxLength": 64
+                },
+                "options": {
+                  "type": "object",
+                  "properties": {
+                    "sendMode": {
+                      "type": "string",
+                      "enum": [
+                        "promptUser",
+                        "softBlock",
+                        "block"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "sendMode"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "actionId"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "events"
+        ]
+      }
+    },
+    "extension-common-custom-control-button": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "button"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extension-common-icon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extension-common-superToolTip"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "The ID of an action defined in runtimes. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Specify whether the control is initially enabled.",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "icons",
+        "supertip",
+        "actionId"
+      ]
+    },
+    "extension-common-builtInControl-button": {
+      "type": "object",
+      "properties": {
+        "builtInControlId": {
+          "type": "string",
+          "description": "Id of the existing office control. Maximum length is 64 characters.",
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "builtInControlId"
+      ]
+    },
+    "extension-common-superToolTip": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title text of the super tip. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the super tip. Maximum length is 128 characters.",
+          "maxLength": 128
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "description"
+      ]
+    },
+    "extension-common-custom-control-menu": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "menu"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extension-common-icon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extension-common-superToolTip"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extension-common-custom-control-menuItem"
+          }
+        },
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        }    
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "icons",
+        "supertip",
+        "items"
+      ]
+    },
+    "extension-common-custom-control-menuItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "menuItem"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extension-common-icon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extension-common-superToolTip"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "The ID of an action defined in runtimes. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the control is initially enabled.",
+          "default": true
+        },
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "supertip",
+        "actionId"
+      ]
+    },
+    "extension-common-icon": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "number",
+          "description": "Size in pixels of the icon. Three image sizes are required (16, 32, and 80 pixels)"
+        },
+        "url": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "Url to the icon."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "size",
+        "url"
+      ]
+    },
+    "extension-alternateVersions-array": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirements-extension-element"
+          },
+          "prefer": {
+            "type": "object",
+            "properties": {
+              "comAddin": {
+                "type": "object",
+                "properties": {
+                  "progId": {
+                    "type": "string",
+                    "description": "Program ID of the alternate com extension. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "progId"
+                ]
+              }
+            }
+          },
+          "hide": {
+            "type": "object",
+            "properties": {
+              "storeOfficeAddin": {
+                "type": "object",
+                "properties": {
+                  "officeAddinId": {
+                    "type": "string",
+                    "description": "Solution ID of an in-market add-in to hide. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "description": "Asset ID of an in-market add-in to hide. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "officeAddinId",
+                  "assetId"
+                ]
+              },
+              "customOfficeAddin": {
+                "type": "object",
+                "properties": {
+                  "officeAddinId": {
+                    "type": "string",
+                    "description": "Solution ID of a custom add-in to hide. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "officeAddinId"
+                ]
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
     }
   }
 }
