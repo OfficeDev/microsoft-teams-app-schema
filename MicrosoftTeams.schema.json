@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.15"
+      "const": "1.16"
     },
     "version": {
       "type": "string",
@@ -275,22 +275,29 @@
           "scopes": {
             "type": "array",
             "description": "Specifies whether the tab offers an experience in the context of a channel in a team, or an experience scoped to an individual user alone. These options are non-exclusive. Currently static tabs are only supported in the 'personal' scope.",
-            "maxItems": 2,
+            "maxItems": 3,
             "items": {
               "enum": [
                 "team",
-                "personal"
+                "personal",
+                "groupChat"
               ]
             }
           },
           "context": {
             "type": "array",
             "description": "The set of contextItem scopes that a tab belong to",
-            "maxItems": 2,
+            "maxItems": 8,
             "items": {
               "enum": [
                 "personalTab",
-                "channelTab"
+                "channelTab",
+                "privateChatTab",
+                "meetingChatTab",
+                "meetingDetailsTab",
+                "meetingSidePanel",
+                "meetingStage",
+                "teamLevelApp"
               ]
             }
           }
@@ -915,6 +922,11 @@
         "supportsStreaming": {
           "type": "boolean",
           "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
+        },
+        "supportsAnonymousGuestUsers": {
+          "type": "boolean",
+          "description": "A boolean value indicating whether this app allows management by anonymous users.",
           "default": false
         }
       },
