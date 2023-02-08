@@ -158,6 +158,15 @@
       "$ref": "#/definitions/hexColor",
       "description": "A color to use in conjunction with the icon. The value must be a valid HTML color code starting with '#', for example `#4464ee`."
     },
+    "requirements": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "description": "The set of host capabilities required by the app.  ",
+          "$ref": "#/definitions/clientApiSets"
+        }
+      }
+    },
     "configurableTabs": {
       "type": "array",
       "description": "These are tabs users can optionally add to their channels and 1:1 or group chats and require extra configuration before they are added. Configurable tabs are not supported in the personal scope. Currently only one configurable tab per app is supported.",
@@ -331,6 +340,69 @@
           "scopes"
         ]
       }
+    },
+    "personalApp": {
+      "additionalProperties": false,
+      "properties": {
+        "isFullScreen": {
+          "type": "boolean",
+          "description": "A value indicating whether a personal app is rendered without a tab header-bar",
+          "default": false
+        },
+        "pages": {
+          "type": "array",
+          "description": "A set of pages included in the personal app.",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "description": "A unique identifier for the entity which the page displays.",
+                "maxLength": 64
+              },
+              "contentType": {
+                "type": "string",
+                "description": "The type of page content.",
+                "enum": ["url", "bot"]
+              },
+              "displayName": {
+                "type": "string",
+                "description": "The display name of the tab.",
+                "maxLength": 128
+              },
+              "contentUrl": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "The url which points to the entity UI to be displayed in the Teams canvas."
+              },
+              "contentBotId": {
+                "$ref": "#/definitions/botId",
+                "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
+              },
+              "websiteUrl": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "The url to point at if a user opts to view in a browser."
+              },
+              "requirements": {
+                "properties": {
+                  "capabilities": {
+                    "$ref": "#/definitions/clientApiSets",
+                    "description": "The set of host capabilities required by this page."
+                  }
+                }
+              }
+            },
+            "required": [
+              "entityId"
+            ]
+          }
+        }
+      },
+      "required": [
+        "pages"
+      ]      
     },
     "bots": {
       "type": "array",
@@ -645,7 +717,8 @@
                     "enum": [
                       "compose",
                       "commandBox",
-                      "message"
+                      "message",
+                      "composeMail"
                     ]
                   },
                   "description": "Context where the command would apply",
@@ -1232,6 +1305,38 @@
       "type": "string",
       "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
       "maxLength": 16
+    },
+    "clientApiSets": {
+      "type": "array",
+      "description": "Array of client API sets",
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name of the API Set",
+            "enum": [              
+              "calendar",
+              "location",
+              "mail",
+              "media",
+              "monetization",
+              "onlineMeeting",
+              "pages.config",
+              "pages.tabs",
+              "pages.backstack",
+              "pages.appButton",
+              "people",
+              "sharing",
+              "teamsCore",
+              "video"   
+            ]
+          }
+        }
+      }
     }
   }
 }
