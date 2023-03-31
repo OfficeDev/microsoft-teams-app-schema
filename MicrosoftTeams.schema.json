@@ -1829,15 +1829,18 @@
           "description": "Size in pixels of the icon. Three image sizes are required (16, 32, and 80 pixels)",
           "enum": [ 16, 20, 24, 32, 40, 48, 64, 80 ]
         },
+        "url": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "Url to the icon."
+        },
         "file": {
           "$ref": "#/definitions/relativePath",
-          "description": "Relative path to the file that contains the icon."
+          "description": "Relative path to the file that contains the icon. This property is currently not supported as a relative path."
         }
       },
       "additionalProperties": false,
       "required": [
-        "size",
-        "file"
+        "size"
       ]
     },
     "extensionAutoRunEventsArray": {
@@ -1854,7 +1857,8 @@
               "type": "object",
               "properties": {
                 "type": {
-                  "$ref": "#/definitions/extensionAutoRunEventsTypes"
+                  "type": "string",
+                  "maxLength": 64
                 },
                 "actionId": {
                   "type": "string",
@@ -1862,7 +1866,21 @@
                   "maxLength": 64
                 },
                 "options": {
-                  "$ref": "#/definitions/extensionAutoRunEventsOptions"
+                  "type": "object",
+                  "properties": {
+                    "sendMode": {
+                      "type": "string",
+                      "enum": [
+                        "promptUser",
+                        "softBlock",
+                        "block"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "sendMode"
+                  ]
                 }
               },
               "additionalProperties": false,
@@ -1878,41 +1896,6 @@
           "events"
         ]
       }
-    },
-    "extensionAutoRunEventsTypes": {
-      "type": "string",
-      "enum": [
-        "newMessageComposeCreated",
-        "newAppointmentOrganizerCreated",
-        "messageAttachmentsChanged",
-        "appointmentAttachmentsChanged",
-        "messageRecipientsChanged",
-        "appointmentAttendeesChanged",
-        "appointmentTimeChanged",
-        "appointmentRecurrenceChanged",
-        "infoBarDismissClicked",
-        "messageSending",
-        "appointmentSending",
-        "documentNew",
-        "documentOpen"
-      ]
-    },
-    "extensionAutoRunEventsOptions": {
-      "type": "object",
-      "properties": {
-        "sendMode": {
-          "type": "string",
-          "enum": [
-            "promptUser",
-            "softBlock",
-            "block"
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "sendMode"
-      ]
     },
     "extensionAlternateVersionsArray": {
       "type": "array",
