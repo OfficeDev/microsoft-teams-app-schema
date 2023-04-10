@@ -1189,6 +1189,9 @@
           }
         }
       }
+    },
+    "extensions": {
+      "$ref": "#/definitions/elementExtensions"
     }
   },
   "required": [
@@ -1232,6 +1235,735 @@
       "type": "string",
       "pattern": "^((([0-9]*\\.)?[0-9]+)|[lL][aA][rR][gG][eE]|[mM][eE][dD][iI][uU][mM]|[sS][mM][aA][lL][lL])$",
       "maxLength": 16
+    },
+    "elementExtensions": {
+      "type": "array",
+      "description": "The set of extensions for this app. Currently only one extensions per app is supported.",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "runtimes": {
+            "$ref": "#/definitions/extensionRuntimesArray"
+          },
+          "ribbons": {
+            "$ref": "#/definitions/extensionRibbonsArray"
+          },
+          "autoRunEvents": {
+            "$ref": "#/definitions/extensionAutoRunEventsArray"
+          },
+          "alternates": {
+            "$ref": "#/definitions/extensionAlternateVersionsArray"
+          },
+          "audienceClaimUrl": {
+            "$ref": "#/definitions/httpsUrl",
+            "description": "The url for your extension, used to validate Exchange user identity tokens."
+          }
+        },
+        "additionalProperties": false
+      },
+      "additionalProperties": false
+    },
+    "requirementsExtensionElement": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "minVersion": {
+                "type": "string"
+              },
+              "maxVersion": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "mail"
+            ]
+          }
+        },
+        "formFactors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "desktop",
+              "mobile"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "extensionRuntimesArray": {
+      "type": "array",
+      "minitems": 1,
+      "items": {
+        "type": "object",
+        "description": "A runtime environment for a page or script",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for this runtime within the app.  Maximum length is 64 characters.",
+            "maxLength": 64
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "general"
+            ],
+            "default": "general",
+            "description": "Supports running functions and launching pages."
+          },
+          "code": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "URL of the .html page to be loaded in browser-based runtimes."
+              },
+              "script": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "URL of the .js script file to be loaded in UI-less runtimes."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "page"
+            ]
+          },
+          "lifetime": {
+            "type": "string",
+            "default": "short",
+            "enum": [
+              "short",
+              "long"
+            ],
+            "description": "Runtimes with a short lifetime do not preserve state across executions. Runtimes with a long lifetime do."
+          },
+          "actions": {
+            "$ref": "#/definitions/extensionRuntimesActions"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "code"
+        ]
+      }
+    },
+    "extensionRuntimesActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/extensionRuntimesActionsItem"
+      },
+      "additionalProperties": false
+    },
+    "extensionRuntimesActionsItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifier for this action. Maximum length is 64 characters. This value is passed to the code file.",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "executeFunction",
+            "openPage"
+          ],
+          "description": "executeFunction: Run a script function without waiting for it to finish. openPate: Open a page in a view."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the action. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "pinnable": {
+          "type": "boolean",
+          "description": "Specifies that a task pane supports pinning, which keeps the task pane open when the user changes the selection."
+        },
+        "view": {
+          "type": "string",
+          "description": "View where the page should be opened. Maximum length is 64 characters.  ",
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "extensionRibbonsArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "contexts": {
+            "$ref": "#/definitions/extensionContexts"
+          },
+          "tabs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/extensionRibbonsArrayTabsItem"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "tabs"
+        ]
+      }
+    },
+    "extensionContexts": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "string",
+        "enum": [
+          "mailRead",
+          "mailCompose",
+          "meetingDetailsOrganizer",
+          "meetingDetailsAttendee"
+        ]
+      }
+    },
+    "extensionRibbonsArrayTabsItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this tab within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the tab. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "position": {
+          "type": "object",
+          "properties": {
+            "builtInTabId": {
+              "type": "string",
+              "description": "The id of the built-in tab. Maximum length is 64 characters.",
+              "maxLength": 64
+            },
+            "align": {
+              "type": "string",
+              "description": "Define alignment of this custom tab relative to the specified built-in tab.",
+              "enum": [
+                "after",
+                "before"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "builtInTabId",
+            "align"
+          ]
+        },
+        "builtInTabId": {
+          "type": "string",
+          "description": "Id of the existing office Tab. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionRibbonsCustomTabGroupsItem"
+          },
+          "minItems": 1
+        }
+      },
+      "dependencies": {
+        "builtInTabId": {
+          "properties": {
+            "groups": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/extensionCommonCustomGroup"
+              }
+            }
+          },
+          "required": [ "builtInTabId" ]
+        },
+        "id": {
+          "required": [
+            "id",
+            "label",
+            "groups"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "extensionRibbonsCustomTabGroupsItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this group within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the group. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonIcon"
+          }
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonCustomGroupControlsItem"
+          },
+          "minItems": 1
+        },
+        "builtInGroupId": {
+          "type": "string",
+          "description": "Id of a built-in Group. Maximum length is 64 characters.",
+          "maxLength": 64
+        }
+      },
+      "dependentSchemas": {
+        "builtInGroupId": {
+          "required": [ "builtInGroupId" ]
+        },
+        "id": {
+          "required": [
+            "id",
+            "label",
+            "controls"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "extensionCommonCustomGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this group within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the group. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonIcon"
+          }
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonCustomGroupControlsItem"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "controls"
+      ],
+      "additionalProperties": false
+    },
+    "extensionCommonCustomGroupControlsItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "button" } }
+          },
+          "then": {
+            "required": [
+              "id",
+              "type",
+              "label",
+              "icons",
+              "supertip",
+              "actionId"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "menu" } }
+          },
+          "then": {
+            "required": [
+              "id",
+              "type",
+              "label",
+              "icons",
+              "supertip",
+              "items"
+            ]
+          }
+        }
+      ],
+      "dependentSchemas": {
+        "builtInControlId": {
+          "required": [ "builtInControlId" ]
+        }
+      },
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "button",
+            "menu"
+          ]
+        },
+        "builtInControlId": {
+          "type": "string",
+          "description": "Id of the existing office control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonIcon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extensionCommonSuperToolTip"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "The ID of an execution-type action that handles this key combination. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the control is initially enabled.",
+          "default": true
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonCustomControlMenuItem"
+          }
+        }
+      }
+    },
+    "extensionCommonCustomControlMenu": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "menu"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonIcon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extensionCommonSuperToolTip"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonCustomControlMenuItem"
+          }
+        },
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "icons",
+        "supertip",
+        "items"
+      ]
+    },
+    "extensionCommonCustomControlMenuItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "menuItem"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionCommonIcon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extensionCommonSuperToolTip"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "The ID of an action defined in runtimes. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the control is initially enabled.",
+          "default": true
+        },
+        "overriddenByRibbonApi": {
+          "type": "boolean",
+          "default": "false"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "supertip",
+        "actionId"
+      ]
+    },
+    "extensionCommonSuperToolTip": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title text of the super tip. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the super tip. Maximum length is 128 characters.",
+          "maxLength": 128
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "description"
+      ]
+    },
+    "extensionCommonIcon": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "number",
+          "description": "Size in pixels of the icon. Three image sizes are required (16, 32, and 80 pixels)",
+          "enum": [ 16, 20, 24, 32, 40, 48, 64, 80 ]
+        },
+        "url": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "Url to the icon."
+        },
+        "file": {
+          "$ref": "#/definitions/relativePath",
+          "description": "Relative path to the file that contains the icon. This property is currently not supported as a relative path."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "size"
+      ]
+    },
+    "extensionAutoRunEventsArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "actionId": {
+                  "type": "string",
+                  "description": "The ID of an action defined in runtimes. Maximum length is 64 characters.",
+                  "maxLength": 64
+                },
+                "options": {
+                  "type": "object",
+                  "properties": {
+                    "sendMode": {
+                      "type": "string",
+                      "enum": [
+                        "promptUser",
+                        "softBlock",
+                        "block"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "sendMode"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "actionId"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "events"
+        ]
+      }
+    },
+    "extensionAlternateVersionsArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "prefer": {
+            "properties": {
+              "comAddin": {
+                "type": "object",
+                "properties": {
+                  "progId": {
+                    "type": "string",
+                    "description": "Program ID of the alternate com extension. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "progId"
+                ]
+              }
+            }
+          },
+          "hide": {
+            "properties": {
+              "storeOfficeAddin": {
+                "type": "object",
+                "properties": {
+                  "officeAddinId": {
+                    "type": "string",
+                    "description": "Solution ID of an in-market add-in to hide. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  },
+                  "assetId": {
+                    "type": "string",
+                    "description": "Asset ID of the in-market add-in to hide. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "officeAddinId",
+                  "assetId"
+                ]
+              },
+              "customOfficeAddin": {
+                "type": "object",
+                "properties": {
+                  "officeAddinId": {
+                    "type": "string",
+                    "description": "Solution ID of the in-market add-in to hide. Maximum length is 64 characters.",
+                    "maxLength": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "officeAddinId"
+                ]
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
     }
   }
 }
