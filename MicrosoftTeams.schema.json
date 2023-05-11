@@ -1558,18 +1558,6 @@
           "maxLength": 64
         }
       },
-      "dependentSchemas": {
-        "builtInGroupId": {
-          "required": [ "builtInGroupId" ]
-        },
-        "id": {
-          "required": [
-            "id",
-            "label",
-            "controls"
-          ]
-        }
-      },
       "additionalProperties": false
     },
     "extensionCommonCustomGroup": {
@@ -1609,43 +1597,6 @@
     "extensionCommonCustomGroupControlsItem": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "if": {
-            "properties": { "type": { "const": "button" } }
-          },
-          "then": {
-            "required": [
-              "id",
-              "type",
-              "label",
-              "icons",
-              "supertip",
-              "actionId"
-            ]
-          }
-        },
-        {
-          "if": {
-            "properties": { "type": { "const": "menu" } }
-          },
-          "then": {
-            "required": [
-              "id",
-              "type",
-              "label",
-              "icons",
-              "supertip",
-              "items"
-            ]
-          }
-        }
-      ],
-      "dependentSchemas": {
-        "builtInControlId": {
-          "required": [ "builtInControlId" ]
-        }
-      },
       "properties": {
         "id": {
           "type": "string",
@@ -1698,7 +1649,15 @@
             "$ref": "#/definitions/extensionCommonCustomControlMenuItem"
           }
         }
-      }
+      },
+      "required": [
+        "id",
+        "type",
+        "label",
+        "icons",
+        "supertip",
+        "actionId"
+      ]
     },
     "extensionCommonCustomControlMenu": {
       "type": "object",
