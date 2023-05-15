@@ -1655,8 +1655,7 @@
         "type",
         "label",
         "icons",
-        "supertip",
-        "actionId"
+        "supertip"
       ]
     },
     "extensionCommonCustomControlMenu": {
