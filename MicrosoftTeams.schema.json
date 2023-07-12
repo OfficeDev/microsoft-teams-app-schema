@@ -926,7 +926,7 @@
         },
         "supportsAnonymousGuestUsers": {
           "type": "boolean",
-          "description": "A boolean value indicating whether this app allows management by anonymous users.",
+          "description": "A value that indicates whether an app supports access for anonymous users.",
           "default": false
         }
       },
