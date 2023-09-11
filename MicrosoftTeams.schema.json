@@ -352,12 +352,12 @@
               "additionalProperties": false,
               "fetchTask": {
                 "type": "boolean",
-                "description": "A boolean value that indicates if it should fetch bot config task module dynamically",
+                "description": "A boolean value that indicates if it should fetch bot config task module dynamically.",
                 "default": false
               },
               "taskInfo": {
                 "$ref": "#/definitions/taskInfo",
-                "description": "Task module to be launched when fetch task set to false"
+                "description": "Task module to be launched when fetch task set to false."
               }
             },
             "groupChat": {
@@ -365,12 +365,12 @@
               "additionalProperties": false,
               "fetchTask": {
                 "type": "boolean",
-                "description": "A boolean value that indicates if it should fetch bot config task module dynamically",
+                "description": "A boolean value that indicates if it should fetch bot config task module dynamically.",
                 "default": false
               },
               "taskInfo": {
                 "$ref": "#/definitions/taskInfo",
-                "description": "Task module to be launched when fetch task set to false"
+                "description": "Task module to be launched when fetch task set to false."
               }  
             }
           },
@@ -671,7 +671,7 @@
                 },
                 "taskInfo": {
                   "$ref": "#/definitions/taskInfo",
-                  "description": "Task module to be launched when fetch task set to false"
+                  "description": "Task module to be launched when fetch task set to false."
                 }
               },
               "required": [
@@ -1142,20 +1142,20 @@
       "properties": {
         "title": {
           "type": "string",
-          "description": "Initial dialog title",
+          "description": "Initial dialog title.",
           "maxLength": 64
         },
         "width": {
           "$ref": "#/definitions/taskInfoDimension",
-          "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+          "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'."
         },
         "height": {
           "$ref": "#/definitions/taskInfoDimension",
-          "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
+          "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'."
         },
         "url": {
           "$ref": "#/definitions/httpsUrl",
-          "description": "Initial webview URL"
+          "description": "Initial webview URL."
         }
       }
     },
