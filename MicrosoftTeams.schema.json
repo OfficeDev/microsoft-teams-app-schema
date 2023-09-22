@@ -347,110 +347,31 @@
           "configuration": {
             "type": "object",
             "additionalProperties": false,
-            "properties": {
-              "team": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "parameters": {
-                    "type": "array",
-                    "maxItems": 5,
-                    "minItems": 1,
-                    "items": {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "description": "Name of the parameter.",
-                          "maxLength": 64
-                        },
-                        "inputType": {
-                          "type": "string",
-                          "enum": [
-                            "text",
-                            "textarea",
-                            "number",
-                            "date",
-                            "time",
-                            "toggle",
-                            "choiceset"
-                          ],
-                          "description": "Type of the parameter",
-                          "default": "text"
-                        },
-                        "title": {
-                          "type": "string",
-                          "description": "Title of the parameter.",
-                          "maxLength": 32
-                        },
-                        "description": {
-                          "type": "string",
-                          "description": "Description of the parameter.",
-                          "maxLength": 128
-                        },
-                        "value": {
-                          "type": "string",
-                          "description": "Initial value for the parameter",
-                          "maxLength": 512
-                        },
-                        "choices": {
-                          "type": "array",
-                          "maxItems": 10,
-                          "description": "The choice options for the parameter",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "title": {
-                                "type": "string",
-                                "description": "Title of the choice",
-                                "maxLength": 128
-                              },
-                              "value": {
-                                "type": "string",
-                                "description": "Value of the choice",
-                                "maxLength": 512
-                              }
-                            },
-                            "additionalProperties": false,
-                            "required": [
-                              "title",
-                              "value"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "title"
-                      ]
-                    }
-                  },
-                  "taskInfo": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "description": "Task module title",
-                        "maxLength": 64
-                      },
-                      "width": {
-                        "$ref": "#/definitions/taskInfoDimension",
-                        "description": "Task module width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                      },
-                      "height": {
-                        "$ref": "#/definitions/taskInfoDimension",
-                        "description": "Task module height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                      },
-                      "url": {
-                        "$ref": "#/definitions/httpsUrl",
-                        "description": "Task module URL"
-                      }
-                    }
-                  }
-                }
+            "team": {
+              "type": "object",
+              "additionalProperties": false,
+              "fetchTask": {
+                "type": "boolean",
+                "description": "A boolean value that indicates if it should fetch bot config task module dynamically.",
+                "default": false
+              },
+              "taskInfo": {
+                "$ref": "#/definitions/taskInfo",
+                "description": "Task module to be launched when fetch task set to false."
               }
+            },
+            "groupChat": {
+              "type": "object",
+              "additionalProperties": false,
+              "fetchTask": {
+                "type": "boolean",
+                "description": "A boolean value that indicates if it should fetch bot config task module dynamically.",
+                "default": false
+              },
+              "taskInfo": {
+                "$ref": "#/definitions/taskInfo",
+                "description": "Task module to be launched when fetch task set to false."
+              }  
             }
           },
           "needsChannelSelector": {
@@ -749,27 +670,8 @@
                   }
                 },
                 "taskInfo": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "title": {
-                      "type": "string",
-                      "description": "Initial dialog title",
-                      "maxLength": 64
-                    },
-                    "width": {
-                      "$ref": "#/definitions/taskInfoDimension",
-                      "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                    },
-                    "height": {
-                      "$ref": "#/definitions/taskInfoDimension",
-                      "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'"
-                    },
-                    "url": {
-                      "$ref": "#/definitions/httpsUrl",
-                      "description": "Initial webview URL"
-                    }
-                  }
+                  "$ref": "#/definitions/taskInfo",
+                  "description": "Task module to be launched when fetch task set to false."
                 }
               },
               "required": [
@@ -1233,6 +1135,29 @@
     "languageTag": {
       "type": "string",
       "pattern": "^[A-Za-z0-9]{1,8}(-[A-Za-z0-9]{1,8}){0,2}$"
+    },
+    "taskInfo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Initial dialog title.",
+          "maxLength": 64
+        },
+        "width": {
+          "$ref": "#/definitions/taskInfoDimension",
+          "description": "Dialog width - either a number in pixels or default layout such as 'large', 'medium', or 'small'."
+        },
+        "height": {
+          "$ref": "#/definitions/taskInfoDimension",
+          "description": "Dialog height - either a number in pixels or default layout such as 'large', 'medium', or 'small'."
+        },
+        "url": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "Initial webview URL."
+        }
+      }
     },
     "taskInfoDimension": {
       "type": "string",
