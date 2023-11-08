@@ -1478,14 +1478,15 @@
     },
     "extensionContexts": {
       "type": "array",
-      "maxItems": 4,
+      "maxItems": 5,
       "items": {
         "type": "string",
         "enum": [
           "mailRead",
           "mailCompose",
           "meetingDetailsOrganizer",
-          "meetingDetailsAttendee"
+          "meetingDetailsAttendee",
+          "default"
         ]
       }
     },
