@@ -1184,7 +1184,14 @@
             "$ref": "#/definitions/extensionGetStartedMessagesArray"
           },
           "runtimes": {
-            "$ref": "#/definitions/extensionRuntimesArray"
+            "oneOf": [
+              {
+                "$ref": "#/definitions/extensionRuntimesGeneralArray"
+              },
+              {
+                "$ref": "#/definitions/extensionRuntimesContentArray"
+              }
+            ]
           },
           "ribbons": {
             "$ref": "#/definitions/extensionRibbonsArray"
@@ -1281,7 +1288,7 @@
         ]
       }
     },
-    "extensionRuntimesArray": {
+    "extensionRuntimesGeneralArray": {
       "type": "array",
       "minItems": 1,
       "items": {
@@ -1337,6 +1344,65 @@
         "additionalProperties": false,
         "required": [
           "id",
+          "code"
+        ]
+      }
+    },
+    "extensionRuntimesContentArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "description": "A runtime environment for a page or script",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for this runtime within the app.  Maximum length is 64 characters.",
+            "maxLength": 64
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "content"
+            ],
+            "description": "Supports launching pages inside document's content."
+          },
+          "code": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "URL of the .html page to be loaded in browser-based runtimes."
+              },
+              "script": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "URL of the .js script file to be loaded in UI-less runtimes."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "page"
+            ]
+          },
+          "requestedWidth": {
+            "type": "number",
+            "description": "Default width in pixels, between 32 and 1000."
+          },
+          "requestedHeight": {
+            "type": "number",
+            "description": "Default height in pixels, between 32 and 1000."
+          },
+          "allowSnapshot": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
           "code"
         ]
       }
