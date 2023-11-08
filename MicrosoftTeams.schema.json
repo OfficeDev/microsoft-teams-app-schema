@@ -1180,6 +1180,9 @@
           "requirements": {
             "$ref": "#/definitions/requirementsExtensionElement"
           },
+          "getStartedMessages": {
+            "$ref": "#/definitions/extensionGetStartedMessagesArray"
+          },
           "runtimes": {
             "$ref": "#/definitions/extensionRuntimesArray"
           },
@@ -1250,6 +1253,33 @@
         }
       },
       "additionalProperties": false
+    },
+    "extensionGetStartedMessagesArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Specifies the Get Started information for the Office add-in. This information is used at various places on the Office User Interface after user installs an add-in.",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "learnMoreUrl": {
+            "$ref": "#/definitions/httpsUrl"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description",
+          "learnMoreUrl"
+        ]
+      }
     },
     "extensionRuntimesArray": {
       "type": "array",
