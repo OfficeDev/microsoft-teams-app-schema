@@ -1199,6 +1199,9 @@
           "autoRunEvents": {
             "$ref": "#/definitions/extensionAutoRunEventsArray"
           },
+          "contextMenus": {
+            "$ref": "#/definitions/extensionContextMenusArray"
+          },
           "alternates": {
             "$ref": "#/definitions/extensionAlternateVersionsArray"
           },
@@ -1887,6 +1890,50 @@
         "additionalProperties": false,
         "required": [
           "events"
+        ]
+      }
+    },
+    "extensionContextMenusArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "menus": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Use cell/text here for Office context menu ContextMenuCell/ContextMenuText.",
+                  "enum": [
+                    "cell",
+                    "text"
+                  ]
+                },
+                "controls": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/extensionCommonCustomControlMenu"
+                  },
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "controls"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "menus"
         ]
       }
     },
