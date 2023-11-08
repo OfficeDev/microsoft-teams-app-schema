@@ -1426,7 +1426,8 @@
           "type": "string",
           "enum": [
             "executeFunction",
-            "openPage"
+            "openPage",
+            "launch"
           ],
           "description": "executeFunction: Run a script function without waiting for it to finish. openPate: Open a page in a view."
         },
