@@ -1180,14 +1180,27 @@
           "requirements": {
             "$ref": "#/definitions/requirementsExtensionElement"
           },
+          "getStartedMessages": {
+            "$ref": "#/definitions/extensionGetStartedMessagesArray"
+          },
           "runtimes": {
-            "$ref": "#/definitions/extensionRuntimesArray"
+            "oneOf": [
+              {
+                "$ref": "#/definitions/extensionRuntimesGeneralArray"
+              },
+              {
+                "$ref": "#/definitions/extensionRuntimesContentArray"
+              }
+            ]
           },
           "ribbons": {
             "$ref": "#/definitions/extensionRibbonsArray"
           },
           "autoRunEvents": {
             "$ref": "#/definitions/extensionAutoRunEventsArray"
+          },
+          "contextMenus": {
+            "$ref": "#/definitions/extensionContextMenusArray"
           },
           "alternates": {
             "$ref": "#/definitions/extensionAlternateVersionsArray"
@@ -1227,11 +1240,14 @@
         },
         "scopes": {
           "type": "array",
-          "maxItems": 1,
+          "maxItems": 4,
           "items": {
             "type": "string",
             "enum": [
-              "mail"
+              "mail",
+              "workbook",
+              "document",
+              "presentation"
             ]
           }
         },
@@ -1248,7 +1264,34 @@
       },
       "additionalProperties": false
     },
-    "extensionRuntimesArray": {
+    "extensionGetStartedMessagesArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Specifies the Get Started information for the Office add-in. This information is used at various places on the Office User Interface after user installs an add-in.",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "learnMoreUrl": {
+            "$ref": "#/definitions/httpsUrl"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description",
+          "learnMoreUrl"
+        ]
+      }
+    },
+    "extensionRuntimesGeneralArray": {
       "type": "array",
       "minItems": 1,
       "items": {
@@ -1308,6 +1351,65 @@
         ]
       }
     },
+    "extensionRuntimesContentArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "description": "A runtime environment for a page or script",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for this runtime within the app.  Maximum length is 64 characters.",
+            "maxLength": 64
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "content"
+            ],
+            "description": "Supports launching pages inside document's content."
+          },
+          "code": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "URL of the .html page to be loaded in browser-based runtimes."
+              },
+              "script": {
+                "$ref": "#/definitions/httpsUrl",
+                "description": "URL of the .js script file to be loaded in UI-less runtimes."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "page"
+            ]
+          },
+          "requestedWidth": {
+            "type": "number",
+            "description": "Default width in pixels, between 32 and 1000."
+          },
+          "requestedHeight": {
+            "type": "number",
+            "description": "Default height in pixels, between 32 and 1000."
+          },
+          "allowSnapshot": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "code"
+        ]
+      }
+    },
     "extensionRuntimesActions": {
       "type": "array",
       "items": {
@@ -1327,7 +1429,8 @@
           "type": "string",
           "enum": [
             "executeFunction",
-            "openPage"
+            "openPage",
+            "launch"
           ],
           "description": "executeFunction: Run a script function without waiting for it to finish. openPate: Open a page in a view."
         },
@@ -1378,14 +1481,15 @@
     },
     "extensionContexts": {
       "type": "array",
-      "maxItems": 4,
+      "maxItems": 5,
       "items": {
         "type": "string",
         "enum": [
           "mailRead",
           "mailCompose",
           "meetingDetailsOrganizer",
-          "meetingDetailsAttendee"
+          "meetingDetailsAttendee",
+          "default"
         ]
       }
     },
@@ -1786,6 +1890,50 @@
         "additionalProperties": false,
         "required": [
           "events"
+        ]
+      }
+    },
+    "extensionContextMenusArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirements": {
+            "$ref": "#/definitions/requirementsExtensionElement"
+          },
+          "menus": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Use cell/text here for Office context menu ContextMenuCell/ContextMenuText.",
+                  "enum": [
+                    "cell",
+                    "text"
+                  ]
+                },
+                "controls": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/extensionCommonCustomControlMenu"
+                  },
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "controls"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "menus"
         ]
       }
     },
