@@ -65,6 +65,10 @@
       "type": "string",
       "maxLength": 64
     },
+    "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.samplePrompts\\[[0-4]\\]\\.text$": {
+      "type": "string",
+      "maxLength": 128
+    },
     "^activities.activityTypes\\[\\b([0-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|12[0-7])\\b]\\.description$": {
       "type": "string",
       "maxLength": 128
@@ -76,6 +80,86 @@
     "^meetingExtensionDefinition.scenes\\[[0-9]\\]\\.name$": {
       "type": "string",
       "maxLength": 128
+    },
+    "^extensions\\[[0]\\]\\.audienceClaimUrl$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.label$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.customMobileRibbonGroups\\[[0-9]\\]\\.label$": {
+      "type": "string",
+      "maxLength": 32
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.customMobileRibbonGroups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.icons\\[[0-8]\\]\\.url$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.customMobileRibbonGroups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.label$": {
+      "type": "string",
+      "maxLength": 32
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.icons\\[[0-2]\\]\\.url$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.label$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.icons\\[[0-2]\\]\\.url$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.label$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.supertip\\.title$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.supertip\\.description$": {
+      "type": "string",
+      "maxLength": 250
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.items\\[[1]?[0-9]\\]\\.icons\\[[0-2]\\]\\.url$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.items\\[[1]?[0-9]\\]\\.label$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.items\\[[1]?[0-9]\\]\\.supertip\\.title$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.ribbons\\[[0-9]\\]\\.tabs\\[[1]?[0-9]\\]\\.groups\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.items\\[[1]?[0-9]\\]\\.supertip\\.description$": {
+      "type": "string",
+      "maxLength": 250
+    },
+    "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.code\\.page$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.code\\.script$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.actions\\[[1]?[0-9]\\]\\.displayName$": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "^extensions\\[[0]\\]\\.alternates\\[[0-9]\\]\\.alternateIcons\\.icon\\.url$": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "^extensions\\[[0]\\]\\.alternates\\[[0-9]\\]\\.alternateIcons\\.highResolutionIcon\\.url$": {
+      "type": "string",
+      "maxLength": 2048
     }
   },
   "required": [ "name.short", "name.full", "description.short", "description.full" ]
