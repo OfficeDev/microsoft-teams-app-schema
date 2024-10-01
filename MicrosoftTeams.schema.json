@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.17"
+      "const": "1.19"
     },
     "version": {
       "type": "string",
@@ -29,6 +29,10 @@
           "$ref": "#/definitions/languageTag",
           "description": "The language tag of the strings in this top level manifest file.",
           "default": "en-us"
+        },
+        "defaultLanguageFile": {
+          "$ref": "#/definitions/relativePath",
+          "description": "A relative file path to a the .json file containing strings in the default language."
         },
         "additionalLanguages": {
           "type": "array",
@@ -1100,6 +1104,22 @@
         "$ref": "#/definitions/dashboardCard"
       },
       "additionalProperties": false
+    },
+    "copilotAgents": {
+      "type": "object",
+      "properties": {
+        "declarativeAgents": {
+          "type": "array",
+          "description": "An array of declarative agent elements references. Currently, only one declarative agent per application is supported.",
+          "items": {
+            "$ref": "#/definitions/declarativeAgentRef"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "declarativeAgents" ]
     }
   },
   "required": [
@@ -2129,6 +2149,25 @@
           "additionalProperties": false
         }
       },
+      "additionalProperties": false
+    },
+    "declarativeAgentRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this declarative agent element."
+        },
+        "file": {
+          "$ref": "#/definitions/relativePath",
+          "description": "Relative file path to this declarative agent element file in the application package."
+        }
+      },
+      "description": "A reference to a declarative agent element. The element's definition is in a separate file.",
+      "required": [
+        "id",
+        "file"
+      ],
       "additionalProperties": false
     }
   }
