@@ -64,7 +64,7 @@ jobs:
           fi
           
           echo "Created Pull Request Number: $PR_NUMBER"
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "::set-output name=pr_number::$PR_NUMBER"
 
       - name: Merge Pull Request
         run: |
