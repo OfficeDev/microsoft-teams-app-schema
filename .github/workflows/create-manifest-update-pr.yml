@@ -67,13 +67,28 @@ jobs:
           echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Merge Pull Request
-        uses: peter-evans/merge-pull-request@v3
-        with:
-          pull-request: ${{ steps.local_to_main_pr.outputs.pr_number }}
-          commit-title: "Merging PR #${{ steps.local_to_main_pr.outputs.pr_number }}"
-          commit-message: "Automatically merged by GitHub Actions."
-          merge-method: merge
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ steps.local_to_main_pr.output.pr_number }}
+          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+
+          # Merge the pull request using the GitHub API
+          RESPONSE=$(curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "$REPO_URL/pulls/$PR_NUMBER/merge" \
+            -d '{"commit_title":"Merging PR #'"$PR_NUMBER"'","commit_message":"Automatically merged by GitHub Actions.","merge_method":"merge"}')
+
+          # Print the API response for debugging
+          echo "Merge Response: $RESPONSE"
+
+          # Check if the merge was successful
+          MERGE_STATE=$(echo "$RESPONSE" | jq -r '.merged')
+          if [ "$MERGE_STATE" != "true" ]; then
+            echo "Failed to merge PR #$PR_NUMBER. Check the response for details."
+            exit 1
+          fi
+
+          echo "Successfully merged PR #$PR_NUMBER."
           
       # Poll for PR status until it's closed
       - name: Monitor PR status
