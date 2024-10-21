@@ -13,8 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Create a Pull Request to the main branch using curl
-      - name: Create PR to main with curl
+      - name: Create or Update PR to main with curl
         id: local_to_main_pr
         run: |
           PR_TITLE="Add / Update new schema files"
@@ -23,17 +22,47 @@ jobs:
           DESTINATION_BRANCH="main"         # The target branch for the PR
           
           # Construct the API URL
-          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls"
+          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
           
+          # Check for existing pull requests
+          EXISTING_PR_RESPONSE=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "$REPO_URL/pulls?head=${{ github.repository }}:${SOURCE_BRANCH}&base=$DESTINATION_BRANCH")
+      
+          # Check if any PRs exist
+          EXISTING_PR_NUMBER=$(echo "$EXISTING_PR_RESPONSE" | jq -r '.[0].number')
+      
+          if [ "$EXISTING_PR_NUMBER" != "null" ]; then
+            echo "Found existing PR #$EXISTING_PR_NUMBER. Closing it..."
+            
+            # Close the existing PR
+            curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d '{"state":"closed"}' \
+              "$REPO_URL/pulls/$EXISTING_PR_NUMBER"
+      
+            echo "Closed existing PR #$EXISTING_PR_NUMBER."
+          else
+            echo "No existing PR found."
+          fi
+      
           # Create the pull request using curl
           RESPONSE=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d "{\"title\":\"$PR_TITLE\", \"body\":\"$PR_BODY\", \"head\":\"$SOURCE_BRANCH\", \"base\":\"$DESTINATION_BRANCH\"}" \
-            $API_URL)
-
+            "$REPO_URL/pulls")
+      
+          # Print the entire API response for debugging
+          echo "API Response: $RESPONSE"
+          
           # Extract PR number from the response
-          echo "Response: $RESPONSE"
-          PR_NUMBER=$(echo $RESPONSE | jq -r '.number')
+          PR_NUMBER=$(echo "$RESPONSE" | jq -r '.number')
+          
+          if [ "$PR_NUMBER" == "null" ]; then
+            echo "Failed to create pull request. Check the API response for details."
+            exit 1
+          fi
+          
           echo "Created Pull Request Number: $PR_NUMBER"
           echo "::set-output name=pr_number::$PR_NUMBER"
 
