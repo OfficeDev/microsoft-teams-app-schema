@@ -70,9 +70,9 @@ jobs:
         uses: peter-evans/merge-pull-request@v3
         with:
           pull-request: ${{ local_to_main_pr.outputs.pr_number }}
-          commit-title: "Merging PR #${{ github.event.pull_request.number }}"
+          commit-title: "Merging PR #${{ local_to_main_pr.outputs.pr_number }}"
           commit-message: "Automatically merged by GitHub Actions."
-          merge-method: merge  # Options: merge, squash, rebase
+          merge-method: merge
           github-token: ${{ secrets.GITHUB_TOKEN }}
           
       # Poll for PR status until it's closed
