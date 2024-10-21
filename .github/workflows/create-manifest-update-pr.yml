@@ -16,8 +16,8 @@ jobs:
       # Create a Pull Request to the main branch.
       - name: Create PR to main
         uses: repo-sync/pull-request@v2
+        id: local_to_main_pr
         with:
-          id: local_to_main_pr
           source_branch: ${{ github.ref }}
           destination_branch: main
           pr_title: "Add / Update new schema files"
