@@ -12,29 +12,35 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
-      # Create a Pull Request to the main branch.
-      - name: Create PR to main
-        uses: repo-sync/pull-request@v2
-        id: local_to_main_pr
-        with:
-          source_branch: ${{ github.ref }}
-          destination_branch: main
-          pr_title: "Add / Update new schema files"
-          pr_body: "This PR adds or updates app and localization schema files to the repo's main branch"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract PR Number
-        id: get_pr_number
+      # Create a Pull Request to the main branch using curl
+      - name: Create PR to main with curl
+        id: local_to_main_pr
         run: |
-          PR_NUMBER=$(echo "${{ steps.local_to_main_pr.outputs.pull_request_number }}" | jq -r '.number')
-          echo "Pull request number: $PR_NUMBER"
+          PR_TITLE="Add / Update new schema files"
+          PR_BODY="This PR adds or updates app and localization schema files to the repo's main branch"
+          SOURCE_BRANCH="${{ github.ref }}"  # The source branch for the PR
+          DESTINATION_BRANCH="main"         # The target branch for the PR
+          
+          # Construct the API URL
+          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls"
+          
+          # Create the pull request using curl
+          RESPONSE=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"title\":\"$PR_TITLE\", \"body\":\"$PR_BODY\", \"head\":\"$SOURCE_BRANCH\", \"base\":\"$DESTINATION_BRANCH\"}" \
+            $API_URL)
+
+          # Extract PR number from the response
+          PR_NUMBER=$(echo $RESPONSE | jq -r '.number')
+          echo "Created Pull Request Number: $PR_NUMBER"
           echo "::set-output name=pr_number::$PR_NUMBER"
+
           
       # Poll for PR status until it's closed
       - name: Monitor PR status
         run: |
-          PR_NUMBER=${{ steps.get_pr_number.outputs.pr_number }}
+          PR_NUMBER=${{ steps.local_to_main_pr.outputs.pr_number }}
           while [ "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER | jq -r .state)" != "closed" ]; do
               echo "PR #$PR_NUMBER is not closed yet..."
