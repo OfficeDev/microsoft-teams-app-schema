@@ -1,4 +1,4 @@
-name: Automate Microsoft 365 App Manifest Release
+cname: Automate Microsoft 365 App Manifest Release
 
 on:
   push:
@@ -24,15 +24,20 @@ jobs:
           pr_body: "This PR adds or updates app and localization schema files to the repo's main branch"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract PR Number
+        id: get_pr_number
+        run: |
+          PR_NUMBER=$(echo "${{ steps.local_to_main_pr.outputs.pull_request_number }}" | jq -r '.number')
+          echo "Pull request number: $PR_NUMBER"
+          echo "::set-output name=pr_number::$PR_NUMBER"
+          
       # Poll for PR status until it's closed
       - name: Monitor PR status
         run: |
-          PR_NUMBER=${{ steps.local_to_main_pr.outputs.pull_request_number }}
+          PR_NUMBER=${{ steps.get_pr_number.outputs.pr_number }}
           while [ "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER | jq -r .state)" != "closed" ]; do
               echo "PR #$PR_NUMBER is not closed yet..."
               sleep 10
           done
           echo "PR local to main with number #$PR_NUMBER has been closed!"
-        env:
-          PR_NUMBER: ${{ steps.local_to_main_pr.outputs.pull_request_number }}
