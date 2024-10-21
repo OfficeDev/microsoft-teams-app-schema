@@ -1,0 +1,38 @@
+name: Automate Microsoft 365 App Manifest Release
+
+on:
+  push:
+    paths:
+      '**/*.json'
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      # Create a Pull Request to the main branch.
+      - name: Create PR to main
+        uses: repo-sync/pull-request@v2
+        with:
+          id: local_to_main_pr
+          source_branch: ${{ github.ref }}
+          destination_branch: main
+          pr_title: "Add / Update new schema files"
+          pr_body: "This PR adds or updates app and localization schema files to the repo's main branch"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Poll for PR status until it's closed
+      - name: Monitor PR status
+        run: |
+          PR_NUMBER=${{ steps.local_to_main_pr.pull_request_number }}
+          while [ "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER | jq -r .state)" != "closed" ]; do
+              echo "PR #$PR_NUMBER is not closed yet..."
+              sleep 10
+          done
+          echo "PR local to main with number #$PR_NUMBER has been closed!"
+        env:
+          PR_NUMBER: ${{ steps.local_to_main_pr.outputs.pull_request_number }}
