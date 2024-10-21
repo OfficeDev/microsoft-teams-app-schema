@@ -9,7 +9,7 @@
     },
     "name.short": {
       "type": "string",
-      "maxLength": 300
+      "maxLength": 30
     },
     "name.full": {
       "type": "string",
