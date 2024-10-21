@@ -1,4 +1,4 @@
-cname: Automate Microsoft 365 App Manifest Release
+name: Automate Microsoft 365 App Manifest Release
 
 on:
   push:
