@@ -32,6 +32,7 @@ jobs:
             $API_URL)
 
           # Extract PR number from the response
+          echo "Response: $RESPONSE"
           PR_NUMBER=$(echo $RESPONSE | jq -r '.number')
           echo "Created Pull Request Number: $PR_NUMBER"
           echo "::set-output name=pr_number::$PR_NUMBER"
