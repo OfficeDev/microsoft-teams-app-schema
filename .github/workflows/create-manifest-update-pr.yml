@@ -4,6 +4,9 @@ on:
   push:
     paths:
       '**/*.json'
+    branches-ignore:
+      - main
+      - live 
 
 jobs:
   create-pr:
@@ -61,8 +64,16 @@ jobs:
           fi
           
           echo "Created Pull Request Number: $PR_NUMBER"
-          echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
+      - name: Merge Pull Request
+        uses: peter-evans/merge-pull-request@v3
+        with:
+          pull-request: ${{ local_to_main_pr.outputs.pr_number }}
+          commit-title: "Merging PR #${{ local_to_main_pr.outputs.pr_number }}"
+          commit-message: "Automatically merged by GitHub Actions."
+          merge-method: merge
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           
       # Poll for PR status until it's closed
       - name: Monitor PR status
