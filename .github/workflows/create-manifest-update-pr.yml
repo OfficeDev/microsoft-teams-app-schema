@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Push the changes back to the repo.
-      - name: Push changes
-        run: git push origin HEAD
 
       # Create a Pull Request to the main branch.
       - name: Create PR to main
