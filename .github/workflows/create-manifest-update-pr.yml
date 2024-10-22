@@ -75,19 +75,18 @@ jobs:
 
           echo "::set-output name=pr_title::$PR_TITLE"
 
-      - name: Send Email Notification
-        uses: dawidd6/action-send-mail@v3
-        with:
-          # Provide the necessary email details
-          to: 'guptaa@microsoft.com , tich@microsoft.com, vtarasov@microsoft.com, dolumuyiwa@microsoft.com'  # Change to the recipient's email
-          from: 'OfficeDev Repo Schema Release Bot'
-          subject: 'New Public Microsoft 365 App Manifest Schema Release PR Created'
-          body: |
-            A new pull request has been created:
-            - PR Title: ${{ steps.local_to_main_pr.outputs.pr_title }}
-            - PR Link: ${{ steps.local_to_main_pr.outputs.pr_url }}
-          server_address: 'smtp.office365.com'  # Your SMTP server
-          server_port: 587
+#      - name: Send Email Notification
+#        uses: dawidd6/action-send-mail@v3
+#        with:
+#          to: 'guptaa@microsoft.com , tich@microsoft.com, vtarasov@microsoft.com, dolumuyiwa@microsoft.com'
+#          from: 'OfficeDev Repo Schema Release Bot'
+#          subject: 'New Public Microsoft 365 App Manifest Schema Release PR Created'
+#          body: |
+#            A new pull request has been created:
+#            - PR Title: ${{ steps.local_to_main_pr.outputs.pr_title }}
+#            - PR Link: ${{ steps.local_to_main_pr.outputs.pr_url }}
+#         server_address: 'smtp.office365.com' 
+#          server_port: 587
           
       # Poll for PR status until it's closed
       - name: Monitor PR status
