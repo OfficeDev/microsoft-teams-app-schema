@@ -58,38 +58,36 @@ jobs:
           echo "Response : $RESPONSE"
           # Extract PR number from the response
           PR_NUMBER=$(echo "$RESPONSE" | jq -r '.number')
+          # Extract the PR URL
+          PR_URL=$(echo "$RESPONSE" | jq -r '.html_url')
           
-          if [ "$PR_NUMBER" == "null" ]; then
+          if [ "$PR_NUMBER" == "null" || "$PR_URL" == "null"]; then
             echo "Failed to create pull request. Check the API response for details."
             exit 1
           fi
+ 
+          
+          echo "Pull Request URL: $PR_URL"
+          echo "::set-output name=pr_url::$PR_URL"
           
           echo "Created Pull Request Number: $PR_NUMBER"
           echo "::set-output name=pr_number::$PR_NUMBER"
 
-      - name: Merge Pull Request
-        run: |
-          PR_NUMBER=${{ steps.local_to_main_pr.output.pr_number }}
-          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          echo "::set-output name=pr_title::$PR_TITLE"
 
-          # Merge the pull request using the GitHub API
-          RESPONSE=$(curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "$REPO_URL/pulls/$PR_NUMBER/merge" \
-            -d '{"commit_title":"Merging PR #'"$PR_NUMBER"'","commit_message":"Automatically merged by GitHub Actions.","merge_method":"merge"}')
-
-          # Print the API response for debugging
-          echo "Merge Response: $RESPONSE"
-
-          # Check if the merge was successful
-          MERGE_STATE=$(echo "$RESPONSE" | jq -r '.merged')
-          if [ "$MERGE_STATE" != "true" ]; then
-            echo "Failed to merge PR #$PR_NUMBER. Check the response for details."
-            exit 1
-          fi
-
-          echo "Successfully merged PR #$PR_NUMBER."
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Provide the necessary email details
+          to: 'guptaa@microsoft.com , tich@microsoft.com, vtarasov@microsoft.com, dolumuyiwa@microsoft.com'  # Change to the recipient's email
+          from: 'OfficeDev Repo Schema Release Bot'
+          subject: 'New Public Microsoft 365 App Manifest Schema Release PR Created'
+          body: |
+            A new pull request has been created:
+            - PR Title: ${{ steps.local_to_main_pr.output.pr_title }}
+            - PR Link: ${{ steps.local_to_main_pr.output.pr_number }}
+          smtp-server: 'smtp.office365.com'  # Your SMTP server
+          smtp-port: 587
           
       # Poll for PR status until it's closed
       - name: Monitor PR status
@@ -98,6 +96,6 @@ jobs:
           while [ "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER | jq -r .state)" != "closed" ]; do
               echo "PR #$PR_NUMBER is not closed yet..."
-              sleep 10
+              sleep 20
           done
           echo "PR local to main with number #$PR_NUMBER has been closed!"
