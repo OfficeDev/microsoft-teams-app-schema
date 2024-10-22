@@ -85,8 +85,8 @@ jobs:
           body: |
             A new pull request has been created:
             - PR Title: ${{ steps.local_to_main_pr.output.pr_title }}
-            - PR Link: ${{ steps.local_to_main_pr.output.pr_number }}
-          smtp-server: 'smtp.office365.com'  # Your SMTP server
+            - PR Link: ${{ steps.local_to_main_pr.output.pr_url }}
+          server-address: 'smtp.office365.com'  # Your SMTP server
           smtp-port: 587
           
       # Poll for PR status until it's closed
