@@ -84,8 +84,8 @@ jobs:
           subject: 'New Public Microsoft 365 App Manifest Schema Release PR Created'
           body: |
             A new pull request has been created:
-            - PR Title: ${{ steps.local_to_main_pr.output.pr_title }}
-            - PR Link: ${{ steps.local_to_main_pr.output.pr_url }}
+            - PR Title: ${{ steps.local_to_main_pr.outputs.pr_title }}
+            - PR Link: ${{ steps.local_to_main_pr.outputs.pr_url }}
           server_address: 'smtp.office365.com'  # Your SMTP server
           server_port: 587
           
