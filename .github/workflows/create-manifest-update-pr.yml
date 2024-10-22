@@ -54,7 +54,8 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -d "{\"title\":\"$PR_TITLE\", \"body\":\"$PR_BODY\", \"head\":\"$SOURCE_BRANCH\", \"base\":\"$DESTINATION_BRANCH\"}" \
             "$REPO_URL/pulls")
-          
+
+          echo "Response : $RESPONSE"
           # Extract PR number from the response
           PR_NUMBER=$(echo "$RESPONSE" | jq -r '.number')
           
