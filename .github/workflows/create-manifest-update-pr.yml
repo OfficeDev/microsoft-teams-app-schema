@@ -87,7 +87,21 @@ jobs:
 #            - PR Link: ${{ steps.local_to_main_pr.outputs.pr_url }}
 #         server_address: 'smtp.office365.com' 
 #          server_port: 587
+
+
+      - name: Notify users about PR creation
+        run: |
+          PR_URL=${{ steps.local_to_main_pr.outputs.pr_url}}
+          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
           
+          # Notify users by commenting on the PR
+          COMMENT="Hello @chu-tianshu @oolumuyiwa, a new PR with URL #${PR_URL} has been created. Please review it!"
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "$REPO_URL/issues/$PR_NUMBER/comments" \
+            -d "{\"body\":\"$COMMENT\"}"
+            
       # Poll for PR status until it's closed
       - name: Monitor PR status
         run: |
