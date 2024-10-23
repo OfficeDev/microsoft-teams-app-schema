@@ -85,6 +85,8 @@ jobs:
 
           echo "::set-output name=pr_title::$PR_TITLE"
 
+          echo "Github repo: ${{ github.repository }}"
+
 #      - name: Send Email Notification
 #        uses: dawidd6/action-send-mail@v3
 #        with:
