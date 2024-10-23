@@ -16,6 +16,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Check for existing PR and close if any
+        run: |
+          # Get the source branch name (current branch)
+          SOURCE_BRANCH=${GITHUB_REF#refs/heads/}
+          echo "Current branch: $SOURCE_BRANCH"
+
+          # Call GitHub API to list open PRs from this source branch to main
+          PR_LIST=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=open&head=${{ github.repository_owner }}:$SOURCE_BRANCH&base=main")
+
+          # Parse the PR number from the response
+          PR_NUMBER=$(echo "$PR_LIST" | jq -r '.[0].number')
+
+          if [ "$PR_NUMBER" != "null" ]; then
+            echo "Found PR #$PR_NUMBER from $SOURCE_BRANCH to main. Closing it now..."
+
+            # Close the PR using the GitHub API
+            curl -X PATCH \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d '{"state": "closed"}' \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/$PR_NUMBER"
+
+            echo "Closed PR #$PR_NUMBER."
+          else
+            echo "No open PR from $SOURCE_BRANCH to main."
+          fi
+          
       - name: Create or Update PR to main with curl
         id: local_to_main_pr
         run: |
@@ -26,55 +54,60 @@ jobs:
           
           # Construct the API URL
           REPO_URL="https://api.github.com/repos/${{ github.repository }}"
-          
-          # Check for existing pull requests
-          EXISTING_PR_RESPONSE=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "$REPO_URL/pulls?head=${{ github.repository }}:${SOURCE_BRANCH}&base=$DESTINATION_BRANCH")
-      
-          # Check if any PRs exist
-          EXISTING_PR_NUMBER=$(echo "$EXISTING_PR_RESPONSE" | jq -r '.[0].number')
-      
-          if [ "$EXISTING_PR_NUMBER" != "null" ]; then
-            echo "Found existing PR #$EXISTING_PR_NUMBER. Closing it..."
-            
-            # Close the existing PR
-            curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              -d '{"state":"closed"}' \
-              "$REPO_URL/pulls/$EXISTING_PR_NUMBER"
-      
-            echo "Closed existing PR #$EXISTING_PR_NUMBER."
-          else
-            echo "No existing PR found."
-          fi
-      
+                
           # Create the pull request using curl
           RESPONSE=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d "{\"title\":\"$PR_TITLE\", \"body\":\"$PR_BODY\", \"head\":\"$SOURCE_BRANCH\", \"base\":\"$DESTINATION_BRANCH\"}" \
             "$REPO_URL/pulls")
-          
+
+          echo "Response : $RESPONSE"
           # Extract PR number from the response
           PR_NUMBER=$(echo "$RESPONSE" | jq -r '.number')
+          # Extract the PR URL
+          PR_URL=$(echo "$RESPONSE" | jq -r '.html_url')
           
-          if [ "$PR_NUMBER" == "null" ]; then
+          if [ "$PR_NUMBER" == "null" || "$PR_URL" == "null"]; then
             echo "Failed to create pull request. Check the API response for details."
             exit 1
           fi
+ 
+          
+          echo "Pull Request URL: $PR_URL"
+          echo "::set-output name=pr_url::$PR_URL"
           
           echo "Created Pull Request Number: $PR_NUMBER"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
-      - name: Merge Pull Request
-        uses: peter-evans/merge-pull-request@v3
-        with:
-          pull-request: ${{ local_to_main_pr.outputs.pr_number }}
-          commit-title: "Merging PR #${{ local_to_main_pr.outputs.pr_number }}"
-          commit-message: "Automatically merged by GitHub Actions."
-          merge-method: merge
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          echo "::set-output name=pr_title::$PR_TITLE"
+
+#      - name: Send Email Notification
+#        uses: dawidd6/action-send-mail@v3
+#        with:
+#          to: 'guptaa@microsoft.com , tich@microsoft.com, vtarasov@microsoft.com, dolumuyiwa@microsoft.com'
+#          from: 'OfficeDev Repo Schema Release Bot'
+#          subject: 'New Public Microsoft 365 App Manifest Schema Release PR Created'
+#          body: |
+#            A new pull request has been created:
+#            - PR Title: ${{ steps.local_to_main_pr.outputs.pr_title }}
+#            - PR Link: ${{ steps.local_to_main_pr.outputs.pr_url }}
+#         server_address: 'smtp.office365.com' 
+#          server_port: 587
+
+
+      - name: Notify users about PR creation
+        run: |
+          PR_URL=${{ steps.local_to_main_pr.outputs.pr_url}}
+          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
           
+          # Notify users by commenting on the PR
+          COMMENT="Hello @chu-tianshu @oolumuyiwa, a new PR with URL #${PR_URL} has been created. Please review it!"
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "$REPO_URL/issues/$PR_NUMBER/comments" \
+            -d "{\"body\":\"$COMMENT\"}"
+            
       # Poll for PR status until it's closed
       - name: Monitor PR status
         run: |
@@ -82,6 +115,6 @@ jobs:
           while [ "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER | jq -r .state)" != "closed" ]; do
               echo "PR #$PR_NUMBER is not closed yet..."
-              sleep 10
+              sleep 20
           done
           echo "PR local to main with number #$PR_NUMBER has been closed!"
