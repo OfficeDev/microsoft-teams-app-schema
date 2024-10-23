@@ -71,7 +71,7 @@ jobs:
           echo "::set-output name=pr_url::$PR_URL"
           
           echo "Created Pull Request Number: $PR_NUMBER"
-          echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
           echo "::set-output name=pr_title::$PR_TITLE"
 
