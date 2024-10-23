@@ -43,8 +43,8 @@ jobs:
           else
             echo "No open PR from $SOURCE_BRANCH to main."
           fi
-          
-      - name: Create or Update PR to main with curl
+
+      - name: Create PR to main with curl
         id: local_to_main_pr
         run: |
           PR_TITLE="Add / Update new schema files"
@@ -95,18 +95,17 @@ jobs:
 #          server_port: 587
 
 
-      - name: Notify users about PR creation
+      - name: Notify users by adding a comment on the PR
+        if: steps.local_to_main_pr.outputs.pr_url
         run: |
-          PR_URL=${{ steps.local_to_main_pr.outputs.pr_url}}
-          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          
-          # Notify users by commenting on the PR
-          COMMENT="Hello @chu-tianshu @oolumuyiwa, a new PR with URL #${PR_URL} has been created. Please review it!"
-          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          PR_URL=${{ steps.local_to_main_pr.outputs.pr_url }}
+          COMMENT_BODY="Hey @chu-tianshu @oolumuyiwa, a new PR #$PR_URL has been created! Please take a look."
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            "$REPO_URL/issues/$PR_NUMBER/comments" \
-            -d "{\"body\":\"$COMMENT\"}"
+            -d "{\"body\": \"$COMMENT_BODY\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER/comments"
+            
             
       # Poll for PR status until it's closed
       - name: Monitor PR status
