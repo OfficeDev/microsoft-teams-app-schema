@@ -9,7 +9,7 @@
     },
     "manifestVersion": {
       "type": "string",
-      "description": "The version of the schema this manifest is using.",
+      "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
       "const": "1.20"
     },
     "version": {
@@ -111,7 +111,8 @@
         }
       },
       "required": [
-        "short"
+        "short",
+        "full"
       ]
     },
     "description": {
@@ -216,18 +217,6 @@
               ]
             }
           },
-          "supportedPlatform": {
-            "type": "array",
-            "description": "The set of supportedPlatform scopes that a tab belong to",
-            "maxItems": 3,
-            "items": {
-              "enum": [
-                "desktop",
-                "mobile",
-                "teamsMeetingDevices"
-              ]
-            }
-          },
           "sharePointPreviewImage": {
             "$ref": "#/definitions/relativePath",
             "description": "A relative file path to a tab preview image for use in SharePoint. Size 1024x768."
@@ -272,7 +261,7 @@
           },
           "contentUrl": {
             "$ref": "#/definitions/httpsUrl",
-            "description": "The url which points to the entity UI to be displayed in the Teams canvas."
+            "description": "The url which points to the entity UI to be displayed in the canvas."
           },
           "contentBotId": {
             "$ref": "#/definitions/guid",
@@ -312,18 +301,6 @@
                 "meetingSidePanel",
                 "meetingStage",
                 "teamLevelApp"
-              ]
-            }
-          },
-          "supportedPlatform": {
-            "type": "array",
-            "description": "The set of supportedPlatform scopes that a tab belong to",
-            "maxItems": 3,
-            "items": {
-              "enum": [
-                "desktop",
-                "mobile",
-                "teamsMeetingDevices"
               ]
             }
           },
