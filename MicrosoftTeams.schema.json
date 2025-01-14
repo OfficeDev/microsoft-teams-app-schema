@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.20"
+      "const": "1.21"
     },
     "version": {
       "type": "string",
@@ -145,6 +145,10 @@
         "color": {
           "$ref": "#/definitions/relativePath",
           "description": "A relative file path to a full color PNG icon. Size 192x192."
+        },
+        "color32x32": {
+          "$ref": "#/definitions/relativePath",
+          "description": "A relative file path to a full color PNG icon with transparent background. Size 32x32."
         }
       },
       "required": [
@@ -346,6 +350,11 @@
               }
             }
           },
+          "allowBotMessageDeleteByUser": {
+            "type": "boolean",
+            "default": false,
+            "description": "Optional Boolean property that enables users to delete messages sent by bot when set to true. The default value is false, ensuring bot messages cannot be deleted by users unless explicitly opted in."
+          },
           "needsChannelSelector": {
             "type": "boolean",
             "description": "This value describes whether or not the bot utilizes a user hint to add the bot to a specific channel.",
@@ -379,7 +388,8 @@
               "enum": [
                 "team",
                 "personal",
-                "groupChat"
+                "groupChat",
+                "copilot"
               ]
             }
           },
@@ -399,7 +409,8 @@
                     "enum": [
                       "team",
                       "personal",
-                      "groupChat"
+                      "groupChat",
+                      "copilot"
                     ]
                   }
                 },
@@ -413,12 +424,12 @@
                       "title": {
                         "type": "string",
                         "description": "The bot command name",
-                        "maxLength": 32
+                        "maxLength": 128
                       },
                       "description": {
                         "type": "string",
                         "description": "A simple text description or an example of the command syntax and its arguments.",
-                        "maxLength": 128
+                        "maxLength": 4000
                       }
                     },
                     "required": [
@@ -968,7 +979,8 @@
         "personal",
         "team",
         "groupChat",
-        "meetings"
+        "meetings",
+        "copilot"
       ],
       "description": "The install scope defined for this app by default. This will be the option displayed on the button when a user tries to add the app"
     },
@@ -1055,6 +1067,11 @@
           "maxItems": 5,
           "type": "array",
           "uniqueItems": true
+        },
+        "supportsCustomShareToStage": {
+          "description": "Represents if the app has added support for sharing to stage.",
+          "type": "boolean",
+          "default": false
         },
         "supportsStreaming": {
           "type": "boolean",
@@ -1222,6 +1239,25 @@
           ]
         }
       ],
+      "additionalProperties": false
+    },
+    "backgroundLoadConfiguration": {
+      "type": "object",
+      "description": "Optional property containing background loading configuration. By opting in to this performance enhancement, your app is eligible to be loaded in the background in any Microsoft 365 application host that supports this feature.",
+      "properties": {
+        "tabConfiguration": {
+          "type": "object",
+          "description": "Optional property within backgroundLoadConfiguration containing tab settings for background loading.",
+          "properties": {
+            "contentUrl": {
+              "$ref": "#/definitions/httpsUrl",
+              "description": "Required URL for background loading. This can be the same contentUrl from the staticTabs section or an alternative endpoint used for background loading."
+            }
+          },
+          "required": [ "contentUrl" ],
+          "additionalProperties": false
+        }
+      },
       "additionalProperties": false
     }
   },
