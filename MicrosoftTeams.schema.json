@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.19"
+      "const": "1.20"
     },
     "version": {
       "type": "string",
@@ -111,8 +111,7 @@
         }
       },
       "required": [
-        "short",
-        "full"
+        "short"
       ]
     },
     "description": {
@@ -165,6 +164,11 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the tab. This id must be unique within the app manifest.",
+            "maxLength": 64
+          },
           "configurationUrl": {
             "$ref": "#/definitions/httpsUrl",
             "description": "The url to use when configuring the tab."
@@ -497,6 +501,11 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the compose extension.",
+            "maxLength": 64
+          },
           "botId": {
             "$ref": "#/definitions/guid",
             "description": "The Microsoft App ID specified for the bot powering the compose extension in the Bot Framework portal (https://dev.botframework.com/bots)"
@@ -787,7 +796,8 @@
                       "description": "A boolean that indicates whether the app's link message handler supports anonymous invoke flow.",
                       "default": false
                     }
-                  }
+                  },
+                  "additionalProperties": false
                 }
               },
               "required": [
@@ -1128,7 +1138,7 @@
         },
         "customEngineAgents": {
           "type": "array",
-          "description": "An array of Custom Engine Agents. Currently only one Custom Engine Agent per application is supported.",
+          "description": "An array of Custom Engine Agents. Currently only one Custom Engine Agent per application is supported. Support is currently in public preview.",
           "items": {
             "type": "object",
             "properties": {
