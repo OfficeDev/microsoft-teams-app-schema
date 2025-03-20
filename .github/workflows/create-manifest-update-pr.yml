@@ -1,0 +1,125 @@
+name: Automate Microsoft 365 App Manifest Release
+
+permissions:
+  pull-requests: write
+  issues: write
+  
+on:
+  push:
+    paths:
+      '**/*.json'
+    branches-ignore:
+      - main
+      - live 
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for existing PR and close if any
+        run: |
+          # Get the source branch name (current branch)
+          SOURCE_BRANCH=${GITHUB_REF#refs/heads/}
+          echo "Current branch: $SOURCE_BRANCH"
+
+          # Call GitHub API to list open PRs from this source branch to main
+          PR_LIST=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=open&head=${{ github.repository_owner }}:$SOURCE_BRANCH&base=main")
+
+          # Parse the PR number from the response
+          PR_NUMBER=$(echo "$PR_LIST" | jq -r '.[0].number')
+
+          if [ "$PR_NUMBER" != "null" ]; then
+            echo "Found PR #$PR_NUMBER from $SOURCE_BRANCH to main. Closing it now..."
+
+            # Close the PR using the GitHub API
+            curl -X PATCH \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              -d '{"state": "closed"}' \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/$PR_NUMBER"
+
+            echo "Closed PR #$PR_NUMBER."
+          else
+            echo "No open PR from $SOURCE_BRANCH to main."
+          fi
+
+      - name: Create PR to main with curl
+        id: local_to_main_pr
+        run: |
+          PR_TITLE="Add / Update new schema files"
+          PR_BODY="This PR adds or updates app and localization schema files to the repo's main branch"
+          SOURCE_BRANCH="${{ github.ref }}"  # The source branch for the PR
+          DESTINATION_BRANCH="main"         # The target branch for the PR
+          
+          # Construct the API URL
+          REPO_URL="https://api.github.com/repos/${{ github.repository }}"
+                
+          # Create the pull request using curl
+          RESPONSE=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"title\":\"$PR_TITLE\", \"body\":\"$PR_BODY\", \"head\":\"$SOURCE_BRANCH\", \"base\":\"$DESTINATION_BRANCH\"}" \
+            "$REPO_URL/pulls")
+
+          echo "Response : $RESPONSE"
+          # Extract PR number from the response
+          PR_NUMBER=$(echo "$RESPONSE" | jq -r '.number')
+          # Extract the PR URL
+          PR_URL=$(echo "$RESPONSE" | jq -r '.html_url')
+          
+          if [ "$PR_NUMBER" == "null" || "$PR_URL" == "null"]; then
+            echo "Failed to create pull request. Check the API response for details."
+            exit 1
+          fi
+ 
+          
+          echo "Pull Request URL: $PR_URL"
+          echo "::set-output name=pr_url::$PR_URL"
+          
+          echo "Created Pull Request Number: $PR_NUMBER"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+          echo "::set-output name=pr_title::$PR_TITLE"
+
+          echo "Github repo: ${{ github.repository }}"
+
+#      - name: Send Email Notification
+#        uses: dawidd6/action-send-mail@v3
+#        with:
+#          to: 'guptaa@microsoft.com , tich@microsoft.com, vtarasov@microsoft.com, dolumuyiwa@microsoft.com'
+#          from: 'OfficeDev Repo Schema Release Bot'
+#          subject: 'New Public Microsoft 365 App Manifest Schema Release PR Created'
+#          body: |
+#            A new pull request has been created:
+#            - PR Title: ${{ steps.local_to_main_pr.outputs.pr_title }}
+#            - PR Link: ${{ steps.local_to_main_pr.outputs.pr_url }}
+#         server_address: 'smtp.office365.com' 
+#          server_port: 587
+
+
+      - name: Notify users by adding a comment on the PR
+        if: steps.local_to_main_pr.outputs.pr_url
+        run: |
+          PR_URL=${{ steps.local_to_main_pr.outputs.pr_url }}
+          COMMENT_BODY="Hey @chu-tianshu @oolumuyiwa, a new PR #$PR_URL has been created! Please take a look."
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"body\": \"$COMMENT_BODY\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+            
+            
+      # Poll for PR status until it's closed
+      - name: Monitor PR status
+        run: |
+          PR_NUMBER=${{ steps.local_to_main_pr.outputs.pr_number }}
+          while [ "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER | jq -r .state)" != "closed" ]; do
+              echo "PR #$PR_NUMBER is not closed yet..."
+              sleep 20
+          done
+          echo "PR local to main with number #$PR_NUMBER has been closed!"
