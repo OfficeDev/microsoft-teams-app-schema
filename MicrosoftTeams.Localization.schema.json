@@ -208,6 +208,10 @@
     "^extensions\\[[0]\\]\\.alternates\\[[0-9]\\]\\.alternateIcons\\.highResolutionIcon\\.url$": {
       "type": "string",
       "maxLength": 2048
+    },
+    "^copilotAgents.customEngineAgents\\[0\\]\\.disclaimer.text$": {
+      "type": "string",
+      "maxLength": 500
     }
   },
   "required": [ "name.short", "description.short", "description.full" ]
