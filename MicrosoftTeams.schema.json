@@ -2899,7 +2899,7 @@
             },
             "options": {
               "type": "array",
-              "description": "Specifies the custom options that a user can select from the preprocessing dialog to provide a reason for reporting a message.",
+              "description": "Specifies up to five options that a user can select from the preprocessing dialog to provide a reason for reporting a message.",
               "items": {
                 "type": "string",
                 "minItems": 1,
