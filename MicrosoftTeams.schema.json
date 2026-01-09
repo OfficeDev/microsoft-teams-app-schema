@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.23"
+      "const": "1.24"
     },
     "version": {
       "type": "string",
@@ -411,7 +411,7 @@
                 },
                 "commands": {
                   "type": "array",
-                  "maxItems": 10,
+                  "maxItems": 12,
                   "items": {
                     "type": "object",
                     "additionalProperties": false,
@@ -1678,12 +1678,13 @@
           "type": "boolean",
           "description": "Allows a custom function to accept Excel data types as parameters and return values.",
           "default": false
+        },
+        "metadataUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of a metadata json file with default locale."
         }
       },
-      "required": [
-        "functions",
-        "namespace"
-      ]
+      "additionalProperties": false
     },
     "extensionCustomFunctionsNamespace": {
       "type": "object",
@@ -1863,7 +1864,7 @@
       "type": "array",
       "description": "Specifies the set of actions supported by this runtime. An action is either running a JavaScript function or opening a view such as a task pane.",
       "minItems": 1,
-      "maxItems": 20,
+      "maxItems": 150,
       "items": {
         "$ref": "#/definitions/extensionRuntimesActionsItem"
       },
@@ -1881,9 +1882,10 @@
           "type": "string",
           "enum": [
             "executeFunction",
-            "openPage"
+            "openPage",
+            "executeDataFunction"
           ],
-          "description": "executeFunction: Run a script function without waiting for it to finish. openPate: Open a page in a view."
+          "description": "executeFunction: Run a script function without waiting for it to finish. openPage: Open a page in a view. executeDataFunction: invoke command and retrieve data."
         },
         "displayName": {
           "type": "string",
@@ -2209,7 +2211,7 @@
           "type": "array",
           "description": "Configures the items for a menu control.",
           "minItems": 1,
-          "maxItems": 20,
+          "maxItems": 30,
           "items": {
             "$ref": "#/definitions/extensionCommonCustomControlMenuItem"
           }
@@ -2441,7 +2443,7 @@
           "events": {
             "type": "array",
             "maxItems": 20,
-            "description": "Specifies the type of event. For supported types, please see: https://review.learn.microsoft.com/en-us/office/dev/add-ins/outlook/autolaunch?tabs=xmlmanifest#supported-events.",
+            "description": "Specifies the type of event. For supported types, please see: https://learn.microsoft.com/en-us/office/dev/add-ins/outlook/autolaunch?tabs=xmlmanifest#supported-events.",
             "items": {
               "type": "object",
               "properties": {
@@ -2556,6 +2558,104 @@
                 "required": [
                   "officeAddinId"
                 ]
+              },
+              "windowsExtensions": {
+                "type": "object",
+                "description": "Configures how to hide windows native extensions",
+                "properties": {
+                  "effect": {
+                    "type": "string",
+                    "description": "Specifies the effect to take while installing the web add-in if the equivalent add-in is installed.",
+                    "enum": [
+                      "userOptionToDisable",
+                      "disableWithNotification"
+                    ]
+                  },
+                  "comAddin": {
+                    "type": "object",
+                    "description": "Specifies the equivalent COM add-ins",
+                    "properties": {
+                      "progIds": {
+                        "type": "array",
+                        "description": "Specifies the program Ids of the equivalent COM add-ins",
+                        "minItems": 1,
+                        "maxItems": 5,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "progIds"
+                    ]
+                  },
+                  "automationAddin": {
+                    "type": "object",
+                    "description": "Specifies the equivalent automation add-ins",
+                    "properties": {
+                      "progIds": {
+                        "type": "array",
+                        "description": "Specifies the program Ids of the equivalent automation add-ins",
+                        "minItems": 1,
+                        "maxItems": 5,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "progIds"
+                    ]
+                  },
+                  "xllCustomFunctions": {
+                    "type": "object",
+                    "description": "Specifies the XLL-based add-ins custom function",
+                    "properties": {
+                      "fileNames": {
+                        "type": "array",
+                        "description": "Specifies the file names of the XLL-based add-ins custom function",
+                        "minItems": 1,
+                        "maxItems": 5,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "fileNames"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "anyOf": [
+                  {
+                    "required": [
+                      "effect",
+                      "comAddin"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "effect",
+                      "automationAddin"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "effect",
+                      "xllCustomFunctions"
+                    ]
+                  }
+                ]
               }
             },
             "minProperties": 1
@@ -2586,9 +2686,10 @@
       "properties": {
         "fileName": {
           "type": "string",
+          "description": "File name for the XLL extension. Maximum length is 254 characters.",
           "pattern": "^(?!.*[\\r\\n\\f\\b\\v\\a\\t])[\\S]*\\.xll$",
-          "minLength": 1,
-          "maxLength": 64
+          "minLength": 4,
+          "maxLength": 254
         }
       }
     },
@@ -2607,9 +2708,27 @@
           },
           "minItems": 1,
           "maxItems": 20000
+        },
+        "keyMappingFiles": {
+          "description": "Specifies the full URLs for shortcuts mapping and localization resource files that don't directly support the unified manifest.",
+          "$ref": "#/definitions/keyboardShortcutsMappingFiles"
+        }
+      }
+    },
+    "keyboardShortcutsMappingFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shortcutsUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of the JSON file that will contain the keyboard combination configuration on Office application and platform combinations that don't directly support the unified manifest."
+        },
+        "localizationResourceUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of a file that provides supplemental resource, such as localized strings, for the file specified in the shortcutsUrl attribute."
         }
       },
-      "required": [ "shortcuts" ]
+      "required": [ "shortcutsUrl" ]
     },
     "extensionShortcut": {
       "type": "object",
