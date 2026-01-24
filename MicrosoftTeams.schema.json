@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.23"
+      "const": "1.25"
     },
     "version": {
       "type": "string",
@@ -411,7 +411,7 @@
                 },
                 "commands": {
                   "type": "array",
-                  "maxItems": 10,
+                  "maxItems": 12,
                   "items": {
                     "type": "object",
                     "additionalProperties": false,
@@ -550,7 +550,8 @@
               "botBased",
               "apiBased"
             ],
-            "description": "Type of the compose extension."
+            "description": "Type of the compose extension.",
+            "default": "botBased"
           },
           "authorization": {
             "type": "object",
@@ -1049,6 +1050,14 @@
         ]
       }
     },
+    "supportsChannelFeatures": {
+      "type": "string",
+      "enum": [
+        "tier1",
+        null
+      ],
+      "description": "A property in the app manifest that declares support for all channel features, categorized by tiers."
+    },
     "defaultBlockUntilAdminAction": {
       "type": "boolean",
       "description": "A value indicating whether an app is blocked by default until admin allows it",
@@ -1305,6 +1314,15 @@
       },
       "additionalProperties": false
     },
+    "agenticUserTemplates": {
+      "type": "array",
+      "description": "An array of agentic user templates references.",
+      "items": {
+        "$ref": "#/definitions/agenticUserTemplateRef"
+      },
+      "minimum": 1,
+      "maxItems": 1
+    },
     "elementRelationshipSet": {
       "type": "object",
       "properties": {
@@ -1378,6 +1396,16 @@
       "type": "string",
       "maxLength": 2048,
       "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+    },
+    "anyHttpUrl": {
+        "type": "string",
+        "maxLength": 2048,
+        "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+    },
+    "secureHttpUrl": {
+        "type": "string",
+        "maxLength": 2048,
+        "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
     },
     "semver": {
       "type": "string",
@@ -1678,12 +1706,73 @@
           "type": "boolean",
           "description": "Allows a custom function to accept Excel data types as parameters and return values.",
           "default": false
+        },
+        "metadataUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of a metadata json file with default locale."
+        },
+        "enums": {
+          "type": "array",
+          "description": "Array of custom defined enum objects.",
+          "items": {
+            "$ref": "#/definitions/enum"
+          },
+          "maxItems": 20000
+        }
+      },
+      "additionalProperties": false
+    },
+    "enum": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique ID for the enum.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z][A-Za-z0-9._]*$"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of the values in this enum.",
+          "enum": [ "number", "string" ]
+        },
+        "values": {
+          "type": "array",
+          "description": "Array that defines the constants for the enum.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "A brief description of the constant.",
+                "maxLength": 256
+              },
+              "numberValue": {
+                "type": ["number", "null"],
+                "description": "When enum type is number, the actual number value of the constant."
+              },
+              "stringValue": {
+                "type": "string",
+                "description": "When enum type is string, the actual string value of the constant."
+              },
+              "tooltip": {
+                "type": "string",
+                "description": "Additional information about the constant, intended to provide more context or details.",
+                "maxLength": 256
+              }
+            },
+            "additionalProperties": false,
+            "required": [ "name" ]
+          }
         }
       },
       "required": [
-        "functions",
-        "namespace"
-      ]
+        "id",
+        "type",
+        "values"
+      ],
+      "additionalProperties": false
     },
     "extensionCustomFunctionsNamespace": {
       "type": "object",
@@ -1775,6 +1864,31 @@
           "type": "boolean",
           "description": "If true, your custom function can access the addresses of the function's input parameters. This property must be used in combination with the dimensionality property of the result object, and dimensionality must be set to matrix.",
           "default": false
+        },
+        "requiresStreamAddress": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, the function can access the address of the cell calling the streaming function. The `address` property of the invocation parameter contains the address of the cell that invoked your streaming function. "
+        },
+        "requiresStreamParameterAddresses": {
+          "type": "boolean",
+          "description": "If `true`, the function can access the parameter addresses of the cell calling the streaming function. The `parameterAddresses` property of the invocation parameter contains the parameter addresses for your streaming function.",
+          "default": false
+        },
+        "capturesCallingObject": {
+          "type": "boolean",
+          "description": "If `true`, the data type being referenced by the custom function is passed as the first argument to the custom function.",
+          "default": false
+        },
+        "excludeFromAutoComplete": {
+          "type": "boolean",
+          "description": "If `true`, the custom function will not appear in the formula AutoComplete menu in Excel.",
+          "default": false
+        },
+        "linkedEntityLoadService": {
+          "type": "boolean",
+          "description": "If `true`, it designates that the function is a linked entity load service that returns linked entity cell values for linked entity IDs requested by Excel.",
+          "default": false
         }
       },
       "required": [
@@ -1814,14 +1928,13 @@
             "doublecellvalue",
             "entitycellvalue",
             "errorcellvalue",
-            "formattednumbercellvalue",
             "linkedentitycellvalue",
             "localimagecellvalue",
             "stringcellvalue",
             "webimagecellvalue",
             null
           ],
-          "description": "A subfield of the type property. Specifies the Excel data types accepted by the custom function. Accepts the values 'cellvalue', 'booleancellvalue', 'doublecellvalue', 'entitycellvalue', 'errorcellvalue', 'formattednumbercellvalue', 'linkedentitycellvalue', 'localimagecellvalue', 'stringcellvalue', 'webimagecellvalue'"
+          "description": "A subfield of the type property. Specifies the Excel data types accepted by the custom function. Accepts the values cellvalue, booleancellvalue, doublecellvalue, entitycellvalue, errorcellvalue, linkedentitycellvalue, localimagecellvalue, stringcellvalue, webimagecellvalue"
         },
         "dimensionality": {
           "type": "string",
@@ -1840,6 +1953,11 @@
           "type": "boolean",
           "default": false,
           "description": "If true, parameters populate from a specified array. Note that functions all repeating parameters are considered optional parameters by definition."
+        },
+        "customEnumId": {
+          "type": "string",
+          "description": "|The `id` of the enum in the `enums` array. This associates the custom enum with the function and enables Excel to display the enum members in the formula AutoComplete menu.",
+          "maxLength": 64
         }
       },
       "required": [ "name" ]
@@ -1863,7 +1981,7 @@
       "type": "array",
       "description": "Specifies the set of actions supported by this runtime. An action is either running a JavaScript function or opening a view such as a task pane.",
       "minItems": 1,
-      "maxItems": 20,
+      "maxItems": 150,
       "items": {
         "$ref": "#/definitions/extensionRuntimesActionsItem"
       },
@@ -1881,9 +1999,10 @@
           "type": "string",
           "enum": [
             "executeFunction",
-            "openPage"
+            "openPage",
+            "executeDataFunction"
           ],
-          "description": "executeFunction: Run a script function without waiting for it to finish. openPate: Open a page in a view."
+          "description": "executeFunction: Run a script function without waiting for it to finish. openPage: Open a page in a view. executeDataFunction: invoke command and retrieve data."
         },
         "displayName": {
           "type": "string",
@@ -1958,7 +2077,7 @@
       "type": "array",
       "description": "Specifies the Office application windows in which the ribbon customization is available to the user. Each item in the array is a member of a string array. Possible values are: mailRead, mailCompose, meetingDetailsOrganizer, meetingDetailsAttendee, onlineMeetingDetailsOrganizer, logEventMeetingDetailsAttendee, spamReportingOverride.",
       "minItems": 1,
-      "maxItems": 8,
+      "maxItems": 7,
       "items": {
         "type": "string",
         "enum": [
@@ -2209,7 +2328,7 @@
           "type": "array",
           "description": "Configures the items for a menu control.",
           "minItems": 1,
-          "maxItems": 20,
+          "maxItems": 30,
           "items": {
             "$ref": "#/definitions/extensionCommonCustomControlMenuItem"
           }
@@ -2441,7 +2560,7 @@
           "events": {
             "type": "array",
             "maxItems": 20,
-            "description": "Specifies the type of event. For supported types, please see: https://review.learn.microsoft.com/en-us/office/dev/add-ins/outlook/autolaunch?tabs=xmlmanifest#supported-events.",
+            "description": "Specifies the type of event. For supported types, please see: https://learn.microsoft.com/en-us/office/dev/add-ins/outlook/autolaunch?tabs=xmlmanifest#supported-events.",
             "items": {
               "type": "object",
               "properties": {
@@ -2556,6 +2675,104 @@
                 "required": [
                   "officeAddinId"
                 ]
+              },
+              "windowsExtensions": {
+                "type": "object",
+                "description": "Configures how to hide windows native extensions",
+                "properties": {
+                  "effect": {
+                    "type": "string",
+                    "description": "Specifies the effect to take while installing the web add-in if the equivalent add-in is installed.",
+                    "enum": [
+                      "userOptionToDisable",
+                      "disableWithNotification"
+                    ]
+                  },
+                  "comAddin": {
+                    "type": "object",
+                    "description": "Specifies the equivalent COM add-ins",
+                    "properties": {
+                      "progIds": {
+                        "type": "array",
+                        "description": "Specifies the program Ids of the equivalent COM add-ins",
+                        "minItems": 1,
+                        "maxItems": 5,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "progIds"
+                    ]
+                  },
+                  "automationAddin": {
+                    "type": "object",
+                    "description": "Specifies the equivalent automation add-ins",
+                    "properties": {
+                      "progIds": {
+                        "type": "array",
+                        "description": "Specifies the program Ids of the equivalent automation add-ins",
+                        "minItems": 1,
+                        "maxItems": 5,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "progIds"
+                    ]
+                  },
+                  "xllCustomFunctions": {
+                    "type": "object",
+                    "description": "Specifies the XLL-based add-ins custom function",
+                    "properties": {
+                      "fileNames": {
+                        "type": "array",
+                        "description": "Specifies the file names of the XLL-based add-ins custom function",
+                        "minItems": 1,
+                        "maxItems": 5,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "fileNames"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "anyOf": [
+                  {
+                    "required": [
+                      "effect",
+                      "comAddin"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "effect",
+                      "automationAddin"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "effect",
+                      "xllCustomFunctions"
+                    ]
+                  }
+                ]
               }
             },
             "minProperties": 1
@@ -2586,9 +2803,10 @@
       "properties": {
         "fileName": {
           "type": "string",
+          "description": "File name for the XLL extension. Maximum length is 254 characters.",
           "pattern": "^(?!.*[\\r\\n\\f\\b\\v\\a\\t])[\\S]*\\.xll$",
-          "minLength": 1,
-          "maxLength": 64
+          "minLength": 4,
+          "maxLength": 254
         }
       }
     },
@@ -2607,9 +2825,27 @@
           },
           "minItems": 1,
           "maxItems": 20000
+        },
+        "keyMappingFiles": {
+          "description": "Specifies the full URLs for shortcuts mapping and localization resource files that don't directly support the unified manifest.",
+          "$ref": "#/definitions/keyboardShortcutsMappingFiles"
+        }
+      }
+    },
+    "keyboardShortcutsMappingFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shortcutsUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of the JSON file that will contain the keyboard combination configuration on Office application and platform combinations that don't directly support the unified manifest."
+        },
+        "localizationResourceUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of a file that provides supplemental resource, such as localized strings, for the file specified in the shortcutsUrl attribute."
         }
       },
-      "required": [ "shortcuts" ]
+      "required": [ "shortcutsUrl" ]
     },
     "extensionShortcut": {
       "type": "object",
@@ -3046,6 +3282,27 @@
         }
       },
       "description": "A reference to a declarative agent element. The element's definition is in a separate file.",
+      "required": [
+        "id",
+        "file"
+      ],
+      "additionalProperties": false
+    },
+    "agenticUserTemplateRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the agentic user template. Must contain only alphanumeric characters, dots, underscores, and hyphens.",
+          "pattern": "^[a-zA-Z0-9._-]+$",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "file": {
+          "$ref": "#/definitions/relativePath",
+          "description": "Relative file path to this agentic user template element file in the application package."
+        }
+      },
       "required": [
         "id",
         "file"
