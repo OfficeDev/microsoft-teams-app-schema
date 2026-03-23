@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.25"
+      "const": "1.26"
     },
     "version": {
       "type": "string",
@@ -127,6 +127,32 @@
           "type": "string",
           "description": "The full description of the app. Maximum length is 4000 characters.",
           "maxLength": 4000
+        },
+        "features": {
+          "type": "array",
+          "description": "Array of features sections describing what the app can do.",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 45,
+                "description": "Title of the feature the app provides."
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 120,
+                "description": "Detailed description of the specific feature."
+              }
+            },
+            "required": [
+              "title",
+              "description"
+            ]
+          }
         }
       },
       "required": [
@@ -449,7 +475,11 @@
             "properties": {
               "source": {
                 "type": "string",
-                "enum": [ "standard", "microsoftCopilotStudio", "onedriveSharepoint" ],
+                "enum": [
+                  "standard",
+                  "microsoftCopilotStudio",
+                  "onedriveSharepoint"
+                ],
                 "description": "The partner source through which the bot is registered. System‑generated metadata. This information is maintained by Microsoft services and must not be modified manually."
               },
               "environment": {
@@ -468,7 +498,9 @@
                 "maxLength": 128
               }
             },
-            "required": [ "source" ],
+            "required": [
+              "source"
+            ],
             "additionalProperties": false
           }
         },
@@ -550,8 +582,8 @@
               "botBased",
               "apiBased"
             ],
-            "description": "Type of the compose extension.",
-            "default": "botBased"
+            "default": "botBased",
+            "description": "Type of the compose extension."
           },
           "authorization": {
             "type": "object",
@@ -562,7 +594,8 @@
                 "enum": [
                   "none",
                   "apiSecretServiceAuth",
-                  "microsoftEntra"
+                  "microsoftEntra",
+                  "oAuth2.0"
                 ],
                 "description": "Enum of possible authentication types."
               },
@@ -589,6 +622,18 @@
                   }
                 },
                 "additionalProperties": false
+              },
+              "oAuthConfiguration": {
+                "type": "object",
+                "description": "Object capturing details needed to match the application's OAuth configuration for the app. This should be and must be populated only when authType is set to oAuth2.0r",
+                "properties": {
+                  "oAuthConfigurationId": {
+                    "type": "string",
+                    "description": "The oAuth configuration id obtained by the Developer when registering their configuration in Developer Portal.",
+                    "maxLength": 128
+                  }
+                },
+                "additionalProperties": false
               }
             },
             "additionalProperties": false
@@ -598,7 +643,10 @@
             "description": "A relative file path to the api specification file in the manifest package."
           },
           "canUpdateConfiguration": {
-            "type": [ "boolean", "null" ],
+            "type": [
+              "boolean",
+              "null"
+            ],
             "description": "A value indicating whether the configuration of a compose extension can be updated by the user.",
             "default": "null"
           },
@@ -682,11 +730,6 @@
                   "description": "A boolean value that indicates if it should fetch task module dynamically",
                   "default": false
                 },
-                "semanticDescription": {
-                  "type": "string",
-                  "description": "Semantic description for the command.",
-                  "maxLength": 5000
-                },
                 "parameters": {
                   "type": "array",
                   "maxItems": 5,
@@ -724,20 +767,15 @@
                         "description": "Description of the parameter.",
                         "maxLength": 128
                       },
-                      "value": {
-                        "type": "string",
-                        "description": "Initial value for the parameter",
-                        "maxLength": 512
-                      },
                       "isRequired": {
                         "type": "boolean",
                         "description": "The value indicates if this parameter is a required field.",
                         "default": false
                       },
-                      "semanticDescription": {
+                      "value": {
                         "type": "string",
-                        "description": "Semantic description for the parameter.",
-                        "maxLength": 2000
+                        "description": "Initial value for the parameter",
+                        "maxLength": 512
                       },
                       "choices": {
                         "type": "array",
@@ -763,6 +801,11 @@
                             "value"
                           ]
                         }
+                      },
+                      "semanticDescription": {
+                        "type": "string",
+                        "description": "Semantic description for the parameter.",
+                        "maxLength": 2000
                       }
                     },
                     "required": [
@@ -793,6 +836,11 @@
                       "description": "Initial webview URL"
                     }
                   }
+                },
+                "semanticDescription": {
+                  "type": "string",
+                  "description": "Semantic description for the command.",
+                  "maxLength": 5000
                 }
               },
               "required": [
@@ -920,7 +968,10 @@
                 "minLength": 1
               }
             },
-            "required": [ "redirectUri", "scopes" ],
+            "required": [
+              "redirectUri",
+              "scopes"
+            ],
             "additionalProperties": false
           }
         }
@@ -1021,6 +1072,25 @@
       },
       "additionalProperties": false
     },
+    "supportsChannelFeatures": {
+      "type": "string",
+      "enum": [
+        "tier1",
+        null
+      ],
+      "description": "A property in the app manifest that declares support for all channel features, categorized by tiers."
+    },
+    "supportedChannelTypes": {
+      "type": "array",
+      "description": "List of 'non-standard' channel types that the app supports. Note: Channels of standard type are supported by default if the app supports team scope.",
+      "maxItems": 2,
+      "items": {
+        "enum": [
+          "sharedChannels",
+          "privateChannels"
+        ]
+      }
+    },
     "configurableProperties": {
       "type": "array",
       "description": "A list of tenant configured properties for an app",
@@ -1038,25 +1108,6 @@
           "termsOfUseUrl"
         ]
       }
-    },
-    "supportedChannelTypes": {
-      "type": "array",
-      "description": "List of 'non-standard' channel types that the app supports. Note: Channels of standard type are supported by default if the app supports team scope.",
-      "maxItems": 2,
-      "items": {
-        "enum": [
-          "sharedChannels",
-          "privateChannels"
-        ]
-      }
-    },
-    "supportsChannelFeatures": {
-      "type": "string",
-      "enum": [
-        "tier1",
-        null
-      ],
-      "description": "A property in the app manifest that declares support for all channel features, categorized by tiers."
     },
     "defaultBlockUntilAdminAction": {
       "type": "boolean",
@@ -1162,14 +1213,14 @@
           "type": "array",
           "uniqueItems": true
         },
-        "supportsCustomShareToStage": {
-          "description": "Represents if the app has added support for sharing to stage.",
-          "type": "boolean",
-          "default": false
-        },
         "supportsStreaming": {
           "type": "boolean",
           "description": "A boolean value indicating whether this app can stream the meeting's audio video content to an RTMP endpoint.",
+          "default": false
+        },
+        "supportsCustomShareToStage": {
+          "description": "Represents if the app has added support for sharing to stage.",
+          "type": "boolean",
           "default": false
         },
         "supportsAnonymousGuestUsers": {
@@ -1235,6 +1286,18 @@
       },
       "additionalProperties": false
     },
+    "intuneInfo": {
+      "type": "object",
+      "description": "The Intune-related properties for the app.",
+      "properties": {
+        "supportedMobileAppManagementVersion": {
+          "type": "string",
+          "description": "Supported mobile app managment version that the app is compliant with.",
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false
+    },
     "copilotAgents": {
       "type": "object",
       "properties": {
@@ -1289,30 +1352,7 @@
         }
       },
       "additionalProperties": false,
-      "oneOf": [
-            {
-              "required": [
-                "declarativeAgents"
-              ]
-            },
-            {
-              "required": [
-                "customEngineAgents"
-              ]
-            }
-      ]
-    },
-    "intuneInfo": {
-      "type": "object",
-      "description": "The Intune-related properties for the app.",
-      "properties": {
-        "supportedMobileAppManagementVersion": {
-          "type": "string",
-          "description": "Supported mobile app managment version that the app is compliant with.",
-          "maxLength": 64
-        }
-      },
-      "additionalProperties": false
+      "anyOf": []
     },
     "agenticUserTemplates": {
       "type": "array",
@@ -1370,7 +1410,9 @@
               "description": "Required URL for background loading. This can be the same contentUrl from the staticTabs section or an alternative endpoint used for background loading."
             }
           },
-          "required": [ "contentUrl" ],
+          "required": [
+            "contentUrl"
+          ],
           "additionalProperties": false
         }
       },
@@ -1397,15 +1439,10 @@
       "maxLength": 2048,
       "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
     },
-    "anyHttpUrl": {
-        "type": "string",
-        "maxLength": 2048,
-        "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
-    },
     "secureHttpUrl": {
-        "type": "string",
-        "maxLength": 2048,
-        "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^[Hh][Tt][Tt][Pp][Ss]://"
     },
     "semver": {
       "type": "string",
@@ -1558,6 +1595,7 @@
           },
           "keyboardShortcuts": {
             "type": "array",
+            "description": " Keyboard shortcuts, also known as key combinations, enable your add-in's users to work more efficiently. Keyboard shortcuts also improve the add-in's accessibility for users with disabilities by providing an alternative to the mouse.",
             "items": {
               "$ref": "#/definitions/extensionKeyboardShortcut"
             },
@@ -1574,8 +1612,8 @@
       "additionalProperties": false
     },
     "requirementsExtensionElement": {
-      "type": "object",
       "description": "Specifies limitations on which clients the add-in can be installed on, including limitations on the Office host application, the form factors, and the requirement sets that the client must support.",
+      "type": "object",
       "minProperties": 1,
       "properties": {
         "capabilities": {
@@ -1713,11 +1751,10 @@
         },
         "enums": {
           "type": "array",
-          "description": "Array of custom defined enum objects.",
           "items": {
             "$ref": "#/definitions/enum"
           },
-          "maxItems": 20000
+          "maxItems": 256
         }
       },
       "additionalProperties": false
@@ -1735,7 +1772,10 @@
         "type": {
           "type": "string",
           "description": "The type of the values in this enum.",
-          "enum": [ "number", "string" ]
+          "enum": [
+            "number",
+            "string"
+          ]
         },
         "values": {
           "type": "array",
@@ -1749,7 +1789,10 @@
                 "maxLength": 256
               },
               "numberValue": {
-                "type": ["number", "null"],
+                "type": [
+                  "number",
+                  "null"
+                ],
                 "description": "When enum type is number, the actual number value of the constant."
               },
               "stringValue": {
@@ -1763,7 +1806,9 @@
               }
             },
             "additionalProperties": false,
-            "required": [ "name" ]
+            "required": [
+              "name"
+            ]
           }
         }
       },
@@ -1780,8 +1825,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Non-localizable version of the namespace.",
           "pattern": "^[A-Za-z][A-Za-z0-9._]*$",
+          "description": "Non-localizable version of the namespace.",
           "minLength": 1,
           "maxLength": 32
         },
@@ -1803,15 +1848,15 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "A unique ID for the function.",
           "pattern": "^[a-zA-Z][a-zA-Z0-9._]*$",
+          "description": "A unique ID for the function.",
           "minLength": 3,
           "maxLength": 64
         },
         "name": {
           "type": "string",
-          "description": "The name of the function that end users see in Excel. In Excel, this function name is prefixed by the custom functions namespace that's specified in the manifest file.",
           "pattern": "^[\\p{L}][\\p{L}0-9._]*$",
+          "description": "The name of the function that end users see in Excel. In Excel, this function name is prefixed by the custom functions namespace that's specified in the manifest file.",
           "minLength": 3,
           "maxLength": 64
         },
@@ -1823,8 +1868,8 @@
         },
         "helpUrl": {
           "type": "string",
-          "description": "URL that provides information about the function. (It is displayed in a task pane.)",
           "format": "uri",
+          "description": "URL that provides information about the function. (It is displayed in a task pane.)",
           "minLength": 1,
           "maxLength": 2048
         },
@@ -1945,22 +1990,27 @@
           "default": "scalar",
           "description": "Must be either scalar (a non-array value) or matrix (a 2-dimensional array)."
         },
+        "customEnumId": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "|The `id` of the enum in the `enums` array. This associates the custom enum with the function and enables Excel to display the enum members in the formula AutoComplete menu."
+        },
         "optional": {
-          "type": [ "boolean", "null" ],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "description": "If true, the parameter is optional."
         },
         "repeating": {
           "type": "boolean",
           "default": false,
           "description": "If true, parameters populate from a specified array. Note that functions all repeating parameters are considered optional parameters by definition."
-        },
-        "customEnumId": {
-          "type": "string",
-          "description": "|The `id` of the enum in the `enums` array. This associates the custom enum with the function and enables Excel to display the enum members in the formula AutoComplete menu.",
-          "maxLength": 64
         }
       },
-      "required": [ "name" ]
+      "required": [
+        "name"
+      ]
     },
     "extensionResult": {
       "type": "object",
@@ -2087,8 +2137,8 @@
           "meetingDetailsAttendee",
           "onlineMeetingDetailsOrganizer",
           "logEventMeetingDetailsAttendee",
-          "default",
-          "spamReportingOverride"
+          "spamReportingOverride",
+          "default"
         ]
       }
     },
@@ -2151,6 +2201,13 @@
           "items": {
             "$ref": "#/definitions/extensionRibbonsCustomMobileGroupItem"
           }
+        },
+        "keytip": {
+          "type": "string",
+          "description": "KeyTip shortcut for keyboard navigation (1-3 uppercase alphanumeric characters)",
+          "minLength": 1,
+          "maxLength": 3,
+          "pattern": "^[A-Z0-9]+$"
         }
       },
       "dependencies": {
@@ -2332,6 +2389,13 @@
           "items": {
             "$ref": "#/definitions/extensionCommonCustomControlMenuItem"
           }
+        },
+        "keytip": {
+          "type": "string",
+          "description": "KeyTip shortcut for keyboard navigation (1-3 uppercase alphanumeric characters)",
+          "minLength": 1,
+          "maxLength": 3,
+          "pattern": "^[A-Z0-9]+$"
         }
       },
       "required": [
@@ -2414,6 +2478,13 @@
         "overriddenByRibbonApi": {
           "type": "boolean",
           "default": "false"
+        },
+        "keytip": {
+          "type": "string",
+          "description": "KeyTip shortcut for keyboard navigation (1-3 uppercase alphanumeric characters)",
+          "minLength": 1,
+          "maxLength": 3,
+          "pattern": "^[A-Z0-9]+$"
         }
       },
       "additionalProperties": false,
@@ -2423,6 +2494,142 @@
         "label",
         "supertip",
         "actionId"
+      ]
+    },
+    "extensionRibbonsArrayFixedControlItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "description": "Defines the type of control.",
+          "enum": [
+            "button"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Displayed text for the control. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "icons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/extensionCommonIcon"
+          }
+        },
+        "supertip": {
+          "$ref": "#/definitions/extensionCommonSuperToolTip"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "The ID of an execution-type action that handles this key combination. Maximum length is 64 characters.",
+          "maxLength": 64
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the control is initially enabled.",
+          "default": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "label",
+        "icons",
+        "supertip",
+        "actionId",
+        "enabled"
+      ]
+    },
+    "extensionRibbonsSpamPreProcessingDialog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Specifies the custom title of the preprocessing dialog.",
+          "maxLength": 128
+        },
+        "description": {
+          "type": "string",
+          "description": "Specifies the custom text that appears in the preprocessing dialog.",
+          "maxLength": 250
+        },
+        "spamNeverShowAgainOption": {
+          "type": "boolean",
+          "description": "Indicating if the developer will allow the user to permanently bypass the PreProcessing Dialog for this add-in. \"false\" is the default value if not specified.",
+          "default": "false"
+        },
+        "spamReportingOptions": {
+          "type": "object",
+          "description": "Specifies up to five options that a user can select from the preprocessing dialog to provide a reason for reporting a message.",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Specifies the title listed before the reporting options list.",
+              "maxLength": 128
+            },
+            "options": {
+              "type": "array",
+              "description": "Specifies the custom options that a user can select from the preprocessing dialog to provide a reason for reporting a message.",
+              "items": {
+                "type": "string",
+                "minItems": 1,
+                "maxItems": 5
+              }
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "radio",
+                "checkbox"
+              ],
+              "description": "Can be set to \"radio\" or \"checkbox\". This determines if Radio Buttons or checkboxes are used for the options. \"checkbox\" is the default if this value is not specified.",
+              "default": "checkbox"
+            }
+          },
+          "required": [
+            "title",
+            "options"
+          ]
+        },
+        "spamFreeTextSectionTitle": {
+          "type": "string",
+          "description": "A text box to the preprocessing dialog to allow users to provide additional information on the message they're reporting. This value is the title of that text box.",
+          "maxLength": 128
+        },
+        "spamMoreInfo": {
+          "type": "object",
+          "description": "Specifies the custom text and URL to provide informational resources to the users.",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Specifies display content of the hyperlink pointing to the site containing informational resources in the preprocessing dialog of a spam-reporting add-in.",
+              "maxLength": 128
+            },
+            "url": {
+              "type": "string",
+              "description": "Specifies the URL of the hyperlink pointing to the site containing informational resources in the preprocessing dialog of a spam-reporting add-in.",
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "text",
+            "url"
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "description"
       ]
     },
     "extensionRibbonsCustomMobileControlButtonItem": {
@@ -2810,97 +3017,6 @@
         }
       }
     },
-    "extensionKeyboardShortcut": {
-      "type": "object",
-      "properties": {
-        "requirements": {
-          "description": "Specifies the Office requirement sets.",
-          "$ref": "#/definitions/requirementsExtensionElement"
-        },
-        "shortcuts": {
-          "type": "array",
-          "description": "Array of mappings from actions to the key combinations that invoke the actions.",
-          "items": {
-            "$ref": "#/definitions/extensionShortcut"
-          },
-          "minItems": 1,
-          "maxItems": 20000
-        },
-        "keyMappingFiles": {
-          "description": "Specifies the full URLs for shortcuts mapping and localization resource files that don't directly support the unified manifest.",
-          "$ref": "#/definitions/keyboardShortcutsMappingFiles"
-        }
-      }
-    },
-    "keyboardShortcutsMappingFiles": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "shortcutsUrl": {
-          "$ref": "#/definitions/httpsUrl",
-          "description": "The full URL of the JSON file that will contain the keyboard combination configuration on Office application and platform combinations that don't directly support the unified manifest."
-        },
-        "localizationResourceUrl": {
-          "$ref": "#/definitions/httpsUrl",
-          "description": "The full URL of a file that provides supplemental resource, such as localized strings, for the file specified in the shortcutsUrl attribute."
-        }
-      },
-      "required": [ "shortcutsUrl" ]
-    },
-    "extensionShortcut": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "object",
-          "$ref": "#/definitions/extensionKeyCombination"
-        },
-        "actionId": {
-          "type": "string",
-          "description": "The ID of an execution-type action that handles this key combination.",
-          "minLength": 1,
-          "maxLength": 64
-        }
-      },
-      "required": [
-        "key",
-        "actionId"
-      ]
-    },
-    "extensionKeyCombination": {
-      "type": "object",
-      "description": "Key combinations in different platform (i.e. default, windows, web and mac).",
-      "properties": {
-        "default": {
-          "type": "string",
-          "description": "Fallback key for any platform that isn't specified.",
-          "pattern": "^[A-Za-z0-9-_+]+$",
-          "minLength": 1,
-          "maxLength": 32
-        },
-        "mac": {
-          "type": "string",
-          "description": "key for mac platform. Alt is mapped to the Option key.",
-          "pattern": "^[A-Za-z0-9-_+]+$",
-          "minLength": 1,
-          "maxLength": 32
-        },
-        "web": {
-          "type": "string",
-          "pattern": "^[A-Za-z0-9-_+]+$",
-          "description": "key for web platform.",
-          "minLength": 1,
-          "maxLength": 32
-        },
-        "windows": {
-          "type": "string",
-          "description": "key for windows platform. Command is mapped to the Ctrl key.",
-          "pattern": "^[A-Za-z0-9-_+]+$",
-          "minLength": 1,
-          "maxLength": 32
-        }
-      },
-      "required": [ "default" ]
-    },
     "extensionContentRuntimeArray": {
       "type": "array",
       "description": "Content runtime is for 'ContentApp', which can be embedded directly into Excel or PowerPoint documents.",
@@ -3004,6 +3120,101 @@
         ]
       }
     },
+    "extensionKeyboardShortcut": {
+      "type": "object",
+      "properties": {
+        "requirements": {
+          "description": "Specifies the Office requirement sets.",
+          "$ref": "#/definitions/requirementsExtensionElement"
+        },
+        "shortcuts": {
+          "type": "array",
+          "description": "Array of mappings from actions to the key combinations that invoke the actions.",
+          "items": {
+            "$ref": "#/definitions/extensionShortcut"
+          },
+          "minItems": 1,
+          "maxItems": 20000
+        },
+        "keyMappingFiles": {
+          "description": "Specifies the full URLs for shortcuts mapping and localization resource files that don't directly support the unified manifest.",
+          "$ref": "#/definitions/keyboardShortcutsMappingFiles"
+        }
+      }
+    },
+    "keyboardShortcutsMappingFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shortcutsUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of the JSON file that will contain the keyboard combination configuration on Office application and platform combinations that don't directly support the unified manifest."
+        },
+        "localizationResourceUrl": {
+          "$ref": "#/definitions/httpsUrl",
+          "description": "The full URL of a file that provides supplemental resource, such as localized strings, for the file specified in the shortcutsUrl attribute."
+        }
+      },
+      "required": [
+        "shortcutsUrl"
+      ]
+    },
+    "extensionShortcut": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "object",
+          "$ref": "#/definitions/extensionKeyCombination"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "The ID of an execution-type action that handles this key combination.",
+          "minLength": 1,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "key",
+        "actionId"
+      ]
+    },
+    "extensionKeyCombination": {
+      "type": "object",
+      "description": "Key combinations in different platform (i.e. default, windows, web and mac).",
+      "properties": {
+        "default": {
+          "type": "string",
+          "description": "Fallback key for any platform that isn't specified.",
+          "pattern": "^[A-Za-z0-9-_+]+$",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "mac": {
+          "type": "string",
+          "description": "key for mac platform. Alt is mapped to the Option key.",
+          "pattern": "^[A-Za-z0-9-_+]+$",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "web": {
+          "type": "string",
+          "description": "key for web platform.",
+          "pattern": "^[A-Za-z0-9-_+]+$",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "windows": {
+          "type": "string",
+          "description": "key for windows platform. Command is mapped to the Ctrl key.",
+          "pattern": "^[A-Za-z0-9-_+]+$",
+          "minLength": 1,
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "default"
+      ]
+    },
     "extensionMenuItem": {
       "type": "array",
       "description": "The title used for the top of the callout.",
@@ -3052,139 +3263,6 @@
         "page"
       ]
     },
-    "extensionRibbonsArrayFixedControlItem": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "A unique identifier for this control within the app. Maximum length is 64 characters. ",
-          "maxLength": 64
-        },
-        "type": {
-          "type": "string",
-          "description": "Defines the type of control.",
-          "enum": [
-            "button"
-          ]
-        },
-        "label": {
-          "type": "string",
-          "description": "Displayed text for the control. Maximum length is 64 characters.",
-          "maxLength": 64
-        },
-        "icons": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 3,
-          "items": {
-            "$ref": "#/definitions/extensionCommonIcon"
-          }
-        },
-        "supertip": {
-          "$ref": "#/definitions/extensionCommonSuperToolTip"
-        },
-        "actionId": {
-          "type": "string",
-          "description": "The ID of an execution-type action that handles this key combination. Maximum length is 64 characters.",
-          "maxLength": 64
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "Whether the control is initially enabled.",
-          "default": true
-        }
-      },
-      "required": [
-        "id",
-        "type",
-        "label",
-        "icons",
-        "supertip",
-        "actionId",
-        "enabled"
-      ]
-    },
-    "extensionRibbonsSpamPreProcessingDialog": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "Specifies the custom title of the preprocessing dialog.",
-          "maxLength": 128
-        },
-        "description": {
-          "type": "string",
-          "description": "Specifies the custom text that appears in the preprocessing dialog.",
-          "maxLength": 250
-        },
-        "spamNeverShowAgainOption": {
-          "type": "boolean",
-          "description": "Indicating if the developer will allow the user to permanently bypass the PreProcessing Dialog for this add-in. \"false\" is the default value if not specified.",
-          "default": "false"
-        },
-        "spamReportingOptions": {
-          "type": "object",
-          "description": "Specifies up to five options that a user can select from the preprocessing dialog to provide a reason for reporting a message.",
-          "properties": {
-            "title": {
-              "type": "string",
-              "description": "Specifies the title listed before the reporting options list.",
-              "maxLength": 128
-            },
-            "options": {
-              "type": "array",
-              "description": "Specifies the custom options that a user can select from the preprocessing dialog to provide a reason for reporting a message.",
-              "items": {
-                "type": "string",
-                "minItems": 1,
-                "maxItems": 5
-              }
-            },
-            "type": {
-              "type": "string",
-              "enum": [ "radio", "checkbox" ],
-              "description": "Can be set to \"radio\" or \"checkbox\". This determines if Radio Buttons or checkboxes are used for the options. \"checkbox\" is the default if this value is not specified.",
-              "default": "checkbox"
-            }
-          },
-          "required": [
-            "title",
-            "options"
-          ]
-        },
-        "spamFreeTextSectionTitle": {
-          "type": "string",
-          "description": "A text box to the preprocessing dialog to allow users to provide additional information on the message they're reporting. This value is the title of that text box.",
-          "maxLength": 128
-        },
-        "spamMoreInfo": {
-          "type": "object",
-          "description": "Specifies the custom text and URL to provide informational resources to the users.",
-          "properties": {
-            "text": {
-              "type": "string",
-              "description": "Specifies display content of the hyperlink pointing to the site containing informational resources in the preprocessing dialog of a spam-reporting add-in.",
-              "maxLength": 128
-            },
-            "url": {
-              "type": "string",
-              "description": "Specifies the URL of the hyperlink pointing to the site containing informational resources in the preprocessing dialog of a spam-reporting add-in.",
-              "maxLength": 2048
-            }
-          },
-          "required": [
-            "text",
-            "url"
-          ]
-        }
-      },
-      "required": [
-        "title",
-        "description"
-      ]
-    },
     "dashboardCard": {
       "type": "object",
       "description": "Cards wich could be pinned to dashboard providing summarized view of information relevant to user.",
@@ -3215,7 +3293,10 @@
         },
         "defaultSize": {
           "type": "string",
-          "enum": [ "medium", "large" ],
+          "enum": [
+            "medium",
+            "large"
+          ],
           "description": "Rendering Size for dashboard card."
         }
       },
@@ -3252,7 +3333,9 @@
       "properties": {
         "sourceType": {
           "type": "string",
-          "enum": [ "bot" ],
+          "enum": [
+            "bot"
+          ],
           "description": "The content of the dashboard card is sourced from a bot."
         },
         "botConfiguration": {
