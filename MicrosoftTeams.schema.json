@@ -1450,6 +1450,11 @@
       "maxLength": 2048,
       "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
     },
+    "anyHttpUrl": {
+        "type": "string",
+        "maxLength": 2048,
+        "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
+    },
     "secureHttpUrl": {
       "type": "string",
       "maxLength": 2048,
