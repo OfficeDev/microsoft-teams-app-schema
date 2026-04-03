@@ -1352,7 +1352,18 @@
         }
       },
       "additionalProperties": false,
-      "anyOf": []
+      "oneOf": [
+        {
+          "required": [
+            "declarativeAgents"
+          ]
+        },
+        {
+          "required": [
+            "customEngineAgents"
+          ]
+        }
+      ]
     },
     "agenticUserTemplates": {
       "type": "array",
@@ -1438,11 +1449,6 @@
       "type": "string",
       "maxLength": 2048,
       "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
-    },
-    "anyHttpUrl": {
-        "type": "string",
-        "maxLength": 2048,
-        "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://"
     },
     "secureHttpUrl": {
       "type": "string",
