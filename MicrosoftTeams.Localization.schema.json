@@ -81,6 +81,10 @@
       "type": "string",
       "maxLength": 64
     },
+    "^composeExtensions\\[0\\]\\.commands\\[[0-9]\\]\\.prompt$": {
+      "type": "string",
+      "maxLength": 4000
+    },
     "^activities.activityTypes\\[\\b([0-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|12[0-7])\\b]\\.description$": {
       "type": "string",
       "maxLength": 128
@@ -89,15 +93,7 @@
       "type": "string",
       "maxLength": 128
     },
-    "^activities.activityGroups\\[\\b([0-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|12[0-7])\\b]\\.displayName$": {
-      "type": "string",
-      "maxLength": 128
-    },
     "^meetingExtensionDefinition.scenes\\[[0-9]\\]\\.name$": {
-      "type": "string",
-      "maxLength": 128
-    },
-    "^meetingExtensionDefinition.videoFilters\\[([0-9]|1[0-5])\\]\\.name$": {
       "type": "string",
       "maxLength": 128
     },
@@ -233,10 +229,6 @@
       "type": "string",
       "maxLength": 128
     },
-    "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.customFunctions\\.namespace\\.name$": {
-      "type": "string",
-      "maxLength": 32
-    },
     "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.customFunctions\\.enums\\[[0-9]\\]\\.values\\[[0-9]\\]\\.name$": {
       "type": "string",
       "maxLength": 256
@@ -244,6 +236,10 @@
     "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.customFunctions\\.enums\\[[0-9]\\]\\.values\\[[0-9]\\]\\.tooltip$": {
       "type": "string",
       "maxLength": 256
+    },
+    "^extensions\\[[0]\\]\\.runtimes\\[[1]?[0-9]\\]\\.customFunctions\\.namespace\\.name$": {
+      "type": "string",
+      "maxLength": 32
     },
     "^extensions\\[[0]\\]\\.keyboardShortcuts\\[[0-9]\\]\\.shortcuts\\[[0-9]\\]\\.key\\.default$": {
       "type": "string",
@@ -281,6 +277,10 @@
       "type": "string",
       "maxLength": 2048
     },
+    "^extensions\\[[0]\\]\\.contentRuntimes\\[[1]?[0-9]\\]\\.code\\.page$": {
+      "type": "string",
+      "maxLength": 2048
+    },
     "^extensions\\[[0]\\]\\.contextMenus\\[[0-9]\\]\\.menus\\[[0-9]\\]\\.controls\\[[1]?[0-9]\\]\\.icons\\[[0-7]\\]\\.url$": {
       "type": "string",
       "maxLength": 2048
@@ -313,13 +313,17 @@
       "type": "string",
       "maxLength": 250
     },
-    "^extensions\\[[0]\\]\\.contentRuntimes\\[[1]?[0-9]\\]\\.code\\.page$": {
-      "type": "string",
-      "maxLength": 2048
-    },
     "^copilotAgents.customEngineAgents\\[0\\]\\.disclaimer.text$": {
       "type": "string",
       "maxLength": 500
+    },
+    "^agentConnectors\\[[0-9]\\]\\.displayName$": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "^agentConnectors\\[[0-9]\\]\\.description$": {
+      "type": "string",
+      "maxLength": 4000
     },
     "^description\\.features\\[[0-2]+\\]\\.title$": {
       "type": "string",
@@ -330,11 +334,7 @@
       "maxLength": 120
     }
   },
-  "required": [
-    "name.short",
-    "description.short",
-    "description.full"
-  ],
+  "required": [ "name.short", "description.short", "description.full" ],
   "definitions": {
     "nonEmptyString": {
       "type": "string",
