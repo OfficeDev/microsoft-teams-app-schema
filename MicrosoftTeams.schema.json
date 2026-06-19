@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.28"
+      "const": "1.29"
     },
     "version": {
       "type": "string",
@@ -414,6 +414,11 @@
               ]
             }
           },
+          "supportsTargetedMessages": {
+            "type": "boolean",
+            "description": "When true, the bot is enabled to receive targeted messages and appears in the / slash commands list. Required for slash command support. Developers can optionally add triggers: [\u0022slash\u0022] on commandLists entries to surface specific commands.",
+            "default": false
+          },
           "commandLists": {
             "type": "array",
             "maxItems": 3,
@@ -422,6 +427,18 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "triggers": {
+                  "type": "array",
+                  "maxItems": 2,
+                  "items": {
+                    "type": "string",
+                    "enum": [ "mention", "slash"
+ ]
+                  },
+                  "default": [ "mention"
+ ],
+                  "description": "Controls where the commands in this commandLists entry are surfaced. \u0022mention\u0022 = @mention trigger (current behavior). \u0022slash\u0022 = slash commands list (targeted messages)."
+                },
                 "scopes": {
                   "type": "array",
                   "description": "Specifies the scopes for which the command list is valid",
@@ -675,6 +692,16 @@
                   ],
                   "description": "Type of the command",
                   "default": "query"
+                },
+                "triggers": {
+                  "type": "array",
+                  "maxItems": 1,
+                  "items": {
+                    "type": "string",
+                    "enum": [ "slash"
+ ]
+                  },
+                  "description": "Adding \u0022slash\u0022 to the array makes the command appear in the / slash commands list in group chat or channel. Note: \u0022mention\u0022 is not a valid value for composeExtension command triggers \u2014 it applies only to bots[].commandLists[]."
                 },
                 "samplePrompts": {
                   "type": "array",
@@ -1487,7 +1514,7 @@
                     "properties": {
                       "type": {
                         "type": "string",
-                        "enum": [ "None", "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration"
+                        "enum": [ "None", "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration", "AzureKeyVault"
  ],
                         "description": "The type of authorization required to invoke the MCP server. Supported values are: \u0027None\u0027 (anonymous access), \u0027OAuthPluginVault\u0027 (OAuth flow with referenceId), \u0027ApiKeyPluginVault\u0027 (API Key with referenceId), \u0027DynamicClientRegistration\u0027 (dynamic client registration with referenceId)."
                       },
@@ -1502,7 +1529,7 @@
                     "if": {
                       "properties": {
                         "type": {
-                          "enum": [ "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration"
+                          "enum": [ "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration", "AzureKeyVault"
  ]
                         }
                       }
@@ -1513,7 +1540,7 @@
                     }
                   }
                 },
-                    "required": [ "mcpServerUrl", "mcpToolDescription"
+                    "required": [ "mcpServerUrl"
  ]
               }
             },
