@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.29"
+      "const": "1.30"
     },
     "version": {
       "type": "string",
@@ -2925,21 +2925,43 @@
                   "properties": {
                     "sendMode": {
                       "type": "string",
+                      "description": "Specifies the actions to take during a mail send event. The property may be omitted, but a literal null is not a valid value.",
                       "enum": [
                         "promptUser",
                         "softBlock",
-                        "block"
+                        "block",
+                        null
                       ]
+                    },
+                    "headerName": {
+                      "type": "string",
+                      "description": "Specifies the internet header name used to identify a message during a decryption event. Follows email header name constraints.",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$"
                     }
                   },
                   "additionalProperties": false,
-                  "required": [
-                    "sendMode"
+                  "anyOf": [
+    {
+                      "required": [ "sendMode"
+ ],
+                      "not": {
+"required": [ "headerName"
+ ]
+ }
+                    },
+                    {
+                      "required": [ "headerName"
+ ],
+                      "not": {
+"required": [ "sendMode"
+ ]
+ }
+                    }
                   ]
                 }
               },
                   "additionalProperties": false,
-                  "required": [
+                      "required": [
                 "type",
                 "actionId"
               ]
@@ -2947,7 +2969,7 @@
           }
         },
                   "additionalProperties": false,
-                  "required": [
+                      "required": [
           "events"
         ]
       }
