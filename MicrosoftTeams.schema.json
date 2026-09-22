@@ -1743,7 +1743,12 @@
             "description": "The url for your extension, used to validate Exchange user identity tokens."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "$ref": "#/definitions/extensionAutoRunEventsMailScopeConstraint"
+          }
+        ]
       },
       "additionalProperties": false
     },
@@ -2935,6 +2940,87 @@
         "additionalProperties": false,
         "required": [
           "events"
+        ]
+      }
+    },
+    "extensionAutoRunEventsMailScopeConstraint": {
+      "title": "Autorun in the unified manifest is supported only for Outlook, which requires the 'mail' scope.",
+      "description": "Autorun (event-based activation) in the unified manifest is currently supported only for Outlook, so an extension that declares 'autoRunEvents' must target the 'mail' scope. Declare \"scopes\": [ \"mail\" ] in 'extensions.requirements.scopes', or in 'extensions.autoRunEvents.requirements.scopes' of every 'autoRunEvents' entry. Autorun events declared only for the 'document', 'workbook', or 'presentation' scopes (for example 'onDocumentOpened' in Word, Excel, or PowerPoint) are not supported and are ignored at runtime.",
+      "if": {
+        "required": [
+          "autoRunEvents"
+        ]
+      },
+      "then": {
+        "allOf": [
+          {
+            "description": "Every 'autoRunEvents' entry that narrows its scopes must keep targeting Outlook: 'extensions.autoRunEvents.requirements.scopes' must include 'mail' when it is present.",
+            "properties": {
+              "autoRunEvents": {
+                "items": {
+                  "properties": {
+                    "requirements": {
+                      "properties": {
+                        "scopes": {
+                          "contains": {
+                            "enum": [
+                              "mail"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "The 'mail' scope must be declared for the autorun feature, either once for the whole extension or on every 'autoRunEvents' entry.",
+            "anyOf": [
+              {
+                "description": "The extension targets Outlook: 'extensions.requirements.scopes' includes 'mail'.",
+                "required": [
+                  "requirements"
+                ],
+                "properties": {
+                  "requirements": {
+                    "required": [
+                      "scopes"
+                    ],
+                    "properties": {
+                      "scopes": {
+                        "contains": {
+                          "enum": [
+                            "mail"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "description": "Every 'autoRunEvents' entry targets Outlook through its own 'requirements.scopes'.",
+                "properties": {
+                  "autoRunEvents": {
+                    "items": {
+                      "required": [
+                        "requirements"
+                      ],
+                      "properties": {
+                        "requirements": {
+                          "required": [
+                            "scopes"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
         ]
       }
     },
