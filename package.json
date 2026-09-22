@@ -1,0 +1,14 @@
+{
+  "name": "microsoft-teams-app-schema",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JSON Schema used to provision Apps for Microsoft Teams.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.js\"",
+    "lint:json": "node tests/lint-json.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1"
+  }
+}
