@@ -10,7 +10,7 @@
     "manifestVersion": {
       "type": "string",
       "description": "The version of the schema this manifest is using. This schema version supports extending Teams apps to other parts of the Microsoft 365 ecosystem. More info at https://aka.ms/extendteamsapps.",
-      "const": "1.30"
+      "const": "1.31"
     },
     "version": {
       "type": "string",
@@ -291,10 +291,6 @@
           "contentUrl": {
             "$ref": "#/definitions/anyHttpUrl",
             "description": "The url which points to the entity UI to be displayed in the canvas."
-          },
-          "contentBotId": {
-            "$ref": "#/definitions/guid",
-            "description": "The Microsoft App ID specified for the bot in the Bot Framework portal (https://dev.botframework.com/bots)"
           },
           "websiteUrl": {
             "$ref": "#/definitions/anyHttpUrl",
@@ -991,7 +987,11 @@
                 "type": "string",
                 "description": "An optional JSON formatted object of client capabilities that represents if the resource server is CAE capable. Do not use an empty string for this value. If unsupported, keep the field undefined. If supported, use the following string exactly: '{\"access_token\":{\"xms_cc\":{\"values\":[\"CP1\"]}}}'. More info on client capabilities here: https://learn.microsoft.com/en-us/entra/identity-platform/claims-challenge?tabs=dotnet#how-to-communicate-client-capabilities-to-microsoft-entra-id ",
                 "minLength": 1
-              }
+                              },
+                              "clientId": {
+                                "$ref": "#/definitions/guid",
+                                "description": "Optional Microsoft Entra ID application (client) ID to use for Nested App Authentication (NAA) for this specific manifest entry. This id must be a GUID. If specified, this value overrides the client ID defined in webApplicationInfo.id. If omitted, webApplicationInfo.id is used as the default client ID."
+                              }
             },
             "required": [ "redirectUri", "scopes" ],
             "additionalProperties": false
@@ -1048,6 +1048,13 @@
               "templateText": {
                 "type": "string",
                 "maxLength": 128
+              },
+              "displayName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "\\S",
+                "description": "The localized, user-visible display name of this activity type. Author a concise standalone noun label using sentence casing appropriate for the locale; do not include surrounding host commands such as \"Turn off\" or ending punctuation. Consumers must preserve the resolved value exactly, must not transform its casing, and must not use it as identity; type remains the stable identifier."
               },
               "allowedIconIds": {
                 "type": "array",
@@ -1504,20 +1511,20 @@
                     "properties": {
                       "type": {
                         "type": "string",
-                        "enum": [ "None", "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration", "AzureKeyVault" ],
-                        "description": "The type of authorization required to invoke the MCP server. Supported values are: 'None' (anonymous access), 'OAuthPluginVault' (OAuth flow with referenceId), 'ApiKeyPluginVault' (API Key with referenceId), 'DynamicClientRegistration' (dynamic client registration with referenceId)."
+                        "enum": [ "None", "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration", "AzureKeyVault", "ConnectionVault" ],
+                        "description": "The type of authorization required to invoke the MCP server. Supported values are: 'None' (anonymous access), 'OAuthPluginVault' (OAuth flow with referenceId), 'ApiKeyPluginVault' (API Key with referenceId), 'DynamicClientRegistration' (dynamic client registration with referenceId), 'AzureKeyVault' (Azure Key Vault URI with referenceId), 'ConnectionVault' (Power Platform connector-managed connection referenced by referenceId)."
                       },
                       "referenceId": {
                         "type": "string",
                         "maxLength": 128,
-                        "description": "A reference identifier used when type is OAuthPluginVault, ApiKeyPluginVault, or DynamicClientRegistration. The referenceId value is acquired independently when providing the necessary authorization configuration values. This mechanism exists to prevent the need for storing secret values in the plugin manifest."
+                        "description": "A reference identifier used when type is OAuthPluginVault, ApiKeyPluginVault, DynamicClientRegistration, AzureKeyVault, or ConnectionVault. The referenceId value is acquired independently when providing the necessary authorization configuration values. This mechanism exists to prevent the need for storing secret values in the plugin manifest."
                       }
                     },
                     "required": [ "type" ],
                     "if": {
                       "properties": {
                         "type": {
-                          "enum": [ "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration", "AzureKeyVault" ]
+                          "enum": [ "OAuthPluginVault", "ApiKeyPluginVault", "DynamicClientRegistration", "AzureKeyVault", "ConnectionVault" ]
                         }
                       }
                     },
